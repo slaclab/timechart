@@ -40,7 +40,8 @@ class SettingsExporter:
             chart_settings["title"] = chart.getPlotTitle()
 
             x_axis_label = chart.labels["bottom"]
-            x_axis_label = x_axis_label[x_axis_label.find(" -- ") + len(" -- "):]
+            if x_axis_label:
+                x_axis_label = x_axis_label[x_axis_label.find(" -- ") + len(" -- "):]
             chart_settings["x_axis_label"] = x_axis_label
             chart_settings["x_axis_unit"] = chart.units["bottom"]
 
