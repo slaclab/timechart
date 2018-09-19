@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+source pydmcharting_setup.sh
+python pydmcharting.py

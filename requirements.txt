@@ -1,0 +1,4 @@
+numpy>=1.11.0
+pyqtgraph>=0.10.0
+six
+pydm>=0.3.3
