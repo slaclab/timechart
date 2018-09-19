@@ -134,7 +134,13 @@ class ChartDataExportDisplay(Display):
         self.image_height_edt.editingFinished.emit()
 
     def handle_export_options_index_changed(self, selected_index):
-        if selected_index != 0:
+        if selected_index == 0:
+            self.setFixedSize(QSize(300, 150))
+            self.main_layout.setAlignment(Qt.AlignTop)
+        elif selected_index == 1:
+            self.setFixedSize(QSize(300, 200))
+            self.main_layout.setAlignment(Qt.AlignTop)
+        elif selected_index == 2:
             self.setFixedSize(QSize(300, 300))
             self.main_layout.setAlignment(Qt.AlignVCenter)
 
@@ -173,7 +179,7 @@ class ChartDataExportDisplay(Display):
                     {'name': 'width', 'type': 'int', 'value': self.image_width, 'limits': (0, None)},
                     {'name': 'height', 'type': 'int', 'value': self.image_height, 'limits': (0, None)},
                     {'name': 'antialias', 'type': 'bool', 'value': True},
-                    {'name': 'background', 'type': 'color', 'value': QColor(0, 0, 0)},
+                    {'name': 'background', 'type': 'color', 'value': self.exported_image_background_color},
                 ])
 
                 image_exporter.widthChanged()
