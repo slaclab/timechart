@@ -27,7 +27,6 @@ setup(
         ]
     },
     license='BSD',
-
     install_requires=requirements,
     include_package_data=True,
     classifiers=[
