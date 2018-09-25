@@ -1,17 +1,12 @@
 # The Main Display Window
 
+import logging
+
 from functools import partial
 import datetime
 
 import numpy as np
 from pyqtgraph import TextItem
-
-from pydm import Display
-from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN
-from data_io.settings_importer import SettingsImporter
-
-from pydmcharting_logging import logging
-logger = logging.getLogger(__name__)
 
 from qtpy.QtCore import Qt, QEvent, Slot, QSize, QTimer
 from qtpy.QtWidgets import QApplication, QWidget, QCheckBox, QHBoxLayout, QVBoxLayout, QFormLayout, QLabel, QSplitter,\
@@ -19,11 +14,17 @@ from qtpy.QtWidgets import QApplication, QWidget, QCheckBox, QHBoxLayout, QVBoxL
     QMessageBox, QFileDialog, QScrollArea, QFrame, QSizePolicy, QLayout
 from qtpy.QtGui import QColor, QPalette
 
-from displays.curve_settings_display import CurveSettingsDisplay
-from displays.axis_settings_display import AxisSettingsDisplay
-from displays.chart_data_export_display import ChartDataExportDisplay
-from utilities.utils import random_color, display_message_box
-from data_io.settings_importer import ASYNC_DATA_SAMPLING, SYNC_DATA_SAMPLING
+from pydm import Display
+from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN
+from ..data_io.settings_importer import SettingsImporter
+
+logger = logging.getLogger(__name__)
+
+from .curve_settings_display import CurveSettingsDisplay
+from .axis_settings_display import AxisSettingsDisplay
+from .chart_data_export_display import ChartDataExportDisplay
+from ..utilities.utils import random_color, display_message_box
+from ..data_io.settings_importer import ASYNC_DATA_SAMPLING, SYNC_DATA_SAMPLING
 
 MINIMUM_BUFFER_SIZE = 1200
 MAXIMUM_BUFER_SIZE = 65535
