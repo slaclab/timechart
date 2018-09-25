@@ -1,4 +1,1 @@
-numpy>=1.11.0
-pyqtgraph>=0.10.0
-six
-pydm>=1.4.0
+git+https://github.com/slaclab/pydm.git
