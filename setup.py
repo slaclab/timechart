@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 # To use a consistent encoding
 from codecs import open
-from os import path, environ
+from os import path
 
 cur_dir = path.abspath(path.dirname(__file__))
 
@@ -20,7 +20,7 @@ setup(
     packages=find_packages(),
     package_dir={'pydmcharting':'pydmcharting'},
     description='Python Display Manager Charting Tool',
-    url='https://github.com/hmbui/pydmcharting',
+    url='https://github.com/slaclab/pydmcharting',
     entry_points={
         'gui_scripts': [
             'pydmcharting=pydmcharting.main:main'

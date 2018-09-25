@@ -1,6 +1,4 @@
 # The Main Display Window
-from setup_paths import setup_paths
-setup_paths()
 
 from functools import partial
 import datetime
@@ -42,7 +40,7 @@ DEFAULT_DATA_SAMPLING_RATE_HZ = 10
 DEFAULT_CHART_BACKGROUND_COLOR = QColor("black")
 DEFAULT_CHART_AXIS_COLOR = QColor("white")
 
-MAX_DISPLAY_PV_NAME_LENGTH = 40
+MAX_DISPLAY_PV_NAME_LENGTH = 30
 
 X_AXIS_LABEL_SEPARATOR = " -- "
 IMPORT_FILE_FORMAT = "json"
@@ -82,7 +80,8 @@ class PyDMChartingDisplay(Display):
         self.pv_connect_push_btn.clicked.connect(self.add_curve)
 
         self.tab_panel = QTabWidget()
-        self.tab_panel.setBaseSize(300, 800)
+        self.tab_panel.setFixedWidth(350)
+
         self.curve_settings_tab = QWidget()
         self.chart_settings_tab = QWidget()
 
@@ -96,13 +95,13 @@ class PyDMChartingDisplay(Display):
         self.curve_settings_layout = QVBoxLayout()
         self.curve_settings_layout.setAlignment(Qt.AlignTop)
         self.curve_settings_layout.setSizeConstraint(QLayout.SetMinAndMaxSize)
-        self.curve_settings_layout.setSpacing(5)
+        self.curve_settings_layout.setSpacing(10)
 
         self.crosshair_settings_layout = QVBoxLayout()
         self.crosshair_settings_layout.setAlignment(Qt.AlignTop)
         self.crosshair_settings_layout.setSpacing(5)
 
-        self.enable_crosshair_chk = QCheckBox("Enable Crosshair")
+        self.enable_crosshair_chk = QCheckBox("Crosshair")
         self.crosshair_coord_lbl = QLabel()
 
         self.curve_settings_inner_frame = QFrame()
@@ -124,17 +123,17 @@ class PyDMChartingDisplay(Display):
 
         self.chart_layout = QVBoxLayout()
         self.chart_panel = QWidget()
-        self.chart_panel.setBaseSize(400, 800)
+        self.chart_panel.setBaseSize(400, 600)
 
         self.chart_control_layout = QHBoxLayout()
         self.chart_control_layout.setAlignment(Qt.AlignHCenter)
         self.chart_control_layout.setSpacing(10)
 
-        self.view_all_btn = QPushButton("View All")
+        self.view_all_btn = QPushButton("All")
         self.view_all_btn.clicked.connect(self.handle_view_all_button_clicked)
         self.view_all_btn.setEnabled(False)
 
-        self.auto_scale_btn = QPushButton("Auto Scale")
+        self.auto_scale_btn = QPushButton("Auto")
         self.auto_scale_btn.clicked.connect(self.handle_auto_scale_btn_clicked)
         self.auto_scale_btn.setEnabled(False)
 
@@ -186,13 +185,13 @@ class PyDMChartingDisplay(Display):
         self.chart_redraw_rate_spin = QSpinBox()
         self.chart_redraw_rate_spin.setRange(MIN_REDRAW_RATE_HZ, MAX_REDRAW_RATE_HZ)
         self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
-        self.chart_redraw_rate_spin.valueChanged.connect(self.handle_redraw_rate_changed)
+        self.chart_redraw_rate_spin.editingFinished.connect(self.handle_redraw_rate_changed)
 
         self.chart_data_sampling_rate_lbl = QLabel("Asynchronous Data Sampling Rate (Hz)")
         self.chart_data_async_sampling_rate_spin = QSpinBox()
         self.chart_data_async_sampling_rate_spin.setRange(MIN_DATA_SAMPLING_RATE_HZ, MAX_DATA_SAMPLING_RATE_HZ)
         self.chart_data_async_sampling_rate_spin.setValue(DEFAULT_DATA_SAMPLING_RATE_HZ)
-        self.chart_data_async_sampling_rate_spin.valueChanged.connect(self.handle_data_sampling_rate_changed)
+        self.chart_data_async_sampling_rate_spin.editingFinished.connect(self.handle_data_sampling_rate_changed)
         self.chart_data_sampling_rate_lbl.hide()
         self.chart_data_async_sampling_rate_spin.hide()
 
@@ -336,8 +335,7 @@ class PyDMChartingDisplay(Display):
         self.chart_control_layout.addWidget(self.import_data_btn)
         self.chart_control_layout.addWidget(self.export_data_btn)
 
-        self.chart_control_layout.setStretch(4, 15)
-        self.chart_control_layout.insertSpacing(5, 150)
+        self.chart_control_layout.insertSpacing(5, 50)
 
         self.chart_layout.addWidget(self.chart)
         self.chart_layout.addLayout(self.chart_control_layout)
@@ -346,6 +344,9 @@ class PyDMChartingDisplay(Display):
 
         self.splitter.addWidget(self.chart_panel)
         self.splitter.addWidget(self.tab_panel)
+
+        self.splitter.setStretchFactor(0, 0)
+        self.splitter.setStretchFactor(1, 400)
 
         self.charting_layout.addWidget(self.splitter)
 
@@ -570,7 +571,8 @@ class PyDMChartingDisplay(Display):
         size_policy.setHorizontalPolicy(QSizePolicy.Fixed)
 
         individual_curve_grpbx = QGroupBox()
-        individual_curve_grpbx.setBaseSize(200, 400)
+        individual_curve_grpbx.setFixedWidth(300)
+        individual_curve_grpbx.setFixedHeight(180)
         individual_curve_grpbx.setAlignment(Qt.AlignHCenter)
 
         individual_curve_grpbx.setSizePolicy(size_policy)
@@ -892,8 +894,8 @@ class PyDMChartingDisplay(Display):
            A PlotItem, i.e. a plot, to draw on the chart.
         """
         pv_name = curve.name()
-        max_x = self.chart.getViewBox().viewRange()[1][0]
-        max_y = self.chart.getViewBox().viewRange()[1][1]
+        min_y = curve.minY if curve.minY else 0
+        max_y = curve.maxY if curve.maxY else 0
         current_y = curve.data_buffer[1, -1]
 
         widgets = self.findChildren((QCheckBox, QLabel, QPushButton), pv_name)
@@ -906,7 +908,7 @@ class PyDMChartingDisplay(Display):
                     w.setChecked(True)
                 if isinstance(w, QLabel):
                     w.clear()
-                    w.setText("(yMin = {0:.3f}, yMax = {1:.3f})\ny = {2:.3f}".format(max_x, max_y, current_y))
+                    w.setText("(yMin = {0:.3f}, yMax = {1:.3f})\ny = {2:.3f}".format(min_y, max_y, current_y))
                     w.show()
             w.setEnabled(not np.isnan(current_y))
 
