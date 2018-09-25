@@ -1,26 +1,26 @@
 import sys
-
-import versioneer
-from arg_parser import ArgParser
 import traceback
+import argparse
+import logging
 
 from pydm.application import PyDMApplication
-from pydmcharting_logging import logging
-from displays.main_display import PyDMChartingDisplay
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+import pydmcharting
+from pydmcharting.displays.main_display import PyDMChartingDisplay
+
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
 
 
 def main():
-    _parse_arguments()
+    args, extra_args = _parse_arguments()
 
-    app = PyDMApplication(command_line_args=sys.argv, hide_nav_bar=True, hide_menu_bar=True, hide_status_bar=True,
+    app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True,
+                          hide_status_bar=True,
                           use_main_window=False)
 
-    pydm_chartsdipslay = PyDMChartingDisplay()
-    pydm_chartsdipslay.setMinimumSize(1200, 800)
-    pydm_chartsdipslay.show()
+    display = PyDMChartingDisplay(args=extra_args)
+    display.show()
 
     sys.exit(app.exec_())
 
@@ -33,21 +33,25 @@ def _parse_arguments():
     -------
     The command arguments as a dictionary : dict
     """
-    parser = ArgParser(description="A charting tool based on the Python Display Manager (PyDM).")
 
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("--version", action="version", version=versioneer.get_version())
+    parser = argparse.ArgumentParser(
+        description="A charting tool based on the Python Display Manager (PyDM).")
 
-    args = parser.parse_args()
-    return args
+    parser.add_argument('--version', action='version',
+                        version='PyDMCharting {version}'.format(
+                            version=pydmcharting.__version__))
+
+    args, extra_args = parser.parse_known_args()
+    return args, extra_args
 
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as error:
-        logger.error("Unexpected exception during the charting process. Exception type: {0}. Exception: {1}"
-                     .format(type(error), error))
+        # logger.error(
+        #     "Unexpected exception during the charting process. Exception type: {0}. Exception: {1}"
+        #     .format(type(error), error))
         traceback.print_exc()
-        for h in logger.handlers:
-            h.flush()
+        # for h in logger.handlers:
+        #     h.flush()

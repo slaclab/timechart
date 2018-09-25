@@ -9,8 +9,8 @@ from pyqtgraph.exporters import CSVExporter, ImageExporter
 from pyqtgraph.parametertree import Parameter
 
 from pydm import Display
-from data_io.settings_exporter import SettingsExporter
-from utilities.utils import display_message_box
+from ..data_io.settings_exporter import SettingsExporter
+from ..utilities.utils import display_message_box
 
 DEFAULT_EXPORTED_IMAGE_WIDTH = "800"
 DEFAULT_EXPORTED_IMAGE_HEIGHT = "600"

@@ -9,12 +9,12 @@ setup(
     author='SLAC National Accelerator Laboratory',
 
     packages=find_packages(),
-    package_dir={'pydmcharting':'pydmcharting'},
+    package_dir={'pydmcharting':'pydmcharting', 'pydmcharting_launcher':'pydmcharting_launcher'},
     description='Python Display Manager Charting Tool',
     url='https://github.com/slaclab/pydmcharting',
     entry_points={
         'gui_scripts': [
-            'pydmcharting=pydmcharting.main:main'
+            'pydmcharting=pydmcharting_launcher.main:main'
         ]
     },
     license='BSD',
