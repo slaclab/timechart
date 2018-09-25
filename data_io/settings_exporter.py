@@ -1,11 +1,11 @@
 from setup_paths import setup_paths
 setup_paths()
 
+import versioneer
 from collections import OrderedDict
 import json
 
 from pydm import utilities
-from version import VERSION
 
 
 class SettingsExporter:
@@ -16,7 +16,7 @@ class SettingsExporter:
 
     def export_settings(self, filename):
         settings = OrderedDict()
-        settings["__version__"] = VERSION
+        settings["__version__"] = versioneer.get_version()
         settings["pvs"] = OrderedDict()
         settings["chart_settings"] = OrderedDict()
 

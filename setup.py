@@ -1,3 +1,4 @@
+import versioneer
 from setuptools import setup, find_packages
 
 # To use a consistent encoding
@@ -11,7 +12,8 @@ with open(path.join(cur_dir, 'requirements.txt')) as f:
 
 setup(
     name='pydmcharting',
-    version="1.0.0",
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     # Author details
     author='SLAC National Accelerator Laboratory',
 

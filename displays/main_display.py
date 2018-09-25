@@ -82,12 +82,13 @@ class PyDMChartingDisplay(Display):
         self.pv_connect_push_btn.clicked.connect(self.add_curve)
 
         self.tab_panel = QTabWidget()
-        self.tab_panel.setMaximumWidth(450)
+        self.tab_panel.setBaseSize(300, 800)
         self.curve_settings_tab = QWidget()
         self.chart_settings_tab = QWidget()
 
         self.charting_layout = QHBoxLayout()
-        self.chart = PyDMTimePlot(plot_by_timestamps=False, plot_display=self)
+        self.chart = PyDMTimePlot(plot_by_timestamps=False)
+        self.chart.plot_redrawn_signal.connect(self.update_curve_data)
         self.chart.setPlotTitle("Time Plot")
 
         self.splitter = QSplitter()
@@ -102,7 +103,7 @@ class PyDMChartingDisplay(Display):
         self.crosshair_settings_layout.setSpacing(5)
 
         self.enable_crosshair_chk = QCheckBox("Enable Crosshair")
-        self.cross_hair_coord_lbl = QLabel()
+        self.crosshair_coord_lbl = QLabel()
 
         self.curve_settings_inner_frame = QFrame()
         self.curve_settings_inner_frame.setLayout(self.curve_settings_layout)
@@ -123,6 +124,7 @@ class PyDMChartingDisplay(Display):
 
         self.chart_layout = QVBoxLayout()
         self.chart_panel = QWidget()
+        self.chart_panel.setBaseSize(400, 800)
 
         self.chart_control_layout = QHBoxLayout()
         self.chart_control_layout.setAlignment(Qt.AlignHCenter)
@@ -288,7 +290,7 @@ class PyDMChartingDisplay(Display):
         """
         The minimum recommended size of the main window.
         """
-        return QSize(1490, 800)
+        return QSize(1200, 800)
 
     def ui_filepath(self):
         """
@@ -324,7 +326,7 @@ class PyDMChartingDisplay(Display):
         self.tab_panel.hide()
 
         self.crosshair_settings_layout.addWidget(self.enable_crosshair_chk)
-        self.crosshair_settings_layout.addWidget(self.cross_hair_coord_lbl)
+        self.crosshair_settings_layout.addWidget(self.crosshair_coord_lbl)
 
         self.chart_control_layout.addWidget(self.auto_scale_btn)
         self.chart_control_layout.addWidget(self.view_all_btn)
@@ -335,7 +337,7 @@ class PyDMChartingDisplay(Display):
         self.chart_control_layout.addWidget(self.export_data_btn)
 
         self.chart_control_layout.setStretch(4, 15)
-        self.chart_control_layout.insertSpacing(5, 350)
+        self.chart_control_layout.insertSpacing(5, 150)
 
         self.chart_layout.addWidget(self.chart)
         self.chart_layout.addLayout(self.chart_control_layout)
@@ -344,8 +346,6 @@ class PyDMChartingDisplay(Display):
 
         self.splitter.addWidget(self.chart_panel)
         self.splitter.addWidget(self.tab_panel)
-        self.splitter.setStretchFactor(0, 0)
-        self.splitter.setStretchFactor(1, 1)
 
         self.charting_layout.addWidget(self.splitter)
 
@@ -472,9 +472,15 @@ class PyDMChartingDisplay(Display):
 
         self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
 
+    def show_mouse_coordinates(self, x, y):
+        self.crosshair_coord_lbl.clear()
+        self.crosshair_coord_lbl.setText("x = {0:.3f}, y = {1:.3f}".format(x, y))
+
     def handle_enable_crosshair_checkbox_clicked(self, is_checked):
         self.chart.enableCrosshair(is_checked)
-        self.cross_hair_coord_lbl.setVisible(is_checked)
+        self.crosshair_coord_lbl.setVisible(is_checked)
+
+        self.chart.crosshair_position_updated.connect(self.show_mouse_coordinates)
 
     def add_y_channel(self, pv_name, curve_name, color, line_style=Qt.SolidLine, line_width=2, symbol=None,
                       symbol_size=None):
@@ -522,38 +528,37 @@ class PyDMChartingDisplay(Display):
         checkbox.setText(display_name)
 
         data_text = QLabel()
+        data_text.setWordWrap(True)
         data_text.setObjectName(pv_name)
         data_text.setPalette(palette)
 
         checkbox.setChecked(True)
         checkbox.clicked.connect(partial(self.handle_curve_chkbox_toggled, checkbox))
 
-        curve_btn_layout = QHBoxLayout()
+        curve_btn_layout = QFormLayout()
 
         modify_curve_btn = QPushButton("Modify...")
         modify_curve_btn.setObjectName(pv_name)
-        modify_curve_btn.setMaximumWidth(100)
+        modify_curve_btn.setMaximumWidth(80)
         modify_curve_btn.clicked.connect(partial(self.display_curve_settings_dialog, pv_name))
 
         focus_curve_btn = QPushButton("Focus")
         focus_curve_btn.setObjectName(pv_name)
-        focus_curve_btn.setMaximumWidth(100)
+        focus_curve_btn.setMaximumWidth(80)
         focus_curve_btn.clicked.connect(partial(self.focus_curve, pv_name))
 
         annotate_curve_btn = QPushButton("Annotate...")
         annotate_curve_btn.setObjectName(pv_name)
-        annotate_curve_btn.setMaximumWidth(100)
+        annotate_curve_btn.setMaximumWidth(80)
         annotate_curve_btn.clicked.connect(partial(self.annotate_curve, pv_name))
 
         remove_curve_btn = QPushButton("Remove")
         remove_curve_btn.setObjectName(pv_name)
-        remove_curve_btn.setMaximumWidth(100)
+        remove_curve_btn.setMaximumWidth(80)
         remove_curve_btn.clicked.connect(partial(self.remove_curve, pv_name))
 
-        curve_btn_layout.addWidget(modify_curve_btn)
-        curve_btn_layout.addWidget(focus_curve_btn)
-        curve_btn_layout.addWidget(annotate_curve_btn)
-        curve_btn_layout.addWidget(remove_curve_btn)
+        curve_btn_layout.addRow(modify_curve_btn,  focus_curve_btn)
+        curve_btn_layout.addRow(annotate_curve_btn, remove_curve_btn)
 
         individual_curve_layout = QVBoxLayout()
         individual_curve_layout.addWidget(checkbox)
@@ -562,7 +567,12 @@ class PyDMChartingDisplay(Display):
 
         size_policy = QSizePolicy()
         size_policy.setVerticalPolicy(QSizePolicy.Fixed)
+        size_policy.setHorizontalPolicy(QSizePolicy.Fixed)
+
         individual_curve_grpbx = QGroupBox()
+        individual_curve_grpbx.setBaseSize(200, 400)
+        individual_curve_grpbx.setAlignment(Qt.AlignHCenter)
+
         individual_curve_grpbx.setSizePolicy(size_policy)
 
         individual_curve_grpbx.setObjectName(pv_name)
@@ -896,17 +906,13 @@ class PyDMChartingDisplay(Display):
                     w.setChecked(True)
                 if isinstance(w, QLabel):
                     w.clear()
-                    w.setText("(yMin = {0:.3f}, yMax = {1:.3f}) y = {2:.3f}".format(max_x, max_y, current_y))
+                    w.setText("(yMin = {0:.3f}, yMax = {1:.3f})\ny = {2:.3f}".format(max_x, max_y, current_y))
                     w.show()
             w.setEnabled(not np.isnan(current_y))
 
             if isinstance(w, QPushButton) and w.text() == "Remove":
                 # Enable the Remove button to make removing inactive PVs possible anytime
                 w.setEnabled(True)
-
-    def show_mouse_coordinates(self, x, y):
-        self.cross_hair_coord_lbl.clear()
-        self.cross_hair_coord_lbl.setText("x = {0:.3f}, y = {1:.3f}".format(x, y))
 
     @staticmethod
     def get_current_datetime():

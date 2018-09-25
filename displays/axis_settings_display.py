@@ -43,7 +43,6 @@ class AxisSettingsDisplay(Display):
         self.y_axis_unit_edt.textChanged.connect(partial(self.handle_axis_label_change, "left", is_unit=True))
 
         self.right_y_axis_label_line_edt = QLineEdit()
-        self.right_y_axis_lbl = QLabel("Right y-axis Label")
 
         self.display_right_y_axis_chk = QCheckBox("Display the right y-axis")
         self.display_right_y_axis_chk.setChecked(self.chart.getShowRightAxis())
@@ -88,16 +87,18 @@ class AxisSettingsDisplay(Display):
         self.main_layout.addRow(self.display_right_y_axis_chk, None)
         self.main_layout.addRow(None, self.close_dialog_btn)
 
-        self.setLayout(self.main_layout)
-
+        self.display_right_y_axis_chk.setChecked(self.chart.getShowRightAxis())
         if self.chart.getShowRightAxis():
-            self.display_right_y_axis_chk.clicked.emit(True)
+            self.display_right_y_axis_chk.clicked.emit(self.chart.getShowRightAxis())
+
+        self.setLayout(self.main_layout)
 
     def handle_right_y_axis_checkbox_changed(self, is_checked):
         self.chart.setShowRightAxis(is_checked)
 
         # Remove the Close button first
-        self.main_layout.removeRow(self.main_layout.rowCount() - 1)
+        if self.main_layout.rowCount() > 1:
+            self.main_layout.removeRow(self.main_layout.rowCount() - 1)
 
         if is_checked:
             right_label = self.chart.labels["right"]
@@ -107,12 +108,14 @@ class AxisSettingsDisplay(Display):
             if not right_unit:
                 right_unit = self.y_axis_unit_edt.text()
 
+            self.right_y_axis_lbl = QLabel("Right y-axis Label")
+            self.right_y_axis_label_line_edt = QLineEdit()
             self.right_y_axis_label_line_edt.textChanged.connect(partial(self.handle_axis_label_change, "right"))
 
-            self.right_y_axis_unit_lbl = QLabel(text="Right y-axis Unit")
+            self.right_y_axis_unit_lbl = QLabel("Right y-axis Unit")
             self.right_y_axis_unit_edt = QLineEdit()
-            self.right_y_axis_unit_edt.textChanged.connect(
-                partial(self.handle_axis_label_change, "right", is_unit=True))
+            self.right_y_axis_unit_edt.textChanged.connect(partial(self.handle_axis_label_change, "right",
+                                                                   is_unit=True))
 
             self.right_y_axis_label_line_edt.setText(right_label)
             self.right_y_axis_unit_edt.setText(right_unit)
