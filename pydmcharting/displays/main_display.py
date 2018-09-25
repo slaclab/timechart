@@ -4,7 +4,7 @@ from functools import partial
 import datetime
 
 import numpy as np
-from pyqtgraph import TextItem, ViewBox
+from pyqtgraph import TextItem
 
 from pydm import Display
 from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN
@@ -120,10 +120,11 @@ class PyDMChartingDisplay(Display):
 
         self.chart_settings_layout = QVBoxLayout()
         self.chart_settings_layout.setAlignment(Qt.AlignTop)
+        self.chart_settings_layout.setSpacing(5)
 
         self.chart_layout = QVBoxLayout()
         self.chart_panel = QWidget()
-        self.chart_panel.setBaseSize(400, 600)
+        self.chart_panel.setBaseSize(200, 400)
 
         self.chart_control_layout = QHBoxLayout()
         self.chart_control_layout.setAlignment(Qt.AlignHCenter)
@@ -133,9 +134,33 @@ class PyDMChartingDisplay(Display):
         self.view_all_btn.clicked.connect(self.handle_view_all_button_clicked)
         self.view_all_btn.setEnabled(False)
 
-        self.auto_scale_btn = QPushButton("Auto")
-        self.auto_scale_btn.clicked.connect(self.handle_auto_scale_btn_clicked)
-        self.auto_scale_btn.setEnabled(False)
+        self.zoom_x_layout = QVBoxLayout()
+        self.zoom_x_layout.setAlignment(Qt.AlignTop)
+        self.zoom_x_layout.setSpacing(5)
+
+        self.zoom_in_x_btn = QPushButton("Zoom In X")
+        self.zoom_in_x_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "x", True))
+        self.zoom_in_x_btn.setEnabled(False)
+
+        self.zoom_out_x_btn = QPushButton("Zoom Out X")
+        self.zoom_out_x_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "x", False))
+        self.zoom_out_x_btn.setEnabled(False)
+
+        self.zoom_y_layout = QVBoxLayout()
+        self.zoom_y_layout.setAlignment(Qt.AlignTop)
+        self.zoom_y_layout.setSpacing(5)
+
+        self.zoom_in_y_btn = QPushButton("Zoom In Y")
+        self.zoom_in_y_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "y", True))
+        self.zoom_in_y_btn.setEnabled(False)
+
+        self.zoom_out_y_btn = QPushButton("Zoom Out Y")
+        self.zoom_out_y_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "y", False))
+        self.zoom_out_y_btn.setEnabled(False)
+
+        self.view_all_reset_chart_layout = QVBoxLayout()
+        self.view_all_reset_chart_layout.setAlignment(Qt.AlignTop)
+        self.view_all_reset_chart_layout.setSpacing(5)
 
         self.reset_chart_btn = QPushButton("Reset")
         self.reset_chart_btn.clicked.connect(self.handle_reset_chart_btn_clicked)
@@ -147,16 +172,24 @@ class PyDMChartingDisplay(Display):
         self.pause_chart_btn.clicked.connect(self.handle_pause_chart_btn_clicked)
 
         self.title_settings_layout = QVBoxLayout()
-        self.title_settings_layout.setSpacing(10)
+        self.title_settings_layout.setAlignment(Qt.AlignTop)
+        self.title_settings_layout.setSpacing(5)
 
-        self.title_settings_grpbx = QGroupBox()
-        self.title_settings_grpbx.setFixedHeight(150)
+        self.title_settings_grpbx = QGroupBox("Title and Legend")
+        self.title_settings_grpbx.setFixedHeight(120)
 
-        self.import_data_btn = QPushButton("Import Data...")
+        self.import_export_data_layout = QVBoxLayout()
+        self.import_export_data_layout.setAlignment(Qt.AlignTop)
+        self.import_export_data_layout.setSpacing(5)
+
+        self.import_data_btn = QPushButton("Import...")
         self.import_data_btn.clicked.connect(self.handle_import_data_btn_clicked)
 
-        self.export_data_btn = QPushButton("Export Data...")
+        self.export_data_btn = QPushButton("Export...")
         self.export_data_btn.clicked.connect(self.handle_export_data_btn_clicked)
+
+        self.chart_title_layout = QHBoxLayout()
+        self.chart_title_layout.setSpacing(10)
 
         self.chart_title_lbl = QLabel(text="Chart Title")
         self.chart_title_line_edt = QLineEdit()
@@ -180,6 +213,9 @@ class PyDMChartingDisplay(Display):
         self.chart_sync_mode_async_radio.setChecked(True)
 
         self.graph_drawing_settings_layout = QVBoxLayout()
+        self.graph_drawing_settings_layout.setAlignment(Qt.AlignTop)
+
+        self.chart_interval_layout = QFormLayout()
 
         self.chart_redraw_rate_lbl = QLabel("Redraw Rate (Hz)")
         self.chart_redraw_rate_spin = QSpinBox()
@@ -201,12 +237,14 @@ class PyDMChartingDisplay(Display):
         self.limit_time_plan_text = "Limit Time Span"
         self.chart_limit_time_span_chk = QCheckBox(self.limit_time_plan_text)
         self.chart_limit_time_span_chk.hide()
-        self.chart_limit_time_span_lbl = QLabel("Hours : Minutes : Seconds")
+        self.chart_limit_time_span_lbl = QLabel("HH : MM : SS")
         self.chart_limit_time_span_hours_line_edt = QLineEdit()
         self.chart_limit_time_span_minutes_line_edt = QLineEdit()
         self.chart_limit_time_span_seconds_line_edt = QLineEdit()
         self.chart_limit_time_span_activate_btn = QPushButton("Apply")
         self.chart_limit_time_span_activate_btn.setDisabled(True)
+
+        self.chart_ring_buffer_layout = QFormLayout()
 
         self.chart_ring_buffer_size_lbl = QLabel("Ring Buffer Size")
         self.chart_ring_buffer_size_edt = QLineEdit()
@@ -266,10 +304,10 @@ class PyDMChartingDisplay(Display):
 
         self.curve_checkbox_panel = QWidget()
 
-        self.graph_drawing_settings_grpbx = QGroupBox()
-        self.graph_drawing_settings_grpbx.setFixedHeight(270)
+        self.graph_drawing_settings_grpbx = QGroupBox("Graph Intervals")
+        self.graph_drawing_settings_grpbx.setAlignment(Qt.AlignVCenter)
 
-        self.axis_settings_grpbx = QGroupBox()
+        self.axis_settings_grpbx = QGroupBox("Grid and Axis")
         self.axis_settings_grpbx.setFixedHeight(180)
 
         self.app = QApplication.instance()
@@ -289,7 +327,7 @@ class PyDMChartingDisplay(Display):
         """
         The minimum recommended size of the main window.
         """
-        return QSize(1200, 800)
+        return QSize(1000, 800)
 
     def ui_filepath(self):
         """
@@ -327,15 +365,24 @@ class PyDMChartingDisplay(Display):
         self.crosshair_settings_layout.addWidget(self.enable_crosshair_chk)
         self.crosshair_settings_layout.addWidget(self.crosshair_coord_lbl)
 
-        self.chart_control_layout.addWidget(self.auto_scale_btn)
-        self.chart_control_layout.addWidget(self.view_all_btn)
-        self.chart_control_layout.addWidget(self.reset_chart_btn)
-        self.chart_control_layout.addWidget(self.pause_chart_btn)
-        self.chart_control_layout.addLayout(self.crosshair_settings_layout)
-        self.chart_control_layout.addWidget(self.import_data_btn)
-        self.chart_control_layout.addWidget(self.export_data_btn)
+        self.zoom_x_layout.addWidget(self.zoom_in_x_btn)
+        self.zoom_x_layout.addWidget(self.zoom_out_x_btn)
 
-        self.chart_control_layout.insertSpacing(5, 50)
+        self.zoom_y_layout.addWidget(self.zoom_in_y_btn)
+        self.zoom_y_layout.addWidget(self.zoom_out_y_btn)
+
+        self.view_all_reset_chart_layout.addWidget(self.view_all_btn)
+        self.view_all_reset_chart_layout.addWidget(self.reset_chart_btn)
+
+        self.import_export_data_layout.addWidget(self.import_data_btn)
+        self.import_export_data_layout.addWidget(self.export_data_btn)
+
+        self.chart_control_layout.addLayout(self.zoom_x_layout)
+        self.chart_control_layout.addLayout(self.zoom_y_layout)
+        self.chart_control_layout.addLayout(self.view_all_reset_chart_layout)
+        self.chart_control_layout.addLayout(self.crosshair_settings_layout)
+        self.chart_control_layout.addLayout(self.import_export_data_layout)
+        self.chart_control_layout.insertSpacing(4, 150)
 
         self.chart_layout.addWidget(self.chart)
         self.chart_layout.addLayout(self.chart_control_layout)
@@ -346,7 +393,7 @@ class PyDMChartingDisplay(Display):
         self.splitter.addWidget(self.tab_panel)
 
         self.splitter.setStretchFactor(0, 0)
-        self.splitter.setStretchFactor(1, 400)
+        self.splitter.setStretchFactor(1, 1)
 
         self.charting_layout.addWidget(self.splitter)
 
@@ -363,8 +410,10 @@ class PyDMChartingDisplay(Display):
         self.chart_sync_mode_async_radio.toggled.connect(partial(self.handle_sync_mode_radio_toggle,
                                                                  self.chart_sync_mode_async_radio))
 
-        self.title_settings_layout.addWidget(self.chart_title_lbl)
-        self.title_settings_layout.addWidget(self.chart_title_line_edt)
+        self.chart_title_layout.addWidget(self.chart_title_lbl)
+        self.chart_title_layout.addWidget(self.chart_title_line_edt)
+        self.title_settings_layout.addLayout(self.chart_title_layout)
+
         self.title_settings_layout.addWidget(self.show_legend_chk)
         self.title_settings_layout.addWidget(self.chart_change_axis_settings_btn)
         self.title_settings_grpbx.setLayout(self.title_settings_layout)
@@ -401,14 +450,18 @@ class PyDMChartingDisplay(Display):
         self.graph_background_color_layout.addRow(self.background_color_lbl, self.background_color_btn)
 
         self.graph_drawing_settings_layout.addLayout(self.graph_background_color_layout)
-        self.graph_drawing_settings_layout.addWidget(self.chart_redraw_rate_lbl)
-        self.graph_drawing_settings_layout.addWidget(self.chart_redraw_rate_spin)
-        self.graph_drawing_settings_layout.addWidget(self.chart_data_sampling_rate_lbl)
-        self.graph_drawing_settings_layout.addWidget(self.chart_data_async_sampling_rate_spin)
+
+        self.chart_interval_layout.addRow(self.chart_redraw_rate_lbl, self.chart_redraw_rate_spin)
+        self.chart_interval_layout.addRow(self.chart_data_sampling_rate_lbl, self.chart_data_async_sampling_rate_spin)
+        self.graph_drawing_settings_layout.addLayout(self.chart_interval_layout)
+
         self.graph_drawing_settings_layout.addWidget(self.chart_limit_time_span_chk)
         self.graph_drawing_settings_layout.addLayout(self.chart_limit_time_span_layout)
-        self.graph_drawing_settings_layout.addWidget(self.chart_ring_buffer_size_lbl)
-        self.graph_drawing_settings_layout.addWidget(self.chart_ring_buffer_size_edt)
+
+        self.chart_ring_buffer_layout.addWidget(self.chart_data_sampling_rate_lbl)
+        self.chart_ring_buffer_layout.addWidget(self.chart_data_async_sampling_rate_spin)
+        self.graph_drawing_settings_layout.addLayout(self.chart_ring_buffer_layout)
+
         self.graph_drawing_settings_grpbx.setLayout(self.graph_drawing_settings_layout)
 
         self.axis_settings_layout.addWidget(self.show_x_grid_chk)
@@ -572,8 +625,8 @@ class PyDMChartingDisplay(Display):
 
         individual_curve_grpbx = QGroupBox()
         individual_curve_grpbx.setFixedWidth(300)
-        individual_curve_grpbx.setFixedHeight(180)
-        individual_curve_grpbx.setAlignment(Qt.AlignHCenter)
+        individual_curve_grpbx.setFixedHeight(160)
+        individual_curve_grpbx.setAlignment(Qt.AlignTop)
 
         individual_curve_grpbx.setSizePolicy(size_policy)
 
@@ -780,7 +833,7 @@ class PyDMChartingDisplay(Display):
                 self.chart_limit_time_span_chk.setChecked(False)
                 self.chart_limit_time_span_chk.clicked.emit(False)
                 self.chart_limit_time_span_chk.hide()
-                self.graph_drawing_settings_grpbx.setFixedHeight(180)
+                self.graph_drawing_settings_grpbx.setFixedHeight(130)
 
                 self.chart.setUpdatesAsynchronously(False)
             elif radio_btn.text() == "Asynchronous":
@@ -789,14 +842,19 @@ class PyDMChartingDisplay(Display):
                 self.chart_data_sampling_rate_lbl.show()
                 self.chart_data_async_sampling_rate_spin.show()
                 self.chart_limit_time_span_chk.show()
-                self.graph_drawing_settings_grpbx.setFixedHeight(270)
+                self.graph_drawing_settings_grpbx.setFixedHeight(230)
 
                 self.chart.setUpdatesAsynchronously(True)
         self.app.establish_widget_connections(self)
 
-    def handle_auto_scale_btn_clicked(self):
-        self.chart.resetAutoRangeX()
-        self.chart.resetAutoRangeY()
+    def handle_zoom_in_btn_clicked(self, axis, is_zoom_in):
+        scale_factor = 0.5
+        if not is_zoom_in:
+            scale_factor += 1.0
+        if axis == "x":
+            self.chart.getViewBox().scaleBy(x=scale_factor)
+        elif axis == "y":
+            self.chart.getViewBox().scaleBy(y=scale_factor)
 
     def handle_view_all_button_clicked(self):
         self.chart.getViewBox().autoRange()
@@ -853,7 +911,11 @@ class PyDMChartingDisplay(Display):
         self.chart.setShowLegend(False)
 
     def enable_chart_control_buttons(self, enabled=True):
-        self.auto_scale_btn.setEnabled(enabled)
+        self.zoom_in_x_btn.setEnabled(enabled)
+        self.zoom_out_x_btn.setEnabled(enabled)
+        self.zoom_in_y_btn.setEnabled(enabled)
+        self.zoom_out_y_btn.setEnabled(enabled)
+
         self.view_all_btn.setEnabled(enabled)
         self.reset_chart_btn.setEnabled(enabled)
         self.pause_chart_btn.setText(self.pause_chart_text)
