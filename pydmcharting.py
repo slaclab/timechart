@@ -2,10 +2,9 @@ from setup_paths import setup_paths
 setup_paths()
 
 import sys
-import os
 
+import versioneer
 from arg_parser import ArgParser
-from version import VERSION
 import traceback
 
 from pydm import PyDMApplication
@@ -23,7 +22,7 @@ def main():
                           use_main_window=False)
 
     pydm_chartsdipslay = PyDMChartingDisplay()
-    pydm_chartsdipslay.setMinimumSize(1600, 800)
+    pydm_chartsdipslay.setMinimumSize(1200, 800)
     pydm_chartsdipslay.show()
 
     sys.exit(app.exec_())
@@ -37,10 +36,10 @@ def _parse_arguments():
     -------
     The command arguments as a dictionary : dict
     """
-    parser = ArgParser(description="A charting tool.")
+    parser = ArgParser(description="A charting tool based on the Python Display Manager (PyDM).")
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--version", action="version", version=VERSION)
+    group.add_argument("--version", action="version", version=versioneer.get_version())
 
     args = parser.parse_args()
     return args
