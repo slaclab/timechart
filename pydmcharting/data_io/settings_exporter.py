@@ -1,6 +1,3 @@
-from setup_paths import setup_paths
-setup_paths()
-
 import versioneer
 from collections import OrderedDict
 import json

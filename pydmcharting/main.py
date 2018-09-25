@@ -1,13 +1,10 @@
-from setup_paths import setup_paths
-setup_paths()
-
 import sys
 
 import versioneer
 from arg_parser import ArgParser
 import traceback
 
-from pydm import PyDMApplication
+from pydm.application import PyDMApplication
 from pydmcharting_logging import logging
 from displays.main_display import PyDMChartingDisplay
 
