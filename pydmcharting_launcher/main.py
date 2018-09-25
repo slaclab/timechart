@@ -8,12 +8,19 @@ from pydm.application import PyDMApplication
 import pydmcharting
 from pydmcharting.displays.main_display import PyDMChartingDisplay
 
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
-
 
 def main():
     args, extra_args = _parse_arguments()
+
+    logger = logging.getLogger('')
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(
+        '[%(asctime)s] [%(levelname)-8s] - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    if args.log_level:
+        logger.setLevel(args.log_level)
+        handler.setLevel(args.log_level)
 
     app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True,
                           hide_status_bar=True,
@@ -36,6 +43,13 @@ def _parse_arguments():
 
     parser = argparse.ArgumentParser(
         description="A charting tool based on the Python Display Manager (PyDM).")
+
+    parser.add_argument(
+        '--log_level',
+        help='Configure level of log display',
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        default='INFO'
+        )
 
     parser.add_argument('--version', action='version',
                         version='PyDMCharting {version}'.format(
