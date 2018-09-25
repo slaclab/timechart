@@ -1,1 +1,4 @@
 git+https://github.com/slaclab/pydm.git
+numpy
+qtpy
+pyqtgraph
