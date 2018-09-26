@@ -572,7 +572,7 @@ class PyDMChartingDisplay(Display):
         self.generate_pv_controls(pv_name, color)
 
         self.enable_chart_control_buttons()
-        self.app.establish_widget_connections(self)
+        self.app.add_connection(curve.channel)
 
     def generate_pv_controls(self, pv_name, curve_color):
         """
@@ -729,6 +729,7 @@ class PyDMChartingDisplay(Display):
         """
         curve = self.chart.findCurve(pv_name)
         if curve:
+            self.app.remove_connection(curve.channel)
             self.chart.removeYChannel(curve)
             del self.channel_map[pv_name]
             self.chart.removeLegendItem(pv_name)
@@ -800,7 +801,7 @@ class PyDMChartingDisplay(Display):
 
     def handle_data_sampling_rate_changed(self):
         # The chart expects the value in milliseconds
-        sampling_rate_seconds = 1 / self.chart_data_async_sampling_rate_spin.value()
+        sampling_rate_seconds = 1.0 / self.chart_data_async_sampling_rate_spin.value()
         self.chart.setUpdateInterval(sampling_rate_seconds)
         self.chart_ring_buffer_size_edt.setText(str(self.chart.getBufferSize()))
 
