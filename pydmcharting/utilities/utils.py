@@ -5,10 +5,9 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QMessageBox
 
 PREDEFINED_COLORS = (QColor(Qt.red), QColor(Qt.green),  QColor(Qt.darkRed),  QColor(Qt.blue), QColor(Qt.darkGreen),
-                     QColor(Qt.cyan),  QColor(Qt.darkBlue),  QColor(Qt.darkCyan), QColor(Qt.magenta),
-                     QColor(Qt.darkMagenta), QColor(255, 0, 127), QColor(0, 85, 255), QColor(255, 85, 0),
-                     QColor(0, 170, 127), QColor(0, 170, 255), QColor(85, 170, 255), QColor(255, 170, 0),
-                     QColor(255, 170, 255))
+                     QColor(Qt.cyan), QColor(Qt.darkCyan), QColor(Qt.magenta), QColor(Qt.darkMagenta),
+                     QColor(255, 0, 127), QColor(0, 85, 255), QColor(255, 85, 0), QColor(0, 170, 127),
+                     QColor(0, 170, 255), QColor(85, 170, 255), QColor(255, 170, 0), QColor(255, 170, 255))
 
 
 def random_color():

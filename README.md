@@ -14,8 +14,8 @@ Python package requirements are listed in the requirements.txt file, which can b
 You must first install PyDM as it is the framework PyDMCharting is built upon. In doing so, you must first satisfy the [PyDM prerequisites](https://github.com/slaclab/pydm/blob/master/requirements.txt, "PyDM Requirements"):
  
 ```sh
-git clone https://github.com/slaclab/pydm.git
-cd pydm
+git clone https://github.com/slaclab/pydmcharting.git
+cd pydmcharting
 pip install .[all]
 ```
 
@@ -28,17 +28,16 @@ pip install .[all]
 ```
 
 # Running PyDMCharting
-In the ```pydmcharting``` directory, customize the ```pydmcharting_setup.sh``` setup script to the paths appropriate to your system. At minimum, you will need to provide the following settings:
+After installing PyDMCharting, you can start the application:
 
-* Where to source the environment setup script for using PyDM. Example: ```source /afs/slac/g/lcls/package/pydm/setup_pydm_env.bash```
-* The path to PyDM, exported as PYDM_PATH environment variable. Example: ```export PYDM_PATH=/u/re/hbui/local/dev/pydm```
-* Linux only: the path to the EPICS libca.so library. Example: ```export PYEPICS_LIBCA=/afs/slac/g/lcls/epics/base/R3.15.5-1.0/lib/rhel6-x86_64/libca.so```
-* Finally, if you plan to test PyDMCharting using PyDM's pydm-testing-ioc, you must ```export EPICS_CA_AUTO_ADDR_LIST=yes```
+```pydmcharting```
 
-To run PyDMCharting:
+For developers, you can install PyDMCharting in development mode:
 
-```./PyDMCharting```
-
-Note that the command is case-sensitive.
-
+```sh
+git clone https://github.com/slaclab/pydmcharting.git
+cd pydmcharting
+python setup.py develop
+pydmcharting
+```
 

@@ -168,7 +168,7 @@ class PyDMChartingDisplay(Display):
         self.zoom_out_y_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "y", False))
         self.zoom_out_y_btn.setEnabled(False)
 
-        self.view_all_btn = QPushButton("All")
+        self.view_all_btn = QPushButton("View All")
         self.view_all_btn.setIcon(self.view_all_icon)
         self.view_all_btn.clicked.connect(self.handle_view_all_button_clicked)
         self.view_all_btn.setEnabled(False)
@@ -381,7 +381,6 @@ class PyDMChartingDisplay(Display):
 
         self.tab_panel.addTab(self.curve_settings_tab, "Curves")
         self.tab_panel.addTab(self.chart_settings_tab, "Chart")
-        self.tab_panel.hide()
 
         self.crosshair_settings_layout.addWidget(self.enable_crosshair_chk)
         self.crosshair_settings_layout.addWidget(self.crosshair_coord_lbl)
@@ -406,7 +405,7 @@ class PyDMChartingDisplay(Display):
         self.chart_control_layout.addLayout(self.pause_chart_layout)
         self.chart_control_layout.addLayout(self.crosshair_settings_layout)
         self.chart_control_layout.addLayout(self.import_export_data_layout)
-        self.chart_control_layout.insertSpacing(5, 50)
+        self.chart_control_layout.insertSpacing(5, 30)
 
         self.chart_layout.addWidget(self.chart)
         self.chart_layout.addLayout(self.chart_control_layout)
@@ -415,7 +414,9 @@ class PyDMChartingDisplay(Display):
 
         self.splitter.addWidget(self.chart_panel)
         self.splitter.addWidget(self.tab_panel)
+        self.splitter.setSizes({400, 0})
 
+        self.splitter.setStyleSheet("QSplitter::handle{ background-color: blue; height: 1px;}")
         self.splitter.setStretchFactor(0, 0)
         self.splitter.setStretchFactor(1, 1)
 
@@ -541,12 +542,13 @@ class PyDMChartingDisplay(Display):
         Add a new curve to the chart.
         """
         pv_name = self._get_full_pv_name(self.pv_name_line_edt.text())
-        color = random_color()
-        for k, v in self.channel_map.items():
-            if color == v.color:
-                color = random_color()
+        if pv_name and len(pv_name):
+            color = random_color()
+            for k, v in self.channel_map.items():
+                if color == v.color:
+                    color = random_color()
 
-        self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
+            self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
 
     def show_mouse_coordinates(self, x, y):
         self.crosshair_coord_lbl.clear()
@@ -657,7 +659,9 @@ class PyDMChartingDisplay(Display):
         individual_curve_grpbx.setLayout(individual_curve_layout)
 
         self.curve_settings_layout.addWidget(individual_curve_grpbx)
-        self.tab_panel.show()
+
+        self.tab_panel.setCurrentIndex(0)
+        self.splitter.setSizes({400, 300})
 
     def handle_curve_chkbox_toggled(self, checkbox):
         """
