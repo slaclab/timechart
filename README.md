@@ -6,7 +6,7 @@ and the PyDM's TimePlot is the central widget in PyDMCharting.
 
 # Prerequisites
 * Python 2.7 or 3.5
-* PyDM >= 0.18
+* PyDM >= 1.4.0
 
 Python package requirements are listed in the requirements.txt file, which can be used to install all requirements from pip: 'pip install -r requirements.txt'
 
