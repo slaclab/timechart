@@ -22,9 +22,7 @@ def main():
         logger.setLevel(args.log_level)
         handler.setLevel(args.log_level)
 
-    app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True,
-                          hide_status_bar=True,
-                          use_main_window=False)
+    app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True, hide_status_bar=True, use_main_window=False)
 
     display = PyDMChartingDisplay(args=extra_args)
     display.show()
