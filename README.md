@@ -6,7 +6,7 @@ and the PyDM's TimePlot is the central widget in PyDMCharting.
 
 # Prerequisites
 * Python 2.7 or 3.5
-* PyDM >= 0.18
+* PyDM >= 1.4.0
 
 Python package requirements are listed in the requirements.txt file, which can be used to install all requirements from pip: 'pip install -r requirements.txt'
 
@@ -28,17 +28,24 @@ pip install .[all]
 ```
 
 # Running PyDMCharting
-In the ```pydmcharting``` directory, customize the ```pydmcharting_setup.sh``` setup script to the paths appropriate to your system. At minimum, you will need to provide the following settings:
+After installing PyDMCharting, make sure you export the following environment variables:
 
-* Where to source the environment setup script for using PyDM. Example: ```source /afs/slac/g/lcls/package/pydm/setup_pydm_env.bash```
-* The path to PyDM, exported as PYDM_PATH environment variable. Example: ```export PYDM_PATH=/u/re/hbui/local/dev/pydm```
-* Linux only: the path to the EPICS libca.so library. Example: ```export PYEPICS_LIBCA=/afs/slac/g/lcls/epics/base/R3.15.5-1.0/lib/rhel6-x86_64/libca.so```
-* Finally, if you plan to test PyDMCharting using PyDM's pydm-testing-ioc, you must ```export EPICS_CA_AUTO_ADDR_LIST=yes```
+```
+sh
+export EPICS_CA_AUTO_ADDR=yes
+export PYEPICS_LIBCA=<your path to libca.so>
+```
+The PYEIPCS_LIBCA path is required for Linux only.
 
-To run PyDMCharting:
+```pydmcharting```
 
-```./PyDMCharting```
+For developers, you can install PyDMCharting in development mode:
 
-Note that the command is case-sensitive.
+```sh
+git clone https://github.com/slaclab/pydm.git
+cd pydm
+python setup.py develop
+pydmcharting
+```
 
 
