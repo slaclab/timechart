@@ -61,9 +61,4 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as error:
-        # logger.error(
-        #     "Unexpected exception during the charting process. Exception type: {0}. Exception: {1}"
-        #     .format(type(error), error))
         traceback.print_exc()
-        # for h in logger.handlers:
-        #     h.flush()

@@ -14,8 +14,8 @@ Python package requirements are listed in the requirements.txt file, which can b
 You must first install PyDM as it is the framework PyDMCharting is built upon. In doing so, you must first satisfy the [PyDM prerequisites](https://github.com/slaclab/pydm/blob/master/requirements.txt, "PyDM Requirements"):
  
 ```sh
-git clone https://github.com/slaclab/pydm.git
-cd pydm
+git clone https://github.com/slaclab/pydmcharting.git
+cd pydmcharting
 pip install .[all]
 ```
 
@@ -28,24 +28,16 @@ pip install .[all]
 ```
 
 # Running PyDMCharting
-After installing PyDMCharting, make sure you export the following environment variables:
-
-```
-sh
-export EPICS_CA_AUTO_ADDR=yes
-export PYEPICS_LIBCA=<your path to libca.so>
-```
-The PYEIPCS_LIBCA path is required for Linux only.
+After installing PyDMCharting, you can start the application:
 
 ```pydmcharting```
 
 For developers, you can install PyDMCharting in development mode:
 
 ```sh
-git clone https://github.com/slaclab/pydm.git
-cd pydm
+git clone https://github.com/slaclab/pydmcharting.git
+cd pydmcharting
 python setup.py develop
 pydmcharting
 ```
-
 
