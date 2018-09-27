@@ -1,4 +1,8 @@
-# TimeChart: A Charting Tool based on PyDM
+<img src="timechart_launcher/icons/charts_256.png" width="256" height="256" align="right"/>
+  <h1>TimeChart</h1>
+  <h3>A Charting Tool based on PyDM</h3>
+</p>
+
 TimeChart is a Python Qt-based graphing application for control systems.
 It is intended to be the modern, feature-by-feature matching alternative
 to the Motif [EPICS Strip Tool](https://epics.anl.gov/extensions/StripTool/ "EPICS Strip Tool") application.
