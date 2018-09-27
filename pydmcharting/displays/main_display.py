@@ -15,7 +15,7 @@ from qtpy.QtWidgets import QApplication, QWidget, QCheckBox, QHBoxLayout, QVBoxL
 from qtpy.QtGui import QColor, QPalette
 
 from pydm import Display
-from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN
+from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN, MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE
 from pydm.utilities.iconfont import IconFont
 from ..data_io.settings_importer import SettingsImporter
 
@@ -26,10 +26,6 @@ from .axis_settings_display import AxisSettingsDisplay
 from .chart_data_export_display import ChartDataExportDisplay
 from ..utilities.utils import random_color, display_message_box
 from ..data_io.settings_importer import ASYNC_DATA_SAMPLING, SYNC_DATA_SAMPLING
-
-MINIMUM_BUFFER_SIZE = 1200
-MAXIMUM_BUFER_SIZE = 65535
-DEFAULT_BUFFER_SIZE = 7200
 
 MIN_REDRAW_RATE_HZ = 1
 MAX_REDRAW_RATE_HZ = 240
@@ -416,7 +412,9 @@ class PyDMChartingDisplay(Display):
         self.splitter.addWidget(self.tab_panel)
         self.splitter.setSizes({400, 0})
 
-        self.splitter.setStyleSheet("QSplitter::handle{ background-color: blue; height: 1px;}")
+        self.splitter.setHandleWidth(1)
+        self.splitter.setStyleSheet("QSplitter::handle{ "
+                                    "background-color: blue}")
         self.splitter.setStretchFactor(0, 0)
         self.splitter.setStretchFactor(1, 1)
 
@@ -791,7 +789,7 @@ class PyDMChartingDisplay(Display):
 
     def handle_buffer_size_changed(self, new_buffer_size):
         try:
-            if new_buffer_size and int(new_buffer_size) > MINIMUM_BUFFER_SIZE:
+            if new_buffer_size and int(new_buffer_size) >= MINIMUM_BUFFER_SIZE:
                 self.chart.setBufferSize(new_buffer_size)
         except ValueError:
             display_message_box(QMessageBox.Critical, "Invalid Values", "Only integer values are accepted.")
@@ -1018,3 +1016,4 @@ class PyDMChartingDisplay(Display):
     @property
     def gridAlpha(self):
         return self.grid_alpha
+
