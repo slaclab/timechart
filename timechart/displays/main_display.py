@@ -44,7 +44,7 @@ X_AXIS_LABEL_SEPARATOR = " -- "
 IMPORT_FILE_FORMAT = "json"
 
 
-class PyDMChartingDisplay(Display):
+class TimeChartDisplay(Display):
     def __init__(self, parent=None, args=[], macros=None):
         """
         Create all the widgets, including any child dialogs.
@@ -58,10 +58,10 @@ class PyDMChartingDisplay(Display):
         macros : str
             Macros to modify the UI parameters at runtime
         """
-        super(PyDMChartingDisplay, self).__init__(parent=parent, args=args, macros=macros)
+        super(TimeChartDisplay, self).__init__(parent=parent, args=args, macros=macros)
 
         self.channel_map = dict()
-        self.setWindowTitle("PyDM Charting Tool")
+        self.setWindowTitle("TimeChart Tool")
 
         self.main_layout = QVBoxLayout()
         self.body_layout = QVBoxLayout()
@@ -531,9 +531,9 @@ class PyDMChartingDisplay(Display):
                     if buffer_size < MINIMUM_BUFFER_SIZE:
                         self.chart_ring_buffer_size_edt.setText(str(MINIMUM_BUFFER_SIZE))
                 except ValueError:
-                    display_message_box(QMessageBox.Critical, "Invalid Values",  "Only integer values are accepted.")
+                    display_message_box(QMessageBox.Critical, "Invalid Values", "Only integer values are accepted.")
                 return True
-        return super(PyDMChartingDisplay, self).eventFilter(obj, event)
+        return super(TimeChartDisplay, self).eventFilter(obj, event)
 
     def add_curve(self):
         """
@@ -964,7 +964,7 @@ class PyDMChartingDisplay(Display):
 
     def handle_update_datetime_timer_timeout(self):
         current_label = self.chart.getBottomAxisLabel()
-        new_label = "Current Time: " + PyDMChartingDisplay.get_current_datetime()
+        new_label = "Current Time: " + TimeChartDisplay.get_current_datetime()
 
         if X_AXIS_LABEL_SEPARATOR in current_label:
             current_label = current_label[current_label.find(X_AXIS_LABEL_SEPARATOR) + len(X_AXIS_LABEL_SEPARATOR):]

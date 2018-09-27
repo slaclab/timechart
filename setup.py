@@ -2,19 +2,19 @@ import versioneer
 from setuptools import setup, find_packages
 
 setup(
-    name='pydmcharting',
+    name='timechart',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     # Author details
     author='SLAC National Accelerator Laboratory',
 
     packages=find_packages(),
-    package_dir={'pydmcharting':'pydmcharting', 'pydmcharting_launcher':'pydmcharting_launcher'},
-    description='Python Display Manager Charting Tool',
-    url='https://github.com/slaclab/pydmcharting',
+    package_dir={'timechart':'timechart', 'timechart_launcher':'timechart_launcher'},
+    description='Time Chart Tool based on PyDM',
+    url='https://github.com/slaclab/timechart',
     entry_points={
         'gui_scripts': [
-            'pydmcharting=pydmcharting_launcher.main:main'
+            'timechart=timechart_launcher.main:main'
         ]
     },
     license='BSD',

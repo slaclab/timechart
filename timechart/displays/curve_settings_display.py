@@ -15,7 +15,7 @@ class CurveSettingsDisplay(Display):
 
         Parameters
         ----------
-        main_display : PyDMChartingDisplay
+        main_display : TimeChartDisplay
             The main display window
         pv_name: str
             The name of the PV the current curve is being plotted for
