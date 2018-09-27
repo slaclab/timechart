@@ -50,7 +50,7 @@ def _parse_arguments():
         )
 
     parser.add_argument('--version', action='version',
-                        version='PyDMCharting {version}'.format(
+                        version='TimeChart {version}'.format(
                             version=timechart.__version__))
 
     args, extra_args = parser.parse_known_args()
