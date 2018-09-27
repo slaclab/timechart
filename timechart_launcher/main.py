@@ -5,8 +5,8 @@ import logging
 
 from pydm.application import PyDMApplication
 
-import pydmcharting
-from pydmcharting.displays.main_display import PyDMChartingDisplay
+import timechart
+from timechart.displays.main_display import PyDMChartingDisplay
 
 
 def main():
@@ -51,7 +51,7 @@ def _parse_arguments():
 
     parser.add_argument('--version', action='version',
                         version='PyDMCharting {version}'.format(
-                            version=pydmcharting.__version__))
+                            version=timechart.__version__))
 
     args, extra_args = parser.parse_known_args()
     return args, extra_args

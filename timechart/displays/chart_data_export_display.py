@@ -16,12 +16,12 @@ DEFAULT_EXPORTED_IMAGE_WIDTH = "800"
 DEFAULT_EXPORTED_IMAGE_HEIGHT = "600"
 
 
-class PyDMChartImageExporter(ImageExporter):
+class TimeChartImageExporter(ImageExporter):
     """
     Override the buggy widthChanged and heightChanged settings from pyqtgraph
     """
     def __init__(self, item):
-        super(PyDMChartImageExporter, self).__init__(item=item)
+        super(TimeChartImageExporter, self).__init__(item=item)
 
     def widthChanged(self):
         sr = self.getSourceRect()
@@ -174,7 +174,7 @@ class ChartDataExportDisplay(Display):
                 data_exporter = CSVExporter(self.main_display.chart.plotItem)
                 data_exporter.export(saved_file_name)
             elif self.export_options_cmb.currentIndex() == 2:
-                image_exporter = PyDMChartImageExporter(self.main_display.chart.plotItem)
+                image_exporter = TimeChartImageExporter(self.main_display.chart.plotItem)
                 image_exporter.params = Parameter(name='params', type='group', children=[
                     {'name': 'width', 'type': 'int', 'value': self.image_width, 'limits': (0, None)},
                     {'name': 'height', 'type': 'int', 'value': self.image_height, 'limits': (0, None)},
