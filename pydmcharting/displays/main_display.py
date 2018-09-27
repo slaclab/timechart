@@ -15,8 +15,7 @@ from qtpy.QtWidgets import QApplication, QWidget, QCheckBox, QHBoxLayout, QVBoxL
 from qtpy.QtGui import QColor, QPalette
 
 from pydm import Display
-from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN, MINIMUM_BUFFER_SIZE, MAXIMUM_BUFFER_SIZE, \
-    DEFAULT_BUFFER_SIZE
+from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN, MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE
 from pydm.utilities.iconfont import IconFont
 from ..data_io.settings_importer import SettingsImporter
 
@@ -790,7 +789,7 @@ class PyDMChartingDisplay(Display):
 
     def handle_buffer_size_changed(self, new_buffer_size):
         try:
-            if new_buffer_size and int(new_buffer_size) > MINIMUM_BUFFER_SIZE:
+            if new_buffer_size and int(new_buffer_size) >= MINIMUM_BUFFER_SIZE:
                 self.chart.setBufferSize(new_buffer_size)
         except ValueError:
             display_message_box(QMessageBox.Critical, "Invalid Values", "Only integer values are accepted.")
@@ -1017,3 +1016,4 @@ class PyDMChartingDisplay(Display):
     @property
     def gridAlpha(self):
         return self.grid_alpha
+
