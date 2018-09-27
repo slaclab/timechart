@@ -1,2 +1,3 @@
 include versioneer.py
 include timechart/_version.py
+include timechart_launcher/icons/*.png

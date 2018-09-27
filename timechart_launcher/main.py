@@ -1,9 +1,13 @@
+import os
 import sys
 import traceback
 import argparse
 import logging
 
 from pydm.application import PyDMApplication
+
+
+from qtpy import QtGui, QtCore
 
 import timechart
 from timechart.displays.main_display import TimeChartDisplay
@@ -22,8 +26,20 @@ def main():
         logger.setLevel(args.log_level)
         handler.setLevel(args.log_level)
 
+    base_path = os.path.dirname(os.path.realpath(__file__))
+    icon_path_mask = os.path.join(base_path, "icons", "charts_{}.png")
+
     app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True, hide_status_bar=True, use_main_window=False)
 
+    app_icon = QtGui.QIcon()
+    app_icon.addFile(icon_path_mask.format(16), QtCore.QSize(16, 16))
+    app_icon.addFile(icon_path_mask.format(24), QtCore.QSize(24, 24))
+    app_icon.addFile(icon_path_mask.format(32), QtCore.QSize(32, 32))
+    app_icon.addFile(icon_path_mask.format(64), QtCore.QSize(64, 64))
+    app_icon.addFile(icon_path_mask.format(128), QtCore.QSize(128, 128))
+    app_icon.addFile(icon_path_mask.format(256), QtCore.QSize(256, 256))
+
+    app.setWindowIcon(app_icon)
     display = TimeChartDisplay(args=extra_args)
     display.show()
 
