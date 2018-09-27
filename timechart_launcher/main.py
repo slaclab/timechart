@@ -6,7 +6,7 @@ import logging
 from pydm.application import PyDMApplication
 
 import timechart
-from timechart.displays.main_display import PyDMChartingDisplay
+from timechart.displays.main_display import TimeChartDisplay
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
 
     app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True, hide_status_bar=True, use_main_window=False)
 
-    display = PyDMChartingDisplay(args=extra_args)
+    display = TimeChartDisplay(args=extra_args)
     display.show()
 
     sys.exit(app.exec_())

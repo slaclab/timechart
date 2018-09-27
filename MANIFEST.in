@@ -1,2 +1,2 @@
 include versioneer.py
-include pydmcharting/_version.py
+include timechart/_version.py
