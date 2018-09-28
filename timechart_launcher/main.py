@@ -6,7 +6,6 @@ import logging
 
 from pydm.application import PyDMApplication
 
-
 from qtpy import QtGui, QtCore
 
 import timechart
@@ -29,7 +28,8 @@ def main():
     base_path = os.path.dirname(os.path.realpath(__file__))
     icon_path_mask = os.path.join(base_path, "icons", "charts_{}.png")
 
-    app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True, hide_status_bar=True, use_main_window=False)
+    app = PyDMApplication(hide_nav_bar=True, hide_menu_bar=True,
+                          hide_status_bar=True, use_main_window=False)
 
     app_icon = QtGui.QIcon()
     app_icon.addFile(icon_path_mask.format(16), QtCore.QSize(16, 16))
@@ -63,7 +63,7 @@ def _parse_arguments():
         help='Configure level of log display',
         choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
         default='INFO'
-        )
+    )
 
     parser.add_argument('--version', action='version',
                         version='TimeChart {version}'.format(

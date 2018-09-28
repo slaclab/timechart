@@ -3,7 +3,8 @@
 from functools import partial
 
 from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import QFormLayout, QCheckBox, QFileDialog, QLabel, QLineEdit, QPushButton
+from qtpy.QtWidgets import (QFormLayout, QCheckBox, QFileDialog, QLabel,
+                            QLineEdit, QPushButton)
 from pydm import Display
 
 X_AXIS_LABEL_SEPARATOR = " -- "
@@ -22,31 +23,37 @@ class AxisSettingsDisplay(Display):
         self.x_axis_label_line_edt = QLineEdit()
         current_x_label = self.chart.labels["bottom"]
         if current_x_label:
-            current_x_label = current_x_label[current_x_label.find(X_AXIS_LABEL_SEPARATOR) +
-                                              len(X_AXIS_LABEL_SEPARATOR):]
+            current_x_label = current_x_label[
+                              current_x_label.find(X_AXIS_LABEL_SEPARATOR) +
+                              len(X_AXIS_LABEL_SEPARATOR):]
             self.x_axis_label_line_edt.setText(current_x_label)
-        self.x_axis_label_line_edt.textChanged.connect(partial(self.handle_axis_label_change, "bottom"))
+        self.x_axis_label_line_edt.textChanged.connect(
+            partial(self.handle_axis_label_change, "bottom"))
 
         self.x_axis_unit_lbl = QLabel("x-axis Unit")
         self.x_axis_unit_edt = QLineEdit()
         self.x_axis_unit_edt.setText(self.chart.units["bottom"])
-        self.x_axis_unit_edt.textChanged.connect(partial(self.handle_axis_label_change, "bottom", is_unit=True))
+        self.x_axis_unit_edt.textChanged.connect(
+            partial(self.handle_axis_label_change, "bottom", is_unit=True))
 
         self.y_axis_lbl = QLabel("y-axis Label")
         self.y_axis_label_line_edt = QLineEdit()
         self.y_axis_label_line_edt.setText(self.chart.labels["left"])
-        self.y_axis_label_line_edt.textChanged.connect(partial(self.handle_axis_label_change, "left"))
+        self.y_axis_label_line_edt.textChanged.connect(
+            partial(self.handle_axis_label_change, "left"))
 
         self.y_axis_unit_lbl = QLabel("y-axis Unit")
         self.y_axis_unit_edt = QLineEdit()
         self.y_axis_unit_edt.setText(self.chart.units["left"])
-        self.y_axis_unit_edt.textChanged.connect(partial(self.handle_axis_label_change, "left", is_unit=True))
+        self.y_axis_unit_edt.textChanged.connect(
+            partial(self.handle_axis_label_change, "left", is_unit=True))
 
         self.right_y_axis_label_line_edt = QLineEdit()
 
         self.display_right_y_axis_chk = QCheckBox("Display the right y-axis")
         self.display_right_y_axis_chk.setChecked(self.chart.getShowRightAxis())
-        self.display_right_y_axis_chk.clicked.connect(self.handle_right_y_axis_checkbox_changed)
+        self.display_right_y_axis_chk.clicked.connect(
+            self.handle_right_y_axis_checkbox_changed)
         self.display_right_y_axis_chk.setChecked(self.chart.getShowRightAxis())
 
         self.right_y_axis_lbl = None
@@ -89,7 +96,8 @@ class AxisSettingsDisplay(Display):
 
         self.display_right_y_axis_chk.setChecked(self.chart.getShowRightAxis())
         if self.chart.getShowRightAxis():
-            self.display_right_y_axis_chk.clicked.emit(self.chart.getShowRightAxis())
+            self.display_right_y_axis_chk.clicked.emit(
+                self.chart.getShowRightAxis())
 
         self.setLayout(self.main_layout)
 
@@ -110,18 +118,22 @@ class AxisSettingsDisplay(Display):
 
             self.right_y_axis_lbl = QLabel("Right y-axis Label")
             self.right_y_axis_label_line_edt = QLineEdit()
-            self.right_y_axis_label_line_edt.textChanged.connect(partial(self.handle_axis_label_change, "right"))
+            self.right_y_axis_label_line_edt.textChanged.connect(
+                partial(self.handle_axis_label_change, "right"))
 
             self.right_y_axis_unit_lbl = QLabel("Right y-axis Unit")
             self.right_y_axis_unit_edt = QLineEdit()
-            self.right_y_axis_unit_edt.textChanged.connect(partial(self.handle_axis_label_change, "right",
-                                                                   is_unit=True))
+            self.right_y_axis_unit_edt.textChanged.connect(
+                partial(self.handle_axis_label_change, "right",
+                        is_unit=True))
 
             self.right_y_axis_label_line_edt.setText(right_label)
             self.right_y_axis_unit_edt.setText(right_unit)
 
-            self.main_layout.addRow(self.right_y_axis_lbl, self.right_y_axis_label_line_edt)
-            self.main_layout.addRow(self.right_y_axis_unit_lbl, self.right_y_axis_unit_edt)
+            self.main_layout.addRow(self.right_y_axis_lbl,
+                                    self.right_y_axis_label_line_edt)
+            self.main_layout.addRow(self.right_y_axis_unit_lbl,
+                                    self.right_y_axis_unit_edt)
         else:
             self.chart.showAxis("right", show=False)
 
@@ -143,7 +155,8 @@ class AxisSettingsDisplay(Display):
             if axis_position == "bottom":
                 current_label = self.chart.getBottomAxisLabel()
                 if X_AXIS_LABEL_SEPARATOR in current_label:
-                    current_label = current_label[:current_label.find(X_AXIS_LABEL_SEPARATOR) -
+                    current_label = current_label[:current_label.find(
+                        X_AXIS_LABEL_SEPARATOR) -
                                                    len(X_AXIS_LABEL_SEPARATOR)]
                 new_label = current_label + X_AXIS_LABEL_SEPARATOR + new_label
             self.chart.setLabel(axis_position, text=new_label)

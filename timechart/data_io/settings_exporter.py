@@ -38,7 +38,8 @@ class SettingsExporter:
 
             x_axis_label = chart.labels["bottom"]
             if x_axis_label:
-                x_axis_label = x_axis_label[x_axis_label.find(" -- ") + len(" -- "):]
+                x_axis_label = x_axis_label[
+                               x_axis_label.find(" -- ") + len(" -- "):]
             chart_settings["x_axis_label"] = x_axis_label
             chart_settings["x_axis_unit"] = chart.units["bottom"]
 
@@ -49,24 +50,31 @@ class SettingsExporter:
             chart_settings["right_y_axis_unit"] = chart.units["right"]
 
             chart_settings["redraw_rate"] = chart.maxRedrawRate
-            chart_settings["data_sampling_mode"] = self.main_display.data_sampling_mode
+            chart_settings[
+                "data_sampling_mode"] = self.main_display.data_sampling_mode
             chart_settings["update_interval_hz"] = 1 / chart.getUpdateInterval()
-            chart_settings["limit_time_span"] = self.main_display.chart_limit_time_span_chk.isChecked()
+            chart_settings[
+                "limit_time_span"] = self.main_display.chart_limit_time_span_chk.isChecked()
 
             time_span_limit_hours = self.main_display.chart_limit_time_span_hours_line_edt.text()
             time_span_limit_minutes = self.main_display.chart_limit_time_span_minutes_line_edt.text()
             time_span_limit_seconds = self.main_display.chart_limit_time_span_seconds_line_edt.text()
 
-            chart_settings["time_span_limit_hours"] = time_span_limit_hours if time_span_limit_hours else 0
-            chart_settings["time_span_limit_minutes"] = time_span_limit_minutes if time_span_limit_minutes else 0
-            chart_settings["time_span_limit_seconds"] = time_span_limit_seconds if time_span_limit_seconds else 0
+            chart_settings[
+                "time_span_limit_hours"] = time_span_limit_hours if time_span_limit_hours else 0
+            chart_settings[
+                "time_span_limit_minutes"] = time_span_limit_minutes if time_span_limit_minutes else 0
+            chart_settings[
+                "time_span_limit_seconds"] = time_span_limit_seconds if time_span_limit_seconds else 0
 
             chart_settings["buffer_size"] = chart.getBufferSize()
             chart_settings["show_legend"] = chart.getShowLegend()
-            chart_settings["background_color"] = str(utilities.colors.svg_color_from_hex(
-                chart.getBackgroundColor().name(), hex_on_fail=True))
-            chart_settings["axis_color"] = str(utilities.colors.svg_color_from_hex(
-                chart.getAxisColor().name(), hex_on_fail=True))
+            chart_settings["background_color"] = str(
+                utilities.colors.svg_color_from_hex(
+                    chart.getBackgroundColor().name(), hex_on_fail=True))
+            chart_settings["axis_color"] = str(
+                utilities.colors.svg_color_from_hex(
+                    chart.getAxisColor().name(), hex_on_fail=True))
             chart_settings["show_x_grid"] = chart.getShowXGrid()
             chart_settings["show_y_grid"] = chart.getShowYGrid()
             chart_settings["grid_alpha"] = self.main_display.gridAlpha * 10.0
@@ -74,4 +82,3 @@ class SettingsExporter:
 
         with open(filename, 'w') as json_file:
             json.dump(settings, json_file, separators=(',', ':'), indent=4)
-

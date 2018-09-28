@@ -115,14 +115,16 @@ class TimeChartDisplay(Display):
         self.curve_settings_inner_frame.setLayout(self.curve_settings_layout)
 
         self.curve_settings_scroll = QScrollArea()
-        self.curve_settings_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.curve_settings_scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarAsNeeded)
         self.curve_settings_scroll.setWidget(self.curve_settings_inner_frame)
 
         self.curves_tab_layout = QHBoxLayout()
         self.curves_tab_layout.addWidget(self.curve_settings_scroll)
 
         self.enable_crosshair_chk.setChecked(False)
-        self.enable_crosshair_chk.clicked.connect(self.handle_enable_crosshair_checkbox_clicked)
+        self.enable_crosshair_chk.clicked.connect(
+            self.handle_enable_crosshair_checkbox_clicked)
         self.enable_crosshair_chk.clicked.emit(False)
 
         self.chart_settings_layout = QVBoxLayout()
@@ -145,16 +147,19 @@ class TimeChartDisplay(Display):
         self.plus_icon = IconFont().icon("plus", color=QColor("green"))
         self.minus_icon = IconFont().icon("minus", color=QColor("red"))
         self.view_all_icon = IconFont().icon("globe", color=QColor("blue"))
-        self.reset_icon = IconFont().icon("circle-o-notch", color=QColor("green"))
+        self.reset_icon = IconFont().icon("circle-o-notch",
+                                          color=QColor("green"))
 
         self.zoom_in_x_btn = QPushButton("X Zoom")
         self.zoom_in_x_btn.setIcon(self.plus_icon)
-        self.zoom_in_x_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "x", True))
+        self.zoom_in_x_btn.clicked.connect(
+            partial(self.handle_zoom_in_btn_clicked, "x", True))
         self.zoom_in_x_btn.setEnabled(False)
 
         self.zoom_out_x_btn = QPushButton("X Zoom")
         self.zoom_out_x_btn.setIcon(self.minus_icon)
-        self.zoom_out_x_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "x", False))
+        self.zoom_out_x_btn.clicked.connect(
+            partial(self.handle_zoom_in_btn_clicked, "x", False))
         self.zoom_out_x_btn.setEnabled(False)
 
         self.zoom_y_layout = QVBoxLayout()
@@ -163,12 +168,14 @@ class TimeChartDisplay(Display):
 
         self.zoom_in_y_btn = QPushButton("Y Zoom")
         self.zoom_in_y_btn.setIcon(self.plus_icon)
-        self.zoom_in_y_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "y", True))
+        self.zoom_in_y_btn.clicked.connect(
+            partial(self.handle_zoom_in_btn_clicked, "y", True))
         self.zoom_in_y_btn.setEnabled(False)
 
         self.zoom_out_y_btn = QPushButton("Y Zoom")
         self.zoom_out_y_btn.setIcon(self.minus_icon)
-        self.zoom_out_y_btn.clicked.connect(partial(self.handle_zoom_in_btn_clicked, "y", False))
+        self.zoom_out_y_btn.clicked.connect(
+            partial(self.handle_zoom_in_btn_clicked, "y", False))
         self.zoom_out_y_btn.setEnabled(False)
 
         self.view_all_btn = QPushButton("View All")
@@ -186,14 +193,16 @@ class TimeChartDisplay(Display):
 
         self.reset_chart_btn = QPushButton("Reset")
         self.reset_chart_btn.setIcon(self.reset_icon)
-        self.reset_chart_btn.clicked.connect(self.handle_reset_chart_btn_clicked)
+        self.reset_chart_btn.clicked.connect(
+            self.handle_reset_chart_btn_clicked)
         self.reset_chart_btn.setEnabled(False)
 
         self.pause_icon = IconFont().icon("pause", color=QColor("red"))
         self.play_icon = IconFont().icon("play", color=QColor("green"))
         self.pause_chart_btn = QPushButton()
         self.pause_chart_btn.setIcon(self.pause_icon)
-        self.pause_chart_btn.clicked.connect(self.handle_pause_chart_btn_clicked)
+        self.pause_chart_btn.clicked.connect(
+            self.handle_pause_chart_btn_clicked)
 
         self.title_settings_layout = QVBoxLayout()
         self.title_settings_layout.setAlignment(Qt.AlignTop)
@@ -207,10 +216,12 @@ class TimeChartDisplay(Display):
         self.import_export_data_layout.setSpacing(5)
 
         self.import_data_btn = QPushButton("Import...")
-        self.import_data_btn.clicked.connect(self.handle_import_data_btn_clicked)
+        self.import_data_btn.clicked.connect(
+            self.handle_import_data_btn_clicked)
 
         self.export_data_btn = QPushButton("Export...")
-        self.export_data_btn.clicked.connect(self.handle_export_data_btn_clicked)
+        self.export_data_btn.clicked.connect(
+            self.handle_export_data_btn_clicked)
 
         self.chart_title_layout = QHBoxLayout()
         self.chart_title_layout.setSpacing(10)
@@ -218,13 +229,17 @@ class TimeChartDisplay(Display):
         self.chart_title_lbl = QLabel(text="Chart Title")
         self.chart_title_line_edt = QLineEdit()
         self.chart_title_line_edt.setText(self.chart.getPlotTitle())
-        self.chart_title_line_edt.textChanged.connect(self.handle_title_text_changed)
+        self.chart_title_line_edt.textChanged.connect(
+            self.handle_title_text_changed)
 
-        self.chart_change_axis_settings_btn = QPushButton(text="Change Axis Settings...")
-        self.chart_change_axis_settings_btn.clicked.connect(self.handle_change_axis_settings_clicked)
+        self.chart_change_axis_settings_btn = QPushButton(
+            text="Change Axis Settings...")
+        self.chart_change_axis_settings_btn.clicked.connect(
+            self.handle_change_axis_settings_clicked)
 
         self.update_datetime_timer = QTimer(self)
-        self.update_datetime_timer.timeout.connect(self.handle_update_datetime_timer_timeout)
+        self.update_datetime_timer.timeout.connect(
+            self.handle_update_datetime_timer_timeout)
 
         self.chart_sync_mode_layout = QVBoxLayout()
         self.chart_sync_mode_layout.setSpacing(5)
@@ -243,15 +258,20 @@ class TimeChartDisplay(Display):
 
         self.chart_redraw_rate_lbl = QLabel("Redraw Rate (Hz)")
         self.chart_redraw_rate_spin = QSpinBox()
-        self.chart_redraw_rate_spin.setRange(MIN_REDRAW_RATE_HZ, MAX_REDRAW_RATE_HZ)
+        self.chart_redraw_rate_spin.setRange(MIN_REDRAW_RATE_HZ,
+                                             MAX_REDRAW_RATE_HZ)
         self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
-        self.chart_redraw_rate_spin.editingFinished.connect(self.handle_redraw_rate_changed)
+        self.chart_redraw_rate_spin.editingFinished.connect(
+            self.handle_redraw_rate_changed)
 
         self.chart_data_sampling_rate_lbl = QLabel("Data Sampling Rate (Hz)")
         self.chart_data_async_sampling_rate_spin = QSpinBox()
-        self.chart_data_async_sampling_rate_spin.setRange(MIN_DATA_SAMPLING_RATE_HZ, MAX_DATA_SAMPLING_RATE_HZ)
-        self.chart_data_async_sampling_rate_spin.setValue(DEFAULT_DATA_SAMPLING_RATE_HZ)
-        self.chart_data_async_sampling_rate_spin.editingFinished.connect(self.handle_data_sampling_rate_changed)
+        self.chart_data_async_sampling_rate_spin.setRange(
+            MIN_DATA_SAMPLING_RATE_HZ, MAX_DATA_SAMPLING_RATE_HZ)
+        self.chart_data_async_sampling_rate_spin.setValue(
+            DEFAULT_DATA_SAMPLING_RATE_HZ)
+        self.chart_data_async_sampling_rate_spin.editingFinished.connect(
+            self.handle_data_sampling_rate_changed)
         self.chart_data_sampling_rate_lbl.hide()
         self.chart_data_async_sampling_rate_spin.hide()
 
@@ -275,41 +295,49 @@ class TimeChartDisplay(Display):
 
         self.chart_ring_buffer_size_lbl = QLabel("Ring Buffer Size")
         self.chart_ring_buffer_size_edt = QLineEdit()
-        self.chart_ring_buffer_size_edt.returnPressed.connect(self.handle_buffer_size_changed)
+        self.chart_ring_buffer_size_edt.returnPressed.connect(
+            self.handle_buffer_size_changed)
         self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
 
         self.show_legend_chk = QCheckBox("Show Legend")
         self.show_legend_chk.setChecked(self.chart.showLegend)
-        self.show_legend_chk.clicked.connect(self.handle_show_legend_checkbox_clicked)
+        self.show_legend_chk.clicked.connect(
+            self.handle_show_legend_checkbox_clicked)
 
         self.graph_background_color_layout = QFormLayout()
 
         self.background_color_lbl = QLabel("Graph Background Color ")
         self.background_color_btn = QPushButton()
-        self.background_color_btn.setStyleSheet("background-color: " + self.chart.getBackgroundColor().name())
+        self.background_color_btn.setStyleSheet(
+            "background-color: " + self.chart.getBackgroundColor().name())
         self.background_color_btn.setContentsMargins(10, 0, 5, 5)
         self.background_color_btn.setMaximumWidth(20)
-        self.background_color_btn.clicked.connect(self.handle_background_color_button_clicked)
+        self.background_color_btn.clicked.connect(
+            self.handle_background_color_button_clicked)
 
         self.axis_settings_layout = QVBoxLayout()
         self.axis_settings_layout.setSpacing(5)
 
         self.show_x_grid_chk = QCheckBox("Show x Grid")
         self.show_x_grid_chk.setChecked(self.chart.showXGrid)
-        self.show_x_grid_chk.clicked.connect(self.handle_show_x_grid_checkbox_clicked)
+        self.show_x_grid_chk.clicked.connect(
+            self.handle_show_x_grid_checkbox_clicked)
 
         self.show_y_grid_chk = QCheckBox("Show y Grid")
         self.show_y_grid_chk.setChecked(self.chart.showYGrid)
-        self.show_y_grid_chk.clicked.connect(self.handle_show_y_grid_checkbox_clicked)
+        self.show_y_grid_chk.clicked.connect(
+            self.handle_show_y_grid_checkbox_clicked)
 
         self.axis_color_lbl = QLabel("Axis and Grid Color")
         self.axis_color_lbl.setEnabled(False)
 
         self.axis_color_btn = QPushButton()
-        self.axis_color_btn.setStyleSheet("background-color: " + DEFAULT_CHART_AXIS_COLOR.name())
+        self.axis_color_btn.setStyleSheet(
+            "background-color: " + DEFAULT_CHART_AXIS_COLOR.name())
         self.axis_color_btn.setContentsMargins(10, 0, 5, 5)
         self.axis_color_btn.setMaximumWidth(20)
-        self.axis_color_btn.clicked.connect(self.handle_axis_color_button_clicked)
+        self.axis_color_btn.clicked.connect(
+            self.handle_axis_color_button_clicked)
         self.axis_color_btn.setEnabled(False)
 
         self.grid_opacity_lbl = QLabel("Grid Opacity")
@@ -322,11 +350,13 @@ class TimeChartDisplay(Display):
         self.grid_opacity_slr.setTickInterval(1)
         self.grid_opacity_slr.setSingleStep(1)
         self.grid_opacity_slr.setTickPosition(QSlider.TicksBelow)
-        self.grid_opacity_slr.valueChanged.connect(self.handle_grid_opacity_slider_mouse_release)
+        self.grid_opacity_slr.valueChanged.connect(
+            self.handle_grid_opacity_slider_mouse_release)
         self.grid_opacity_slr.setEnabled(False)
 
         self.reset_chart_settings_btn = QPushButton("Reset Chart Settings")
-        self.reset_chart_settings_btn.clicked.connect(self.handle_reset_chart_settings_btn_clicked)
+        self.reset_chart_settings_btn.clicked.connect(
+            self.handle_reset_chart_settings_btn_clicked)
 
         self.curve_checkbox_panel = QWidget()
 
@@ -456,17 +486,20 @@ class TimeChartDisplay(Display):
             self.splitter.setSizes([1, 0])
 
     def setup_chart_settings_layout(self):
-        self.chart_sync_mode_sync_radio.toggled.connect(partial(self.handle_sync_mode_radio_toggle,
-                                                                self.chart_sync_mode_sync_radio))
-        self.chart_sync_mode_async_radio.toggled.connect(partial(self.handle_sync_mode_radio_toggle,
-                                                                 self.chart_sync_mode_async_radio))
+        self.chart_sync_mode_sync_radio.toggled.connect(
+            partial(self.handle_sync_mode_radio_toggle,
+                    self.chart_sync_mode_sync_radio))
+        self.chart_sync_mode_async_radio.toggled.connect(
+            partial(self.handle_sync_mode_radio_toggle,
+                    self.chart_sync_mode_async_radio))
 
         self.chart_title_layout.addWidget(self.chart_title_lbl)
         self.chart_title_layout.addWidget(self.chart_title_line_edt)
         self.title_settings_layout.addLayout(self.chart_title_layout)
 
         self.title_settings_layout.addWidget(self.show_legend_chk)
-        self.title_settings_layout.addWidget(self.chart_change_axis_settings_btn)
+        self.title_settings_layout.addWidget(
+            self.chart_change_axis_settings_btn)
         self.title_settings_grpbx.setLayout(self.title_settings_layout)
         self.chart_settings_layout.addWidget(self.title_settings_grpbx)
 
@@ -477,11 +510,16 @@ class TimeChartDisplay(Display):
 
         self.chart_settings_layout.addWidget(self.chart_sync_mode_grpbx)
 
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_lbl)
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_hours_spin_box)
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_minutes_spin_box)
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_seconds_spin_box)
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_activate_btn)
+        self.chart_limit_time_span_layout.addWidget(
+            self.chart_limit_time_span_lbl)
+        self.chart_limit_time_span_layout.addWidget(
+            self.chart_limit_time_span_hours_spin_box)
+        self.chart_limit_time_span_layout.addWidget(
+            self.chart_limit_time_span_minutes_spin_box)
+        self.chart_limit_time_span_layout.addWidget(
+            self.chart_limit_time_span_seconds_spin_box)
+        self.chart_limit_time_span_layout.addWidget(
+            self.chart_limit_time_span_activate_btn)
 
         self.chart_limit_time_span_lbl.hide()
         self.chart_limit_time_span_hours_spin_box.hide()
@@ -496,23 +534,34 @@ class TimeChartDisplay(Display):
         self.chart_limit_time_span_seconds_spin_box.valueChanged.connect(
             self.handle_time_span_changed)
 
-        self.chart_limit_time_span_chk.clicked.connect(self.handle_limit_time_span_checkbox_clicked)
-        self.chart_limit_time_span_activate_btn.clicked.connect(self.handle_chart_limit_time_span_activate_btn_clicked)
+        self.chart_limit_time_span_chk.clicked.connect(
+            self.handle_limit_time_span_checkbox_clicked)
+        self.chart_limit_time_span_activate_btn.clicked.connect(
+            self.handle_chart_limit_time_span_activate_btn_clicked)
 
-        self.graph_background_color_layout.addRow(self.background_color_lbl, self.background_color_btn)
-        self.graph_drawing_settings_layout.addLayout(self.graph_background_color_layout)
+        self.graph_background_color_layout.addRow(self.background_color_lbl,
+                                                  self.background_color_btn)
+        self.graph_drawing_settings_layout.addLayout(
+            self.graph_background_color_layout)
 
-        self.chart_interval_layout.addRow(self.chart_redraw_rate_lbl, self.chart_redraw_rate_spin)
-        self.chart_interval_layout.addRow(self.chart_data_sampling_rate_lbl, self.chart_data_async_sampling_rate_spin)
+        self.chart_interval_layout.addRow(self.chart_redraw_rate_lbl,
+                                          self.chart_redraw_rate_spin)
+        self.chart_interval_layout.addRow(self.chart_data_sampling_rate_lbl,
+                                          self.chart_data_async_sampling_rate_spin)
         self.graph_drawing_settings_layout.addLayout(self.chart_interval_layout)
 
-        self.graph_drawing_settings_layout.addWidget(self.chart_limit_time_span_chk)
-        self.graph_drawing_settings_layout.addLayout(self.chart_limit_time_span_layout)
+        self.graph_drawing_settings_layout.addWidget(
+            self.chart_limit_time_span_chk)
+        self.graph_drawing_settings_layout.addLayout(
+            self.chart_limit_time_span_layout)
 
-        self.chart_ring_buffer_layout.addRow(self.chart_ring_buffer_size_lbl, self.chart_ring_buffer_size_edt)
+        self.chart_ring_buffer_layout.addRow(self.chart_ring_buffer_size_lbl,
+                                             self.chart_ring_buffer_size_edt)
 
-        self.graph_drawing_settings_layout.addLayout(self.chart_ring_buffer_layout)
-        self.graph_drawing_settings_grpbx.setLayout(self.graph_drawing_settings_layout)
+        self.graph_drawing_settings_layout.addLayout(
+            self.chart_ring_buffer_layout)
+        self.graph_drawing_settings_grpbx.setLayout(
+            self.graph_drawing_settings_layout)
 
         self.axis_settings_layout.addWidget(self.show_x_grid_chk)
         self.axis_settings_layout.addWidget(self.show_y_grid_chk)
@@ -544,22 +593,27 @@ class TimeChartDisplay(Display):
 
     def show_mouse_coordinates(self, x, y):
         self.crosshair_coord_lbl.clear()
-        self.crosshair_coord_lbl.setText("x = {0:.3f}\ny = {1:.3f}".format(x, y))
+        self.crosshair_coord_lbl.setText(
+            "x = {0:.3f}\ny = {1:.3f}".format(x, y))
 
     def handle_enable_crosshair_checkbox_clicked(self, is_checked):
         self.chart.enableCrosshair(is_checked)
         self.crosshair_coord_lbl.setVisible(is_checked)
 
-        self.chart.crosshair_position_updated.connect(self.show_mouse_coordinates)
+        self.chart.crosshair_position_updated.connect(
+            self.show_mouse_coordinates)
 
-    def add_y_channel(self, pv_name, curve_name, color, line_style=Qt.SolidLine, line_width=2, symbol=None,
+    def add_y_channel(self, pv_name, curve_name, color, line_style=Qt.SolidLine,
+                      line_width=2, symbol=None,
                       symbol_size=None):
         if pv_name in self.channel_map:
             logger.error("'{0}' has already been added.".format(pv_name))
             return
 
-        curve = self.chart.addYChannel(y_channel=pv_name, name=curve_name, color=color, lineStyle=line_style,
-                                       lineWidth=line_width, symbol=symbol, symbolSize=symbol_size)
+        curve = self.chart.addYChannel(y_channel=pv_name, name=curve_name,
+                                       color=color, lineStyle=line_style,
+                                       lineWidth=line_width, symbol=symbol,
+                                       symbolSize=symbol_size)
         self.channel_map[pv_name] = curve
         self.generate_pv_controls(pv_name, color)
 
@@ -592,8 +646,10 @@ class TimeChartDisplay(Display):
         display_name = pv_name.split("://")[1]
         if len(display_name) > MAX_DISPLAY_PV_NAME_LENGTH:
             # Only display max allowed number of characters of the PV Name
-            display_name = display_name[:int(MAX_DISPLAY_PV_NAME_LENGTH / 2) - 1] + "..." + \
-                           display_name[-int(MAX_DISPLAY_PV_NAME_LENGTH / 2) + 2:]
+            display_name = display_name[
+                           :int(MAX_DISPLAY_PV_NAME_LENGTH / 2) - 1] + "..." + \
+                           display_name[
+                           -int(MAX_DISPLAY_PV_NAME_LENGTH / 2) + 2:]
 
         checkbox.setText(display_name)
 
@@ -603,12 +659,14 @@ class TimeChartDisplay(Display):
         data_text.setPalette(palette)
 
         checkbox.setChecked(True)
-        checkbox.clicked.connect(partial(self.handle_curve_chkbox_toggled, checkbox))
+        checkbox.clicked.connect(
+            partial(self.handle_curve_chkbox_toggled, checkbox))
 
         modify_curve_btn = QPushButton("Modify...")
         modify_curve_btn.setObjectName(pv_name)
         modify_curve_btn.setMaximumWidth(80)
-        modify_curve_btn.clicked.connect(partial(self.display_curve_settings_dialog, pv_name))
+        modify_curve_btn.clicked.connect(
+            partial(self.display_curve_settings_dialog, pv_name))
 
         focus_curve_btn = QPushButton("Focus")
         focus_curve_btn.setObjectName(pv_name)
@@ -618,7 +676,8 @@ class TimeChartDisplay(Display):
         annotate_curve_btn = QPushButton("Annotate...")
         annotate_curve_btn.setObjectName(pv_name)
         annotate_curve_btn.setMaximumWidth(80)
-        annotate_curve_btn.clicked.connect(partial(self.annotate_curve, pv_name))
+        annotate_curve_btn.clicked.connect(
+            partial(self.annotate_curve, pv_name))
 
         remove_curve_btn = QPushButton("Remove")
         remove_curve_btn.setObjectName(pv_name)
@@ -674,7 +733,8 @@ class TimeChartDisplay(Display):
         if checkbox.isChecked():
             curve = self.channel_map.get(pv_name, None)
             if curve:
-                self.chart.addLegendItem(curve, pv_name, self.show_legend_chk.isChecked())
+                self.chart.addLegendItem(curve, pv_name,
+                                         self.show_legend_chk.isChecked())
                 curve.show()
         else:
             curve = self.chart.findCurve(pv_name)
@@ -703,9 +763,10 @@ class TimeChartDisplay(Display):
     def annotate_curve(self, pv_name):
         curve = self.chart.findCurve(pv_name)
         if curve:
-            annot = TextItem(html='<div style="text-align: center"><span style="color: #FFF;">This is the'
-                                  '</span><br><span style="color: #FF0; font-size: 16pt;">PEAK</span></div>',
-                             anchor=(-0.3, 0.5), border='w', fill=(0, 0, 255, 100))
+            annot = TextItem(
+                html='<div style="text-align: center"><span style="color: #FFF;">This is the'
+                     '</span><br><span style="color: #FF0; font-size: 16pt;">PEAK</span></div>',
+                anchor=(-0.3, 0.5), border='w', fill=(0, 0, 255, 100))
             annot = TextItem("test", anchor=(-0.3, 0.5))
             self.chart.annotateCurve(curve, annot)
 
@@ -726,7 +787,8 @@ class TimeChartDisplay(Display):
             del self.channel_map[pv_name]
             self.chart.removeLegendItem(pv_name)
 
-            widgets = self.findChildren((QCheckBox, QLabel, QPushButton, QGroupBox), pv_name)
+            widgets = self.findChildren(
+                (QCheckBox, QLabel, QPushButton, QGroupBox), pv_name)
             for w in widgets:
                 w.deleteLater()
 
@@ -764,8 +826,9 @@ class TimeChartDisplay(Display):
         self.chart_limit_time_span_activate_btn.setEnabled(status)
 
     def handle_chart_limit_time_span_activate_btn_clicked(self):
-        timeout_milliseconds = (self.time_span_limit_hours * 3600 + self.time_span_limit_minutes * 60 +
-                                self.time_span_limit_seconds) * 1000
+        timeout_milliseconds = (
+                                       self.time_span_limit_hours * 3600 + self.time_span_limit_minutes * 60 +
+                                       self.time_span_limit_seconds) * 1000
         self.chart.setTimeSpan(timeout_milliseconds / 1000.0)
         self.chart_ring_buffer_size_edt.setText(str(self.chart.getBufferSize()))
 
@@ -775,7 +838,8 @@ class TimeChartDisplay(Display):
             if new_buffer_size and int(new_buffer_size) >= MINIMUM_BUFFER_SIZE:
                 self.chart.setBufferSize(new_buffer_size)
         except ValueError:
-            display_message_box(QMessageBox.Critical, "Invalid Values", "Only integer values are accepted.")
+            display_message_box(QMessageBox.Critical, "Invalid Values",
+                                "Only integer values are accepted.")
 
     def handle_redraw_rate_changed(self):
         self.chart.maxRedrawRate = self.chart_redraw_rate_spin.value()
@@ -789,33 +853,45 @@ class TimeChartDisplay(Display):
     def handle_background_color_button_clicked(self):
         selected_color = QColorDialog.getColor()
         self.chart.setBackgroundColor(selected_color)
-        self.background_color_btn.setStyleSheet("background-color: " + selected_color.name())
+        self.background_color_btn.setStyleSheet(
+            "background-color: " + selected_color.name())
 
     def handle_axis_color_button_clicked(self):
         selected_color = QColorDialog.getColor()
         self.chart.setAxisColor(selected_color)
-        self.axis_color_btn.setStyleSheet("background-color: " + selected_color.name())
+        self.axis_color_btn.setStyleSheet(
+            "background-color: " + selected_color.name())
 
     def handle_grid_opacity_slider_mouse_release(self):
         self.grid_alpha = float(self.grid_opacity_slr.value()) / 10.0
-        self.chart.setShowXGrid(self.show_x_grid_chk.isChecked(), self.grid_alpha)
-        self.chart.setShowYGrid(self.show_y_grid_chk.isChecked(), self.grid_alpha)
+        self.chart.setShowXGrid(self.show_x_grid_chk.isChecked(),
+                                self.grid_alpha)
+        self.chart.setShowYGrid(self.show_y_grid_chk.isChecked(),
+                                self.grid_alpha)
 
     def handle_show_x_grid_checkbox_clicked(self, is_checked):
         self.chart.setShowXGrid(is_checked, self.grid_alpha)
 
-        self.axis_color_lbl.setEnabled(is_checked or self.show_y_grid_chk.isChecked())
-        self.axis_color_btn.setEnabled(is_checked or self.show_y_grid_chk.isChecked())
-        self.grid_opacity_lbl.setEnabled(is_checked or self.show_y_grid_chk.isChecked())
-        self.grid_opacity_slr.setEnabled(is_checked or self.show_y_grid_chk.isChecked())
+        self.axis_color_lbl.setEnabled(
+            is_checked or self.show_y_grid_chk.isChecked())
+        self.axis_color_btn.setEnabled(
+            is_checked or self.show_y_grid_chk.isChecked())
+        self.grid_opacity_lbl.setEnabled(
+            is_checked or self.show_y_grid_chk.isChecked())
+        self.grid_opacity_slr.setEnabled(
+            is_checked or self.show_y_grid_chk.isChecked())
 
     def handle_show_y_grid_checkbox_clicked(self, is_checked):
         self.chart.setShowYGrid(is_checked, self.grid_alpha)
 
-        self.axis_color_lbl.setEnabled(is_checked or self.show_x_grid_chk.isChecked())
-        self.axis_color_btn.setEnabled(is_checked or self.show_x_grid_chk.isChecked())
-        self.grid_opacity_lbl.setEnabled(is_checked or self.show_x_grid_chk.isChecked())
-        self.grid_opacity_slr.setEnabled(is_checked or self.show_x_grid_chk.isChecked())
+        self.axis_color_lbl.setEnabled(
+            is_checked or self.show_x_grid_chk.isChecked())
+        self.axis_color_btn.setEnabled(
+            is_checked or self.show_x_grid_chk.isChecked())
+        self.grid_opacity_lbl.setEnabled(
+            is_checked or self.show_x_grid_chk.isChecked())
+        self.grid_opacity_slr.setEnabled(
+            is_checked or self.show_x_grid_chk.isChecked())
 
     def handle_show_legend_checkbox_clicked(self, is_checked):
         self.chart.setShowLegend(is_checked)
@@ -825,7 +901,8 @@ class TimeChartDisplay(Display):
         self.chart_data_export_disp.show()
 
     def handle_import_data_btn_clicked(self):
-        open_file_info = QFileDialog.getOpenFileName(self, caption="Open File", filter="*." + IMPORT_FILE_FORMAT)
+        open_file_info = QFileDialog.getOpenFileName(self, caption="Open File",
+                                                     filter="*." + IMPORT_FILE_FORMAT)
         open_file_name = open_file_info[0]
         if open_file_name:
             importer = SettingsImporter(self)
@@ -884,7 +961,8 @@ class TimeChartDisplay(Display):
         self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
 
         self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
-        self.chart_data_async_sampling_rate_spin.setValue(DEFAULT_DATA_SAMPLING_RATE_HZ)
+        self.chart_data_async_sampling_rate_spin.setValue(
+            DEFAULT_DATA_SAMPLING_RATE_HZ)
         self.chart_data_sampling_rate_lbl.hide()
         self.chart_data_async_sampling_rate_spin.hide()
 
@@ -901,10 +979,12 @@ class TimeChartDisplay(Display):
         self.chart.setBufferSize(DEFAULT_BUFFER_SIZE)
 
         self.chart.setBackgroundColor(DEFAULT_CHART_BACKGROUND_COLOR)
-        self.background_color_btn.setStyleSheet("background-color: " + DEFAULT_CHART_BACKGROUND_COLOR.name())
+        self.background_color_btn.setStyleSheet(
+            "background-color: " + DEFAULT_CHART_BACKGROUND_COLOR.name())
 
         self.chart.setAxisColor(DEFAULT_CHART_AXIS_COLOR)
-        self.axis_color_btn.setStyleSheet("background-color: " + DEFAULT_CHART_AXIS_COLOR.name())
+        self.axis_color_btn.setStyleSheet(
+            "background-color: " + DEFAULT_CHART_AXIS_COLOR.name())
 
         self.grid_opacity_slr.setValue(5)
 
@@ -950,7 +1030,9 @@ class TimeChartDisplay(Display):
         new_label = "Current Time: " + TimeChartDisplay.get_current_datetime()
 
         if X_AXIS_LABEL_SEPARATOR in current_label:
-            current_label = current_label[current_label.find(X_AXIS_LABEL_SEPARATOR) + len(X_AXIS_LABEL_SEPARATOR):]
+            current_label = current_label[
+                            current_label.find(X_AXIS_LABEL_SEPARATOR) + len(
+                                X_AXIS_LABEL_SEPARATOR):]
             new_label += X_AXIS_LABEL_SEPARATOR + current_label
 
         self.chart.setLabel("bottom", text=new_label)
@@ -980,7 +1062,9 @@ class TimeChartDisplay(Display):
                     w.setChecked(True)
                 if isinstance(w, QLabel):
                     w.clear()
-                    w.setText("(yMin = {0:.3f}, yMax = {1:.3f}) y = {2:.3f}".format(min_y, max_y, current_y))
+                    w.setText(
+                        "(yMin = {0:.3f}, yMax = {1:.3f}) y = {2:.3f}".format(
+                            min_y, max_y, current_y))
                     w.show()
             w.setEnabled(not np.isnan(current_y))
 
@@ -999,4 +1083,3 @@ class TimeChartDisplay(Display):
     @property
     def gridAlpha(self):
         return self.grid_alpha
-
