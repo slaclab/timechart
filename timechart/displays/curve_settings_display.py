@@ -4,7 +4,8 @@ from pydm import Display
 from pydm.widgets.baseplot import BasePlotCurveItem
 
 from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import QFormLayout, QLabel, QComboBox, QSpinBox, QPushButton, QColorDialog, QCheckBox
+from qtpy.QtWidgets import (QFormLayout, QLabel, QComboBox, QSpinBox,
+                            QPushButton, QColorDialog, QCheckBox)
 from qtpy.QtGui import QPalette
 
 
@@ -35,7 +36,8 @@ class CurveSettingsDisplay(Display):
         self.curve_color_lbl = QLabel("Curve Color ")
         self.curve_color_btn = QPushButton()
         self.curve_color_btn.setMaximumWidth(20)
-        self.curve_color_btn.clicked.connect(self.handle_curve_color_button_clicked)
+        self.curve_color_btn.clicked.connect(
+            self.handle_curve_color_button_clicked)
 
         self.symbol_lbl = QLabel("Symbol")
         self.symbol_cmb = QComboBox()
@@ -90,11 +92,15 @@ class CurveSettingsDisplay(Display):
         self.set_widgets_to_current_curve_settings()
 
         # Connect to slots to handle signal events
-        self.symbol_cmb.currentIndexChanged.connect(self.handle_symbol_index_changed)
-        self.symbol_size_spin.valueChanged.connect(self.handle_symbol_size_changed)
+        self.symbol_cmb.currentIndexChanged.connect(
+            self.handle_symbol_index_changed)
+        self.symbol_size_spin.valueChanged.connect(
+            self.handle_symbol_size_changed)
 
-        self.line_style_cmb.currentIndexChanged.connect(self.handle_line_style_index_changed)
-        self.line_width_spin.valueChanged.connect(self.handle_line_width_changed)
+        self.line_style_cmb.currentIndexChanged.connect(
+            self.handle_line_style_index_changed)
+        self.line_width_spin.valueChanged.connect(
+            self.handle_line_width_changed)
 
         # Add widgets to the form layout
         self.main_layout.setSpacing(10)
@@ -114,10 +120,13 @@ class CurveSettingsDisplay(Display):
         """
         curve = self.chart.findCurve(self.pv_name)
         if curve:
-            self.curve_color_btn.setStyleSheet("background-color: " + curve.color.name())
+            self.curve_color_btn.setStyleSheet(
+                "background-color: " + curve.color.name())
 
-            self.set_combo_box(self.symbol_cmb, BasePlotCurveItem.symbols, curve.symbol)
-            self.set_combo_box(self.line_style_cmb, BasePlotCurveItem.lines, curve.lineStyle)
+            self.set_combo_box(self.symbol_cmb, BasePlotCurveItem.symbols,
+                               curve.symbol)
+            self.set_combo_box(self.line_style_cmb, BasePlotCurveItem.lines,
+                               curve.lineStyle)
 
             self.symbol_size_spin.setValue(curve.symbolSize)
             self.line_width_spin.setValue(curve.lineWidth)
@@ -146,7 +155,8 @@ class CurveSettingsDisplay(Display):
         if curve:
             self.curve_original_color = curve.color
             curve.color = selected_color
-            self.curve_color_btn.setStyleSheet("background-color: " + curve.color.name())
+            self.curve_color_btn.setStyleSheet(
+                "background-color: " + curve.color.name())
 
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
@@ -164,7 +174,8 @@ class CurveSettingsDisplay(Display):
         """
         curve = self.chart.findCurve(self.pv_name)
         if curve:
-            curve.symbol = BasePlotCurveItem.symbols[self.symbol_cmb.itemText(selected_index)]
+            curve.symbol = BasePlotCurveItem.symbols[
+                self.symbol_cmb.itemText(selected_index)]
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
 
@@ -215,7 +226,8 @@ class CurveSettingsDisplay(Display):
         """
         curve = self.chart.findCurve(self.pv_name)
         if curve:
-            curve.lineStyle = BasePlotCurveItem.lines[self.line_style_cmb.itemText(selected_index)]
+            curve.lineStyle = BasePlotCurveItem.lines[
+                self.line_style_cmb.itemText(selected_index)]
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
 
@@ -230,7 +242,8 @@ class CurveSettingsDisplay(Display):
         if curve:
             if self.curve_original_color:
                 curve.color = self.curve_original_color
-                self.curve_color_btn.setStyleSheet("background-color: " + curve.color.name())
+                self.curve_color_btn.setStyleSheet(
+                    "background-color: " + curve.color.name())
 
             self.symbol_cmb.setCurrentIndex(0)
             self.symbol_size_spin.setValue(10)
@@ -250,12 +263,12 @@ class CurveSettingsDisplay(Display):
         curve = self.chart.findCurve(self.pv_name)
         if curve:
             # Update the widget checkbox text to the current curve color
-            widgets = self.main_display.findChildren((QCheckBox, QLabel), self.pv_name)
+            widgets = self.main_display.findChildren((QCheckBox, QLabel),
+                                                     self.pv_name)
             for w in widgets:
                 palette = w.palette()
-                palette.setColor(QPalette.Active, QPalette.WindowText, curve.color)
+                palette.setColor(QPalette.Active, QPalette.WindowText,
+                                 curve.color)
                 w.setPalette(palette)
                 if isinstance(w, QCheckBox):
                     w.setText(self.pv_name.split("://")[1])
-
-

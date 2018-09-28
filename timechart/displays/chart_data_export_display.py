@@ -1,8 +1,9 @@
 # The Dialog to Export Data from a Chart
 
 from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import QVBoxLayout, QFormLayout, QCheckBox, QLineEdit, QFileDialog, QLabel, QComboBox, \
-    QPushButton, QColorDialog, QMessageBox
+from qtpy.QtWidgets import (QVBoxLayout, QFormLayout, QCheckBox, QLineEdit,
+                            QFileDialog, QLabel, QComboBox,
+                            QPushButton, QColorDialog, QMessageBox)
 from qtpy.QtGui import QColor
 
 from pyqtgraph.exporters import CSVExporter, ImageExporter
@@ -20,6 +21,7 @@ class TimeChartImageExporter(ImageExporter):
     """
     Override the buggy widthChanged and heightChanged settings from pyqtgraph
     """
+
     def __init__(self, item):
         super(TimeChartImageExporter, self).__init__(item=item)
 
@@ -45,14 +47,17 @@ class ChartDataExportDisplay(Display):
         self.export_options_lbl = QLabel()
         self.export_options_lbl.setText("Export Options")
         self.export_options_cmb = QComboBox()
-        self.export_options_cmb.addItems(("Curve Data", "Chart Settings", "Image File"))
-        self.export_options_cmb.currentIndexChanged.connect(self.handle_export_options_index_changed)
+        self.export_options_cmb.addItems(
+            ("Curve Data", "Chart Settings", "Image File"))
+        self.export_options_cmb.currentIndexChanged.connect(
+            self.handle_export_options_index_changed)
 
         # Options for Chart Settings
         self.include_pv_chk = QCheckBox("Include currently plotted PVs")
         self.include_pv_chk.setChecked(True)
 
-        self.include_chart_settings_chk = QCheckBox("Include current chart settings")
+        self.include_chart_settings_chk = QCheckBox(
+            "Include current chart settings")
         self.include_chart_settings_chk.setChecked(True)
 
         # Options for Image File
@@ -61,12 +66,14 @@ class ChartDataExportDisplay(Display):
 
         self.image_width_lbl = QLabel("Image width")
         self.image_width_edt = QLineEdit()
-        self.image_width_edt.editingFinished.connect(self.handle_image_dimension_value)
+        self.image_width_edt.editingFinished.connect(
+            self.handle_image_dimension_value)
         self.image_width_edt.setText(DEFAULT_EXPORTED_IMAGE_WIDTH)
 
         self.image_height_lbl = QLabel("Image height")
         self.image_height_edt = QLineEdit()
-        self.image_height_edt.editingFinished.connect(self.handle_image_dimension_value)
+        self.image_height_edt.editingFinished.connect(
+            self.handle_image_dimension_value)
         self.image_height_edt.setText(DEFAULT_EXPORTED_IMAGE_HEIGHT)
 
         self.anti_alias_chk = QCheckBox("Anti-alias")
@@ -75,8 +82,10 @@ class ChartDataExportDisplay(Display):
         self.export_image_background_color_lbl = QLabel("Background Color ")
         self.export_image_background_btn = QPushButton()
         self.export_image_background_btn.setMaximumWidth(20)
-        self.export_image_background_btn.setStyleSheet("background-color: black")
-        self.export_image_background_btn.clicked.connect(self.handle_export_image_background_button_clicked)
+        self.export_image_background_btn.setStyleSheet(
+            "background-color: black")
+        self.export_image_background_btn.clicked.connect(
+            self.handle_export_image_background_button_clicked)
 
         self.export_format_lbl = QLabel()
         self.export_format_lbl.setText("Export Format")
@@ -116,8 +125,10 @@ class ChartDataExportDisplay(Display):
         self.main_layout.addWidget(self.include_pv_chk)
         self.main_layout.addWidget(self.include_chart_settings_chk)
 
-        self.image_dimension_layout.addRow(self.image_width_lbl, self.image_width_edt)
-        self.image_dimension_layout.addRow(self.image_height_lbl, self.image_height_edt)
+        self.image_dimension_layout.addRow(self.image_width_lbl,
+                                           self.image_width_edt)
+        self.image_dimension_layout.addRow(self.image_height_lbl,
+                                           self.image_height_edt)
         self.main_layout.addLayout(self.image_dimension_layout)
 
         self.main_layout.addWidget(self.anti_alias_chk)
@@ -164,7 +175,8 @@ class ChartDataExportDisplay(Display):
         self.file_format_cmb.setEnabled(False)
 
     def handle_save_file_btn_clicked(self):
-        saved_file_info = QFileDialog.getSaveFileName(self, caption="Save File", filter=self.file_format)
+        saved_file_info = QFileDialog.getSaveFileName(self, caption="Save File",
+                                                      filter=self.file_format)
         saved_file_name = saved_file_info[0]
         if saved_file_info[1][1:] not in saved_file_name:
             saved_file_name += saved_file_info[1][1:]
@@ -174,19 +186,32 @@ class ChartDataExportDisplay(Display):
                 data_exporter = CSVExporter(self.main_display.chart.plotItem)
                 data_exporter.export(saved_file_name)
             elif self.export_options_cmb.currentIndex() == 2:
-                image_exporter = TimeChartImageExporter(self.main_display.chart.plotItem)
-                image_exporter.params = Parameter(name='params', type='group', children=[
-                    {'name': 'width', 'type': 'int', 'value': self.image_width, 'limits': (0, None)},
-                    {'name': 'height', 'type': 'int', 'value': self.image_height, 'limits': (0, None)},
-                    {'name': 'antialias', 'type': 'bool', 'value': True},
-                    {'name': 'background', 'type': 'color', 'value': self.exported_image_background_color},
-                ])
+                image_exporter = TimeChartImageExporter(
+                    self.main_display.chart.plotItem)
+                image_exporter.params = Parameter(name='params', type='group',
+                                                  children=[
+                                                      {'name': 'width',
+                                                       'type': 'int',
+                                                       'value': self.image_width,
+                                                       'limits': (0, None)},
+                                                      {'name': 'height',
+                                                       'type': 'int',
+                                                       'value': self.image_height,
+                                                       'limits': (0, None)},
+                                                      {'name': 'antialias',
+                                                       'type': 'bool',
+                                                       'value': True},
+                                                      {'name': 'background',
+                                                       'type': 'color',
+                                                       'value': self.exported_image_background_color},
+                                                  ])
 
                 image_exporter.widthChanged()
                 image_exporter.heightChanged()
                 image_exporter.export(fileName=saved_file_name)
             else:
-                settings_exporter = SettingsExporter(self.main_display, self.include_pv_chk.isChecked(),
+                settings_exporter = SettingsExporter(self.main_display,
+                                                     self.include_pv_chk.isChecked(),
                                                      self.include_chart_settings_chk.isChecked())
                 settings_exporter.export_settings(saved_file_name)
 
@@ -212,4 +237,3 @@ class ChartDataExportDisplay(Display):
         except ValueError:
             display_message_box(QMessageBox.Critical, "Invalid Values",
                                 "Only integer values larger than 0 are accepted.")
-
