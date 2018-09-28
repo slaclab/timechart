@@ -1,4 +1,4 @@
-<img src="timechart_launcher/icons/charts_256.png" width="256" height="256" align="right"/>
+<img src="timechart_launcher/icons/charts_128.png" width="128" height="128" align="right"/>
   <h1>TimeChart</h1>
   <h3>A Charting Tool based on PyDM</h3>
 </p>
