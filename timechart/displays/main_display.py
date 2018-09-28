@@ -8,14 +8,20 @@ import datetime
 import numpy as np
 from pyqtgraph import TextItem
 
-from qtpy.QtCore import Qt, QEvent, Slot, QSize, QTimer
-from qtpy.QtWidgets import QApplication, QWidget, QCheckBox, QHBoxLayout, QVBoxLayout, QFormLayout, QLabel, QSplitter,\
-    QComboBox, QLineEdit, QPushButton, QSlider, QSpinBox, QTabWidget, QColorDialog, QGroupBox, QRadioButton,\
-    QMessageBox, QFileDialog, QScrollArea, QFrame, QSizePolicy, QLayout
+from qtpy.QtCore import Qt, Slot, QSize, QTimer
+from qtpy.QtWidgets import (QApplication, QWidget, QCheckBox, QHBoxLayout,
+                            QVBoxLayout, QFormLayout, QLabel, QSplitter,
+                            QComboBox, QLineEdit, QPushButton, QSlider,
+                            QSpinBox, QTabWidget,
+                            QColorDialog, QGroupBox, QRadioButton,
+                            QMessageBox, QFileDialog, QScrollArea, QFrame,
+                            QSizePolicy, QLayout,
+                            QToolButton)
 from qtpy.QtGui import QColor, QPalette
 
 from pydm import Display
-from pydm.widgets.timeplot import PyDMTimePlot, DEFAULT_X_MIN, MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE
+from pydm.widgets.timeplot import (PyDMTimePlot, DEFAULT_X_MIN,
+                                   MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE)
 from pydm.utilities.iconfont import IconFont
 from ..data_io.settings_importer import SettingsImporter
 
@@ -58,7 +64,8 @@ class TimeChartDisplay(Display):
         macros : str
             Macros to modify the UI parameters at runtime
         """
-        super(TimeChartDisplay, self).__init__(parent=parent, args=args, macros=macros)
+        super(TimeChartDisplay, self).__init__(parent=parent, args=args,
+                                               macros=macros)
 
         self.channel_map = dict()
         self.setWindowTitle("TimeChart Tool")
@@ -69,7 +76,7 @@ class TimeChartDisplay(Display):
         self.pv_layout = QHBoxLayout()
         self.pv_name_line_edt = QLineEdit()
         self.pv_name_line_edt.setAcceptDrops(True)
-        self.pv_name_line_edt.installEventFilter(self)
+        self.pv_name_line_edt.returnPressed.connect(self.add_curve)
 
         self.pv_protocol_cmb = QComboBox()
         self.pv_protocol_cmb.addItems(["ca://", "archive://"])
@@ -254,10 +261,13 @@ class TimeChartDisplay(Display):
         self.limit_time_plan_text = "Limit Time Span"
         self.chart_limit_time_span_chk = QCheckBox(self.limit_time_plan_text)
         self.chart_limit_time_span_chk.hide()
-        self.chart_limit_time_span_lbl = QLabel("HH : MM : SS")
-        self.chart_limit_time_span_hours_line_edt = QLineEdit()
-        self.chart_limit_time_span_minutes_line_edt = QLineEdit()
-        self.chart_limit_time_span_seconds_line_edt = QLineEdit()
+        self.chart_limit_time_span_lbl = QLabel("H:MM:SS")
+        self.chart_limit_time_span_hours_spin_box = QSpinBox()
+        self.chart_limit_time_span_hours_spin_box.setMaximum(999)
+        self.chart_limit_time_span_minutes_spin_box = QSpinBox()
+        self.chart_limit_time_span_minutes_spin_box.setMaximum(59)
+        self.chart_limit_time_span_seconds_spin_box = QSpinBox()
+        self.chart_limit_time_span_seconds_spin_box.setMaximum(59)
         self.chart_limit_time_span_activate_btn = QPushButton("Apply")
         self.chart_limit_time_span_activate_btn.setDisabled(True)
 
@@ -265,8 +275,7 @@ class TimeChartDisplay(Display):
 
         self.chart_ring_buffer_size_lbl = QLabel("Ring Buffer Size")
         self.chart_ring_buffer_size_edt = QLineEdit()
-        self.chart_ring_buffer_size_edt.installEventFilter(self)
-        self.chart_ring_buffer_size_edt.textChanged.connect(self.handle_buffer_size_changed)
+        self.chart_ring_buffer_size_edt.returnPressed.connect(self.handle_buffer_size_changed)
         self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
 
         self.show_legend_chk = QCheckBox("Show Legend")
@@ -412,9 +421,7 @@ class TimeChartDisplay(Display):
         self.splitter.addWidget(self.tab_panel)
         self.splitter.setSizes({400, 0})
 
-        self.splitter.setHandleWidth(1)
-        self.splitter.setStyleSheet("QSplitter::handle{ "
-                                    "background-color: blue}")
+        self.splitter.setHandleWidth(10)
         self.splitter.setStretchFactor(0, 0)
         self.splitter.setStretchFactor(1, 1)
 
@@ -426,6 +433,27 @@ class TimeChartDisplay(Display):
         self.main_layout.addLayout(self.body_layout)
 
         self.enable_chart_control_buttons(False)
+
+        handle = self.splitter.handle(1)
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        button = QToolButton(handle)
+        button.setArrowType(Qt.LeftArrow)
+        button.clicked.connect(
+            lambda: self.handle_splitter_button(True))
+        layout.addWidget(button)
+        button = QToolButton(handle)
+        button.setArrowType(Qt.RightArrow)
+        button.clicked.connect(
+            lambda: self.handle_splitter_button(False))
+        layout.addWidget(button)
+        handle.setLayout(layout)
+
+    def handle_splitter_button(self, left=True):
+        if left:
+            self.splitter.setSizes([1, 1])
+        else:
+            self.splitter.setSizes([1, 0])
 
     def setup_chart_settings_layout(self):
         self.chart_sync_mode_sync_radio.toggled.connect(partial(self.handle_sync_mode_radio_toggle,
@@ -450,25 +478,26 @@ class TimeChartDisplay(Display):
         self.chart_settings_layout.addWidget(self.chart_sync_mode_grpbx)
 
         self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_lbl)
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_hours_line_edt)
-
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_minutes_line_edt)
-        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_seconds_line_edt)
+        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_hours_spin_box)
+        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_minutes_spin_box)
+        self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_seconds_spin_box)
         self.chart_limit_time_span_layout.addWidget(self.chart_limit_time_span_activate_btn)
 
         self.chart_limit_time_span_lbl.hide()
-        self.chart_limit_time_span_hours_line_edt.hide()
-        self.chart_limit_time_span_minutes_line_edt.hide()
-        self.chart_limit_time_span_seconds_line_edt.hide()
+        self.chart_limit_time_span_hours_spin_box.hide()
+        self.chart_limit_time_span_minutes_spin_box.hide()
+        self.chart_limit_time_span_seconds_spin_box.hide()
         self.chart_limit_time_span_activate_btn.hide()
 
-        self.chart_limit_time_span_hours_line_edt.textChanged.connect(self.handle_time_span_edt_text_changed)
-        self.chart_limit_time_span_minutes_line_edt.textChanged.connect(self.handle_time_span_edt_text_changed)
-        self.chart_limit_time_span_seconds_line_edt.textChanged.connect(self.handle_time_span_edt_text_changed)
+        self.chart_limit_time_span_hours_spin_box.valueChanged.connect(
+            self.handle_time_span_changed)
+        self.chart_limit_time_span_minutes_spin_box.valueChanged.connect(
+            self.handle_time_span_changed)
+        self.chart_limit_time_span_seconds_spin_box.valueChanged.connect(
+            self.handle_time_span_changed)
 
         self.chart_limit_time_span_chk.clicked.connect(self.handle_limit_time_span_checkbox_clicked)
         self.chart_limit_time_span_activate_btn.clicked.connect(self.handle_chart_limit_time_span_activate_btn_clicked)
-        self.chart_limit_time_span_activate_btn.installEventFilter(self)
 
         self.graph_background_color_layout.addRow(self.background_color_lbl, self.background_color_btn)
         self.graph_drawing_settings_layout.addLayout(self.graph_background_color_layout)
@@ -499,41 +528,6 @@ class TimeChartDisplay(Display):
 
         self.chart_sync_mode_async_radio.toggled.emit(True)
         self.update_datetime_timer.start(1000)
-
-    def eventFilter(self, obj, event):
-        """
-        Handle key and mouse events for any applicable widget.
-
-        Parameters
-        ----------
-        obj : QWidget
-            The current widget that accepts the event
-        event : QEvent
-            The key or mouse event to handle
-
-        Returns
-        -------
-            True if the event was handled successfully; False otherwise
-        """
-        if obj == self.pv_name_line_edt and event.type() == QEvent.KeyPress:
-            if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
-                self.add_curve()
-                return True
-        elif obj == self.chart_limit_time_span_activate_btn and event.type() == QEvent.KeyPress:
-            if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
-                self.handle_chart_limit_time_span_activate_btn_clicked()
-                return True
-        elif obj == self.chart_ring_buffer_size_edt:
-            if event.type() == QEvent.KeyPress and (event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return) or \
-                    event.type() == QEvent.FocusOut:
-                try:
-                    buffer_size = int(self.chart_ring_buffer_size_edt.text())
-                    if buffer_size < MINIMUM_BUFFER_SIZE:
-                        self.chart_ring_buffer_size_edt.setText(str(MINIMUM_BUFFER_SIZE))
-                except ValueError:
-                    display_message_box(QMessageBox.Critical, "Invalid Values", "Only integer values are accepted.")
-                return True
-        return super(TimeChartDisplay, self).eventFilter(obj, event)
 
     def add_curve(self):
         """
@@ -749,9 +743,9 @@ class TimeChartDisplay(Display):
 
     def handle_limit_time_span_checkbox_clicked(self, is_checked):
         self.chart_limit_time_span_lbl.setVisible(is_checked)
-        self.chart_limit_time_span_hours_line_edt.setVisible(is_checked)
-        self.chart_limit_time_span_minutes_line_edt.setVisible(is_checked)
-        self.chart_limit_time_span_seconds_line_edt.setVisible(is_checked)
+        self.chart_limit_time_span_hours_spin_box.setVisible(is_checked)
+        self.chart_limit_time_span_minutes_spin_box.setVisible(is_checked)
+        self.chart_limit_time_span_seconds_spin_box.setVisible(is_checked)
         self.chart_limit_time_span_activate_btn.setVisible(is_checked)
 
         self.chart_ring_buffer_size_lbl.setDisabled(is_checked)
@@ -760,35 +754,24 @@ class TimeChartDisplay(Display):
         if not is_checked:
             self.chart_limit_time_span_chk.setText(self.limit_time_plan_text)
 
-    def handle_time_span_edt_text_changed(self, new_text):
-        try:
-            self.time_span_limit_hours = int(self.chart_limit_time_span_hours_line_edt.text())
-            self.time_span_limit_minutes = int(self.chart_limit_time_span_minutes_line_edt.text())
-            self.time_span_limit_seconds = int(self.chart_limit_time_span_seconds_line_edt.text())
-        except ValueError as e:
-            self.time_span_limit_hours = None
-            self.time_span_limit_minutes = None
-            self.time_span_limit_seconds = None
+    def handle_time_span_changed(self, new_val):
+        self.time_span_limit_hours = self.chart_limit_time_span_hours_spin_box.value()
+        self.time_span_limit_minutes = self.chart_limit_time_span_minutes_spin_box.value()
+        self.time_span_limit_seconds = self.chart_limit_time_span_seconds_spin_box.value()
 
-        if self.time_span_limit_hours is not None and self.time_span_limit_minutes is not None and \
-                self.time_span_limit_seconds is not None:
-            self.chart_limit_time_span_activate_btn.setEnabled(True)
-        else:
-            self.chart_limit_time_span_activate_btn.setEnabled(False)
+        status = self.time_span_limit_hours > 0 or self.time_span_limit_minutes > 0 or self.time_span_limit_seconds > 0
+
+        self.chart_limit_time_span_activate_btn.setEnabled(status)
 
     def handle_chart_limit_time_span_activate_btn_clicked(self):
-        if self.time_span_limit_hours is None or self.time_span_limit_minutes is None or \
-                self.time_span_limit_seconds is None:
-            display_message_box(QMessageBox.Critical, "Invalid Values",
-                                "Hours, minutes, and seconds expect only integer values.")
-        else:
-            timeout_milliseconds = (self.time_span_limit_hours * 3600 + self.time_span_limit_minutes * 60 +
-                                    self.time_span_limit_seconds) * 1000
-            self.chart.setTimeSpan(timeout_milliseconds / 1000.0)
-            self.chart_ring_buffer_size_edt.setText(str(self.chart.getBufferSize()))
+        timeout_milliseconds = (self.time_span_limit_hours * 3600 + self.time_span_limit_minutes * 60 +
+                                self.time_span_limit_seconds) * 1000
+        self.chart.setTimeSpan(timeout_milliseconds / 1000.0)
+        self.chart_ring_buffer_size_edt.setText(str(self.chart.getBufferSize()))
 
-    def handle_buffer_size_changed(self, new_buffer_size):
+    def handle_buffer_size_changed(self):
         try:
+            new_buffer_size = int(self.chart_ring_buffer_size_edt.text())
             if new_buffer_size and int(new_buffer_size) >= MINIMUM_BUFFER_SIZE:
                 self.chart.setBufferSize(new_buffer_size)
         except ValueError:
