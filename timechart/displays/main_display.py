@@ -51,7 +51,7 @@ IMPORT_FILE_FORMAT = "json"
 
 
 class TimeChartDisplay(Display):
-    def __init__(self, parent=None, args=[], macros=None):
+    def __init__(self, parent=None, args=[], macros=None, show_pv_add_panel=True):
         """
         Create all the widgets, including any child dialogs.
 
@@ -63,6 +63,8 @@ class TimeChartDisplay(Display):
             The command parameters
         macros : str
             Macros to modify the UI parameters at runtime
+        show_pv_add_panel : bool
+            Whether or not to show the PV add panel on top of the graph
         """
         super(TimeChartDisplay, self).__init__(parent=parent, args=args,
                                                macros=macros)
@@ -73,6 +75,8 @@ class TimeChartDisplay(Display):
         self.main_layout = QVBoxLayout()
         self.body_layout = QVBoxLayout()
 
+        self.pv_add_panel = QFrame()
+        self.pv_add_panel.setVisible(show_pv_add_panel)
         self.pv_layout = QHBoxLayout()
         self.pv_name_line_edt = QLineEdit()
         self.pv_name_line_edt.setAcceptDrops(True)
@@ -94,6 +98,7 @@ class TimeChartDisplay(Display):
         self.charting_layout = QHBoxLayout()
         self.chart = PyDMTimePlot(plot_by_timestamps=False)
         self.chart.plot_redrawn_signal.connect(self.update_curve_data)
+        self.chart.setBufferSize(DEFAULT_BUFFER_SIZE)
         self.chart.setPlotTitle("Time Plot")
 
         self.splitter = QSplitter()
@@ -408,6 +413,7 @@ class TimeChartDisplay(Display):
         self.pv_layout.addWidget(self.pv_protocol_cmb)
         self.pv_layout.addWidget(self.pv_name_line_edt)
         self.pv_layout.addWidget(self.pv_connect_push_btn)
+        self.pv_add_panel.setLayout(self.pv_layout)
         QTimer.singleShot(0, self.pv_name_line_edt.setFocus)
 
         self.curve_settings_tab.setLayout(self.curves_tab_layout)
@@ -457,7 +463,7 @@ class TimeChartDisplay(Display):
 
         self.charting_layout.addWidget(self.splitter)
 
-        self.body_layout.addLayout(self.pv_layout)
+        self.body_layout.addWidget(self.pv_add_panel)
         self.body_layout.addLayout(self.charting_layout)
         self.body_layout.addLayout(self.chart_control_layout)
         self.main_layout.addLayout(self.body_layout)
