@@ -77,6 +77,7 @@ class TimeChartDisplay(Display):
 
         self.pv_add_panel = QFrame()
         self.pv_add_panel.setVisible(show_pv_add_panel)
+        self.pv_add_panel.setMaximumHeight(75)
         self.pv_layout = QHBoxLayout()
         self.pv_name_line_edt = QLineEdit()
         self.pv_name_line_edt.setAcceptDrops(True)
@@ -214,7 +215,7 @@ class TimeChartDisplay(Display):
         self.title_settings_layout.setSpacing(5)
 
         self.title_settings_grpbx = QGroupBox("Title and Legend")
-        self.title_settings_grpbx.setFixedHeight(120)
+        self.title_settings_grpbx.setMaximumHeight(120)
 
         self.import_export_data_layout = QVBoxLayout()
         self.import_export_data_layout.setAlignment(Qt.AlignTop)
@@ -250,7 +251,7 @@ class TimeChartDisplay(Display):
         self.chart_sync_mode_layout.setSpacing(5)
 
         self.chart_sync_mode_grpbx = QGroupBox("Data Sampling Mode")
-        self.chart_sync_mode_grpbx.setFixedHeight(80)
+        self.chart_sync_mode_grpbx.setMaximumHeight(100)
 
         self.chart_sync_mode_sync_radio = QRadioButton("Synchronous")
         self.chart_sync_mode_async_radio = QRadioButton("Asynchronous")
@@ -321,7 +322,7 @@ class TimeChartDisplay(Display):
             self.handle_background_color_button_clicked)
 
         self.axis_settings_layout = QVBoxLayout()
-        self.axis_settings_layout.setSpacing(5)
+        self.axis_settings_layout.setSpacing(10)
 
         self.show_x_grid_chk = QCheckBox("Show x Grid")
         self.show_x_grid_chk.setChecked(self.chart.showXGrid)
@@ -369,7 +370,6 @@ class TimeChartDisplay(Display):
         self.graph_drawing_settings_grpbx.setAlignment(Qt.AlignTop)
 
         self.axis_settings_grpbx = QGroupBox("Grid and Axis")
-        self.axis_settings_grpbx.setFixedHeight(180)
 
         self.app = QApplication.instance()
         self.setup_ui()
@@ -926,7 +926,6 @@ class TimeChartDisplay(Display):
                 self.chart_limit_time_span_chk.setChecked(False)
                 self.chart_limit_time_span_chk.clicked.emit(False)
                 self.chart_limit_time_span_chk.hide()
-                self.graph_drawing_settings_grpbx.setFixedHeight(130)
 
                 self.chart.setUpdatesAsynchronously(False)
             elif radio_btn.text() == "Asynchronous":
@@ -935,7 +934,6 @@ class TimeChartDisplay(Display):
                 self.chart_data_sampling_rate_lbl.show()
                 self.chart_data_async_sampling_rate_spin.show()
                 self.chart_limit_time_span_chk.show()
-                self.graph_drawing_settings_grpbx.setFixedHeight(230)
 
                 self.chart.setUpdatesAsynchronously(True)
         self.app.establish_widget_connections(self)
