@@ -77,6 +77,7 @@ class TimeChartDisplay(Display):
 
         self.pv_add_panel = QFrame()
         self.pv_add_panel.setVisible(show_pv_add_panel)
+        self.pv_add_panel.setMaximumHeight(75)
         self.pv_layout = QHBoxLayout()
         self.pv_name_line_edt = QLineEdit()
         self.pv_name_line_edt.setAcceptDrops(True)
