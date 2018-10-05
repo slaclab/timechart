@@ -99,6 +99,7 @@ class TimeChartDisplay(Display):
 
         self.charting_layout = QHBoxLayout()
         self.chart = PyDMTimePlot(plot_by_timestamps=False)
+        self.chart.setDownsampling(ds=False, auto=False, mode=None)
         self.chart.plot_redrawn_signal.connect(self.update_curve_data)
         self.chart.setBufferSize(DEFAULT_BUFFER_SIZE)
         self.chart.setPlotTitle("Time Plot")
@@ -389,7 +390,7 @@ class TimeChartDisplay(Display):
         """
         The minimum recommended size of the main window.
         """
-        return QSize(900, 750)
+        return QSize(800, 600)
 
     def ui_filepath(self):
         """
@@ -466,7 +467,6 @@ class TimeChartDisplay(Display):
 
         self.body_layout.addWidget(self.pv_add_panel)
         self.body_layout.addLayout(self.charting_layout)
-        self.body_layout.addLayout(self.chart_control_layout)
         self.main_layout.addLayout(self.body_layout)
 
         self.enable_chart_control_buttons(False)
