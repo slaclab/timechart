@@ -1,0 +1,42 @@
+{% set data = load_setup_py_data() %}
+
+package:
+    name    : timechart
+    version : {{ data.get('version') }}
+
+source:
+    path: ..
+
+requirements:
+    build:
+      - python
+      - setuptools
+      - six
+      - numpy >=1.11.0
+      - pyepics >=3.2.7
+      - pyqt >=5
+      - pyqtgraph
+      - qtpy
+      - pydm
+
+    run:
+      - six
+      - python
+      - numpy >=1.11.0
+      - scipy >=0.12.0
+      - pyepics >=3.2.7
+      - requests >=1.1.0
+      - psutil
+      - pyqt >=5
+      - qtpy
+      - pyqtgraph
+      - pydm
+
+test:
+    imports:
+      - timechart
+
+about:
+  home: https://github.com/slaclab/timechart
+  license: SLAC Open License
+  summary: Charting Tool based on PyDM
