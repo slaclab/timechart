@@ -4,6 +4,9 @@ import traceback
 import argparse
 import logging
 
+import warnings
+warnings.filterwarnings("ignore")
+
 from pydm.application import PyDMApplication
 
 from qtpy import QtGui, QtCore

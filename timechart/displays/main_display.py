@@ -861,7 +861,10 @@ class TimeChartDisplay(Display):
     def handle_data_sampling_rate_changed(self):
         # The chart expects the value in milliseconds
         sampling_rate_seconds = 1.0 / self.chart_data_async_sampling_rate_spin.value()
+        buffer_size = self.chart.getBufferSize()
         self.chart.setUpdateInterval(sampling_rate_seconds)
+        if self.chart.getBufferSize() < buffer_size:
+            self.chart.setBufferSize(buffer_size)
         self.chart_ring_buffer_size_edt.setText(str(self.chart.getBufferSize()))
 
     def handle_background_color_button_clicked(self):
