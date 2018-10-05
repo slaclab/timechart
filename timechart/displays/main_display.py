@@ -51,7 +51,8 @@ IMPORT_FILE_FORMAT = "json"
 
 
 class TimeChartDisplay(Display):
-    def __init__(self, parent=None, args=[], macros=None, show_pv_add_panel=True):
+    def __init__(self, parent=None, args=[], macros=None,
+                 show_pv_add_panel=True):
         """
         Create all the widgets, including any child dialogs.
 
@@ -642,8 +643,24 @@ class TimeChartDisplay(Display):
         curve_color : QColor
             The color of the curve to paint for the checkbox label to help the user track the curve to the checkbox
         """
-        checkbox = QCheckBox()
-        checkbox.setObjectName(pv_name)
+        individual_curve_layout = QVBoxLayout()
+
+        size_policy = QSizePolicy()
+        size_policy.setVerticalPolicy(QSizePolicy.Fixed)
+        size_policy.setHorizontalPolicy(QSizePolicy.Fixed)
+
+        individual_curve_grpbx = QGroupBox()
+        individual_curve_grpbx.setFixedWidth(300)
+        individual_curve_grpbx.setFixedHeight(120)
+        individual_curve_grpbx.setAlignment(Qt.AlignTop)
+
+        individual_curve_grpbx.setSizePolicy(size_policy)
+
+        individual_curve_grpbx.setObjectName(pv_name + "_grb")
+        individual_curve_grpbx.setLayout(individual_curve_layout)
+
+        checkbox = QCheckBox(parent=individual_curve_grpbx)
+        checkbox.setObjectName(pv_name + "_chb")
 
         palette = checkbox.palette()
         palette.setColor(QPalette.Active, QPalette.WindowText, curve_color)
@@ -659,34 +676,36 @@ class TimeChartDisplay(Display):
 
         checkbox.setText(display_name)
 
-        data_text = QLabel()
+        data_text = QLabel(parent=individual_curve_grpbx)
         data_text.setWordWrap(True)
-        data_text.setObjectName(pv_name)
+        data_text.setObjectName(pv_name + "_lbl")
         data_text.setPalette(palette)
 
         checkbox.setChecked(True)
         checkbox.clicked.connect(
             partial(self.handle_curve_chkbox_toggled, checkbox))
 
-        modify_curve_btn = QPushButton("Modify...")
-        modify_curve_btn.setObjectName(pv_name)
+        modify_curve_btn = QPushButton("Modify...",
+                                       parent=individual_curve_grpbx)
+        modify_curve_btn.setObjectName(pv_name + "_btn_modify")
         modify_curve_btn.setMaximumWidth(80)
         modify_curve_btn.clicked.connect(
             partial(self.display_curve_settings_dialog, pv_name))
 
-        focus_curve_btn = QPushButton("Focus")
-        focus_curve_btn.setObjectName(pv_name)
+        focus_curve_btn = QPushButton("Focus", parent=individual_curve_grpbx)
+        focus_curve_btn.setObjectName(pv_name + "_btn_focus")
         focus_curve_btn.setMaximumWidth(80)
         focus_curve_btn.clicked.connect(partial(self.focus_curve, pv_name))
 
-        annotate_curve_btn = QPushButton("Annotate...")
-        annotate_curve_btn.setObjectName(pv_name)
-        annotate_curve_btn.setMaximumWidth(80)
-        annotate_curve_btn.clicked.connect(
-            partial(self.annotate_curve, pv_name))
+        # annotate_curve_btn = QPushButton("Annotate...",
+        #                                  parent=individual_curve_grpbx)
+        # annotate_curve_btn.setObjectName(pv_name+"_btn_ann")
+        # annotate_curve_btn.setMaximumWidth(80)
+        # annotate_curve_btn.clicked.connect(
+        #     partial(self.annotate_curve, pv_name))
 
-        remove_curve_btn = QPushButton("Remove")
-        remove_curve_btn.setObjectName(pv_name)
+        remove_curve_btn = QPushButton("Remove", parent=individual_curve_grpbx)
+        remove_curve_btn.setObjectName(pv_name + "_btn_remove")
         remove_curve_btn.setMaximumWidth(80)
         remove_curve_btn.clicked.connect(partial(self.remove_curve, pv_name))
 
@@ -694,26 +713,12 @@ class TimeChartDisplay(Display):
         curve_btn_layout.setSpacing(5)
         curve_btn_layout.addWidget(modify_curve_btn)
         curve_btn_layout.addWidget(focus_curve_btn)
+        # curve_btn_layout.addWidget(annotate_curve_btn)
         curve_btn_layout.addWidget(remove_curve_btn)
 
-        individual_curve_layout = QVBoxLayout()
         individual_curve_layout.addWidget(checkbox)
         individual_curve_layout.addWidget(data_text)
         individual_curve_layout.addLayout(curve_btn_layout)
-
-        size_policy = QSizePolicy()
-        size_policy.setVerticalPolicy(QSizePolicy.Fixed)
-        size_policy.setHorizontalPolicy(QSizePolicy.Fixed)
-
-        individual_curve_grpbx = QGroupBox()
-        individual_curve_grpbx.setFixedWidth(300)
-        individual_curve_grpbx.setFixedHeight(120)
-        individual_curve_grpbx.setAlignment(Qt.AlignTop)
-
-        individual_curve_grpbx.setSizePolicy(size_policy)
-
-        individual_curve_grpbx.setObjectName(pv_name)
-        individual_curve_grpbx.setLayout(individual_curve_layout)
 
         self.curve_settings_layout.addWidget(individual_curve_grpbx)
 
@@ -793,10 +798,13 @@ class TimeChartDisplay(Display):
             del self.channel_map[pv_name]
             self.chart.removeLegendItem(pv_name)
 
-            widgets = self.findChildren(
-                (QCheckBox, QLabel, QPushButton, QGroupBox), pv_name)
-            for w in widgets:
-                w.deleteLater()
+            try:
+                widget = self.findChildren(QGroupBox, pv_name + "_grb")[0]
+                if widget:
+                    widget.deleteLater()
+                    widget = None
+            except IndexError:
+                pass
 
         if len(self.chart.getCurves()) < 1:
             self.enable_chart_control_buttons(False)
@@ -1043,8 +1051,8 @@ class TimeChartDisplay(Display):
 
     def update_curve_data(self, curve):
         """
-        Determine if the PV is active. If not, disable the related PV controls. If the PV is active, update the PV
-        controls' states.
+        Determine if the PV is active. If not, disable the related PV controls.
+        If the PV is active, update the PV controls' states.
 
         Parameters
         ----------
@@ -1056,25 +1064,26 @@ class TimeChartDisplay(Display):
         max_y = curve.maxY if curve.maxY else 0
         current_y = curve.data_buffer[1, -1]
 
-        widgets = self.findChildren((QCheckBox, QLabel, QPushButton), pv_name)
-        for w in widgets:
-            if np.isnan(current_y):
-                if isinstance(w, QCheckBox):
-                    w.setChecked(False)
-            else:
-                if isinstance(w, QCheckBox) and not w.isEnabled():
-                    w.setChecked(True)
-                if isinstance(w, QLabel):
-                    w.clear()
-                    w.setText(
-                        "(yMin = {0:.3f}, yMax = {1:.3f}) y = {2:.3f}".format(
-                            min_y, max_y, current_y))
-                    w.show()
-            w.setEnabled(not np.isnan(current_y))
+        connected = not np.isnan(current_y)
 
-            if isinstance(w, QPushButton) and w.text() == "Remove":
-                # Enable the Remove button to make removing inactive PVs possible anytime
-                w.setEnabled(True)
+        grb = self.findChild(QGroupBox, pv_name + "_grb")
+
+        lbl = grb.findChild(QLabel, pv_name + "_lbl")
+        lbl.setText("(yMin = {0:.3f}, yMax = {1:.3f}) y = {2:.3f}".format(
+            min_y, max_y, current_y))
+
+        chb = grb.findChild(QCheckBox, pv_name + "_chb")
+        if connected and chb.isEnabled():
+            return
+
+        chb.setEnabled(connected)
+        btn_modify = grb.findChild(QPushButton, pv_name + "_btn_modify")
+        btn_modify.setEnabled(connected)
+        btn_focus = grb.findChild(QPushButton, pv_name + "_btn_modify")
+        btn_focus.setEnabled(connected)
+
+        # btn_ann = grb.findChild(QPushButton, pv_name + "_btn_ann")
+        # btn_ann.setEnabled(connected)
 
     @staticmethod
     def get_current_datetime():
