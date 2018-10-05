@@ -3,7 +3,7 @@ from collections import OrderedDict
 import json
 
 from pydm import utilities
-
+from timechart import __version__ as ver
 
 class SettingsExporter:
     def __init__(self, pydm_main_display, include_pvs, include_chart_settings):
@@ -13,7 +13,7 @@ class SettingsExporter:
 
     def export_settings(self, filename):
         settings = OrderedDict()
-        settings["__version__"] = versioneer.get_version()
+        settings["__version__"] = ver
         settings["pvs"] = OrderedDict()
         settings["chart_settings"] = OrderedDict()
 
@@ -56,9 +56,9 @@ class SettingsExporter:
             chart_settings[
                 "limit_time_span"] = self.main_display.chart_limit_time_span_chk.isChecked()
 
-            time_span_limit_hours = self.main_display.chart_limit_time_span_hours_line_edt.text()
-            time_span_limit_minutes = self.main_display.chart_limit_time_span_minutes_line_edt.text()
-            time_span_limit_seconds = self.main_display.chart_limit_time_span_seconds_line_edt.text()
+            time_span_limit_hours = self.main_display.chart_limit_time_span_minutes_spin_box.text()
+            time_span_limit_minutes = self.main_display.chart_limit_time_span_minutes_spin_box.text()
+            time_span_limit_seconds = self.main_display.chart_limit_time_span_seconds_spin_box.text()
 
             chart_settings[
                 "time_span_limit_hours"] = time_span_limit_hours if time_span_limit_hours else 0
