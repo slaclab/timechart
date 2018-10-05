@@ -69,20 +69,14 @@ class SettingsImporter:
                 chart_settings["time_span_limit_seconds"])
 
             if time_span_limit_hours != 0 or time_span_limit_minutes != 0 or time_span_limit_seconds != 0:
-                self.main_display.chart_limit_time_span_hours_line_edt.setText(
-                    str(time_span_limit_hours))
-                self.main_display.chart_limit_time_span_hours_line_edt.textChanged.emit(
-                    str(time_span_limit_hours))
+                self.main_display.chart_limit_time_span_hours_spin_box.setValue(time_span_limit_hours)
+                self.main_display.chart_limit_time_span_hours_spin_box.valueChanged.emit(time_span_limit_hours)
 
-                self.main_display.chart_limit_time_span_minutes_line_edt.setText(
-                    str(time_span_limit_minutes))
-                self.main_display.chart_limit_time_span_minutes_line_edt.textChanged.emit(
-                    str(time_span_limit_minutes))
+                self.main_display.chart_limit_time_span_minutes_spin_box.setValue(time_span_limit_minutes)
+                self.main_display.chart_limit_time_span_minutes_spin_box.valueChanged.emit(time_span_limit_minutes)
 
-                self.main_display.chart_limit_time_span_seconds_line_edt.setText(
-                    str(time_span_limit_seconds))
-                self.main_display.chart_limit_time_span_seconds_line_edt.textChanged.emit(
-                    str(time_span_limit_seconds))
+                self.main_display.chart_limit_time_span_seconds_spin_box.setValue(time_span_limit_seconds)
+                self.main_display.chart_limit_time_span_seconds_spin_box.valueChanged.emit(time_span_limit_seconds)
 
                 self.main_display.chart_limit_time_span_chk.setChecked(
                     chart_settings["limit_time_span"])

@@ -125,7 +125,9 @@ class TimeChartDisplay(Display):
         self.curve_settings_scroll = QScrollArea()
         self.curve_settings_scroll.setVerticalScrollBarPolicy(
             Qt.ScrollBarAsNeeded)
+        self.curve_settings_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.curve_settings_scroll.setWidget(self.curve_settings_inner_frame)
+        self.curve_settings_scroll.setWidgetResizable(True)
 
         self.curves_tab_layout = QHBoxLayout()
         self.curves_tab_layout.addWidget(self.curve_settings_scroll)
@@ -798,13 +800,10 @@ class TimeChartDisplay(Display):
             del self.channel_map[pv_name]
             self.chart.removeLegendItem(pv_name)
 
-            try:
-                widget = self.findChildren(QGroupBox, pv_name + "_grb")[0]
-                if widget:
-                    widget.deleteLater()
-                    widget = None
-            except IndexError:
-                pass
+            widget = self.findChild(QGroupBox, pv_name + "_grb")
+            if widget:
+                widget.deleteLater()
+                widget = None
 
         if len(self.chart.getCurves()) < 1:
             self.enable_chart_control_buttons(False)
