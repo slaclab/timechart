@@ -215,6 +215,9 @@ class ChartDataExportDisplay(Display):
                                                      self.include_chart_settings_chk.isChecked())
                 settings_exporter.export_settings(saved_file_name)
 
+            self.close()
+            QMessageBox.information(self, "Data Export", "Data exported successfully!")
+
     def handle_export_image_background_button_clicked(self):
         self.exported_image_background_color = QColorDialog.getColor()
         self.export_image_background_btn.setStyleSheet("background-color: " +

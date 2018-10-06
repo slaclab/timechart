@@ -5,6 +5,7 @@ import json
 from pydm import utilities
 from timechart import __version__ as ver
 
+
 class SettingsExporter:
     def __init__(self, pydm_main_display, include_pvs, include_chart_settings):
         self.main_display = pydm_main_display

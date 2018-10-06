@@ -78,7 +78,7 @@ class TimeChartDisplay(Display):
 
         self.pv_add_panel = QFrame()
         self.pv_add_panel.setVisible(show_pv_add_panel)
-        self.pv_add_panel.setMaximumHeight(75)
+        self.pv_add_panel.setMaximumHeight(50)
         self.pv_layout = QHBoxLayout()
         self.pv_name_line_edt = QLineEdit()
         self.pv_name_line_edt.setAcceptDrops(True)
@@ -109,7 +109,7 @@ class TimeChartDisplay(Display):
         self.curve_settings_layout = QVBoxLayout()
         self.curve_settings_layout.setAlignment(Qt.AlignTop)
         self.curve_settings_layout.setSizeConstraint(QLayout.SetMinAndMaxSize)
-        self.curve_settings_layout.setSpacing(10)
+        self.curve_settings_layout.setSpacing(5)
 
         self.crosshair_settings_layout = QVBoxLayout()
         self.crosshair_settings_layout.setAlignment(Qt.AlignTop)
@@ -469,6 +469,8 @@ class TimeChartDisplay(Display):
 
         self.body_layout.addWidget(self.pv_add_panel)
         self.body_layout.addLayout(self.charting_layout)
+        self.body_layout.setSpacing(0)
+        self.body_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.addLayout(self.body_layout)
 
         self.enable_chart_control_buttons(False)
