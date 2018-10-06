@@ -125,10 +125,10 @@ class AxisSettingsDisplay(Display):
             self.right_y_axis_label_line_edt.setText(right_label)
             self.right_y_axis_unit_edt.setText(right_unit)
 
-            self.main_layout.insertRow(self.main_layout.rowCount() - 2,
+            self.main_layout.insertRow(self.main_layout.rowCount() - 1,
                                        self.right_y_axis_lbl,
                                        self.right_y_axis_label_line_edt)
-            self.main_layout.insertRow(self.main_layout.rowCount() - 2,
+            self.main_layout.insertRow(self.main_layout.rowCount() - 1,
                                        self.right_y_axis_unit_lbl,
                                        self.right_y_axis_unit_edt)
         else:
