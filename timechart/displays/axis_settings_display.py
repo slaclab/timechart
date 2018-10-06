@@ -17,7 +17,6 @@ class AxisSettingsDisplay(Display):
         self.main_display = main_display
 
         self.chart = self.main_display.chart
-        self.app = self.main_display.app
 
         self.x_axis_lbl = QLabel("x-axis Label")
         self.x_axis_label_line_edt = QLineEdit()
@@ -104,10 +103,6 @@ class AxisSettingsDisplay(Display):
     def handle_right_y_axis_checkbox_changed(self, is_checked):
         self.chart.setShowRightAxis(is_checked)
 
-        # Remove the Close button first
-        if self.main_layout.rowCount() > 1:
-            self.main_layout.removeRow(self.main_layout.rowCount() - 1)
-
         if is_checked:
             right_label = self.chart.labels["right"]
             if not right_label:
@@ -130,22 +125,18 @@ class AxisSettingsDisplay(Display):
             self.right_y_axis_label_line_edt.setText(right_label)
             self.right_y_axis_unit_edt.setText(right_unit)
 
-            self.main_layout.addRow(self.right_y_axis_lbl,
-                                    self.right_y_axis_label_line_edt)
-            self.main_layout.addRow(self.right_y_axis_unit_lbl,
-                                    self.right_y_axis_unit_edt)
+            self.main_layout.insertRow(self.main_layout.rowCount() - 2,
+                                       self.right_y_axis_lbl,
+                                       self.right_y_axis_label_line_edt)
+            self.main_layout.insertRow(self.main_layout.rowCount() - 2,
+                                       self.right_y_axis_unit_lbl,
+                                       self.right_y_axis_unit_edt)
         else:
             self.chart.showAxis("right", show=False)
-
-            for i in range(2):
-                self.main_layout.removeRow(self.main_layout.rowCount() - 1)
-
-        # Add the Close button back
-        self.close_dialog_btn = QPushButton("Close")
-        self.close_dialog_btn.clicked.connect(self.handle_close_button_clicked)
-        self.main_layout.addRow(None, self.close_dialog_btn)
-
-        self.app.establish_widget_connections(self.main_display)
+            self.right_y_axis_lbl.deleteLater()
+            self.right_y_axis_label_line_edt.deleteLater()
+            self.right_y_axis_unit_lbl.deleteLater()
+            self.right_y_axis_unit_edt.deleteLater()
 
     def handle_axis_label_change(self, axis_position, new_label, is_unit=False):
         if is_unit:
