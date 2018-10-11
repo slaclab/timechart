@@ -16,7 +16,7 @@ from qtpy.QtWidgets import (QApplication, QWidget, QCheckBox, QHBoxLayout,
                             QColorDialog, QGroupBox, QRadioButton,
                             QMessageBox, QFileDialog, QScrollArea, QFrame,
                             QSizePolicy, QLayout,
-                            QToolButton)
+                            QToolButton, QFontDialog)
 from qtpy.QtGui import QColor, QPalette
 
 from pydm import Display
@@ -70,6 +70,8 @@ class TimeChartDisplay(Display):
         super(TimeChartDisplay, self).__init__(parent=parent, args=args,
                                                macros=macros)
 
+        self.legend_font = None
+
         self.channel_map = dict()
         self.setWindowTitle("TimeChart Tool")
 
@@ -92,7 +94,8 @@ class TimeChartDisplay(Display):
         self.pv_connect_push_btn.clicked.connect(self.add_curve)
 
         self.tab_panel = QTabWidget()
-        self.tab_panel.setFixedWidth(350)
+        self.tab_panel.setMinimumWidth(350)
+        self.tab_panel.setMaximumWidth(350)
 
         self.curve_settings_tab = QWidget()
         self.data_settings_tab = QWidget()
@@ -150,7 +153,7 @@ class TimeChartDisplay(Display):
         self.chart_layout.setSpacing(10)
 
         self.chart_panel = QWidget()
-        self.chart_panel.setBaseSize(200, 400)
+        self.chart_panel.setMinimumHeight(400)
 
         self.chart_control_layout = QHBoxLayout()
         self.chart_control_layout.setAlignment(Qt.AlignHCenter)
@@ -247,6 +250,14 @@ class TimeChartDisplay(Display):
         self.chart_title_line_edt.textChanged.connect(
             self.handle_title_text_changed)
 
+        self.chart_title_font_btn = QPushButton()
+        self.chart_title_font_btn.setFixedHeight(24)
+        self.chart_title_font_btn.setFixedWidth(24)
+        self.chart_title_font_btn.setIcon(IconFont().icon("font"))
+        self.chart_title_font_btn.clicked.connect(
+            partial(self.handle_chart_font_changed, "title")
+        )
+
         self.chart_change_axis_settings_btn = QPushButton(
             text="Change Axis Settings...")
         self.chart_change_axis_settings_btn.clicked.connect(
@@ -318,6 +329,14 @@ class TimeChartDisplay(Display):
         self.show_legend_chk.setChecked(self.chart.showLegend)
         self.show_legend_chk.clicked.connect(
             self.handle_show_legend_checkbox_clicked)
+
+        self.legend_font_btn = QPushButton()
+        self.legend_font_btn.setFixedHeight(24)
+        self.legend_font_btn.setFixedWidth(24)
+        self.legend_font_btn.setIcon(IconFont().icon("font"))
+        self.legend_font_btn.clicked.connect(
+            partial(self.handle_chart_font_changed, "legend")
+        )
 
         self.graph_background_color_layout = QFormLayout()
 
@@ -393,12 +412,6 @@ class TimeChartDisplay(Display):
         self.time_span_limit_seconds = None
         self.data_sampling_mode = ASYNC_DATA_SAMPLING
 
-    def minimumSizeHint(self):
-        """
-        The minimum recommended size of the main window.
-        """
-        return QSize(800, 600)
-
     def ui_filepath(self):
         """
         The path to the UI file created by Qt Designer, if applicable.
@@ -427,11 +440,11 @@ class TimeChartDisplay(Display):
 
         self.curve_settings_tab.setLayout(self.curves_tab_layout)
 
-        self.data_settings_tab.setLayout(self.data_tab_layout)
-        self.setup_data_tab_layout()
-
         self.chart_settings_tab.setLayout(self.chart_settings_layout)
         self.setup_chart_settings_layout()
+
+        self.data_settings_tab.setLayout(self.data_tab_layout)
+        self.setup_data_tab_layout()
 
         self.tab_panel.addTab(self.curve_settings_tab, "Curves")
         self.tab_panel.addTab(self.data_settings_tab, "Data")
@@ -469,7 +482,7 @@ class TimeChartDisplay(Display):
 
         self.splitter.addWidget(self.chart_panel)
         self.splitter.addWidget(self.tab_panel)
-        self.splitter.setSizes({400, 0})
+        self.splitter.setSizes([1, 0])
 
         self.splitter.setHandleWidth(10)
         self.splitter.setStretchFactor(0, 0)
@@ -505,6 +518,40 @@ class TimeChartDisplay(Display):
             self.splitter.setSizes([1, 1])
         else:
             self.splitter.setSizes([1, 0])
+
+    def change_legend_font(self, font):
+        if font is None:
+            return
+        self.legend_font = font
+        items = self.chart.plotItem.legend.items
+        for i in items:
+            i[1].item.setFont(font)
+            i[1].resizeEvent(None)
+            i[1].updateGeometry()
+
+    def change_title_font(self, font):
+        current_text = self.chart.plotItem.titleLabel.text
+        args = {
+            "family": font.family,
+            "size": "{}pt".format(font.pointSize()),
+            "bold": font.bold(),
+            "italic": font.italic(),
+        }
+        self.chart.plotItem.titleLabel.setText(current_text, **args)
+
+    def handle_chart_font_changed(self, target):
+        if target not in ("title", "legend"):
+            return
+
+        dialog = QFontDialog(self)
+        dialog.setOption(QFontDialog.DontUseNativeDialog, True)
+
+        if target == "title":
+            dialog.fontSelected.connect(self.change_title_font)
+        else:
+            dialog.fontSelected.connect(self.change_legend_font)
+
+        dialog.open()
 
     def setup_data_tab_layout(self):
         self.chart_sync_mode_sync_radio.toggled.connect(
@@ -574,9 +621,13 @@ class TimeChartDisplay(Display):
     def setup_chart_settings_layout(self):
         self.chart_title_layout.addWidget(self.chart_title_lbl)
         self.chart_title_layout.addWidget(self.chart_title_line_edt)
+        self.chart_title_layout.addWidget(self.chart_title_font_btn)
         self.title_settings_layout.addLayout(self.chart_title_layout)
 
-        self.title_settings_layout.addWidget(self.show_legend_chk)
+        legend_layout = QHBoxLayout()
+        legend_layout.addWidget(self.show_legend_chk)
+        legend_layout.addWidget(self.legend_font_btn)
+        self.title_settings_layout.addLayout(legend_layout)
         self.title_settings_layout.addWidget(
             self.chart_change_axis_settings_btn)
         self.title_settings_grpbx.setLayout(self.title_settings_layout)
@@ -636,6 +687,8 @@ class TimeChartDisplay(Display):
                                        color=color, lineStyle=line_style,
                                        lineWidth=line_width, symbol=symbol,
                                        symbolSize=symbol_size)
+        if self.show_legend_chk.isChecked():
+            self.change_legend_font(self.legend_font)
         self.channel_map[pv_name] = curve
         self.generate_pv_controls(pv_name, color)
 
@@ -665,8 +718,8 @@ class TimeChartDisplay(Display):
         size_policy.setHorizontalPolicy(QSizePolicy.Fixed)
 
         individual_curve_grpbx = QGroupBox()
-        individual_curve_grpbx.setFixedWidth(300)
-        individual_curve_grpbx.setFixedHeight(120)
+        individual_curve_grpbx.setMinimumWidth(300)
+        individual_curve_grpbx.setMinimumHeight(120)
         individual_curve_grpbx.setAlignment(Qt.AlignTop)
 
         individual_curve_grpbx.setSizePolicy(size_policy)
@@ -738,7 +791,6 @@ class TimeChartDisplay(Display):
         self.curve_settings_layout.addWidget(individual_curve_grpbx)
 
         self.tab_panel.setCurrentIndex(0)
-        self.splitter.setSizes({400, 300})
 
     def handle_curve_chkbox_toggled(self, checkbox):
         """
@@ -761,7 +813,9 @@ class TimeChartDisplay(Display):
             if curve:
                 self.chart.addLegendItem(curve, pv_name,
                                          self.show_legend_chk.isChecked())
+
                 curve.show()
+                self.change_legend_font(self.legend_font)
         else:
             curve = self.chart.findCurve(pv_name)
             if curve:
