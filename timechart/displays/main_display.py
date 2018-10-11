@@ -98,6 +98,7 @@ class TimeChartDisplay(Display):
         self.tab_panel.setMaximumWidth(350)
 
         self.curve_settings_tab = QWidget()
+        self.data_settings_tab = QWidget()
         self.chart_settings_tab = QWidget()
 
         self.charting_layout = QHBoxLayout()
@@ -132,31 +133,21 @@ class TimeChartDisplay(Display):
         self.curve_settings_scroll.setWidget(self.curve_settings_inner_frame)
         self.curve_settings_scroll.setWidgetResizable(True)
 
-        self.curves_tab_layout = QHBoxLayout()
-        self.curves_tab_layout.addWidget(self.curve_settings_scroll)
-
         self.enable_crosshair_chk.setChecked(False)
         self.enable_crosshair_chk.clicked.connect(
             self.handle_enable_crosshair_checkbox_clicked)
         self.enable_crosshair_chk.clicked.emit(False)
 
+        self.curves_tab_layout = QHBoxLayout()
+        self.curves_tab_layout.addWidget(self.curve_settings_scroll)
+
+        self.data_tab_layout = QVBoxLayout()
+        self.data_tab_layout.setAlignment(Qt.AlignTop)
+        self.data_tab_layout.setSpacing(5)
+
         self.chart_settings_layout = QVBoxLayout()
         self.chart_settings_layout.setAlignment(Qt.AlignTop)
         self.chart_settings_layout.setSpacing(5)
-
-        self.chart_settings_inner_frame = QFrame()
-        self.chart_settings_inner_frame.setLayout(self.chart_settings_layout)
-
-        self.chart_settings_scroll = QScrollArea()
-        self.chart_settings_scroll.setVerticalScrollBarPolicy(
-            Qt.ScrollBarAsNeeded)
-        self.chart_settings_scroll.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
-        self.chart_settings_scroll.setWidget(self.chart_settings_inner_frame)
-        self.chart_settings_scroll.setWidgetResizable(True)
-
-        self.chart_tab_layout = QHBoxLayout()
-        self.chart_tab_layout.addWidget(self.chart_settings_scroll)
 
         self.chart_layout = QVBoxLayout()
         self.chart_layout.setSpacing(10)
@@ -253,7 +244,7 @@ class TimeChartDisplay(Display):
         self.chart_title_layout = QHBoxLayout()
         self.chart_title_layout.setSpacing(10)
 
-        self.chart_title_lbl = QLabel(text="Chart Title")
+        self.chart_title_lbl = QLabel(text="Graph Title")
         self.chart_title_line_edt = QLineEdit()
         self.chart_title_line_edt.setText(self.chart.getPlotTitle())
         self.chart_title_line_edt.textChanged.connect(
@@ -406,7 +397,7 @@ class TimeChartDisplay(Display):
         self.graph_drawing_settings_grpbx = QGroupBox("Graph Intervals")
         self.graph_drawing_settings_grpbx.setAlignment(Qt.AlignTop)
 
-        self.axis_settings_grpbx = QGroupBox("Grid and Axis")
+        self.axis_settings_grpbx = QGroupBox("Graph Appearance")
 
         self.app = QApplication.instance()
         self.setup_ui()
@@ -448,11 +439,16 @@ class TimeChartDisplay(Display):
         QTimer.singleShot(0, self.pv_name_line_edt.setFocus)
 
         self.curve_settings_tab.setLayout(self.curves_tab_layout)
-        self.chart_settings_tab.setLayout(self.chart_tab_layout)
+
+        self.chart_settings_tab.setLayout(self.chart_settings_layout)
         self.setup_chart_settings_layout()
 
+        self.data_settings_tab.setLayout(self.data_tab_layout)
+        self.setup_data_tab_layout()
+
         self.tab_panel.addTab(self.curve_settings_tab, "Curves")
-        self.tab_panel.addTab(self.chart_settings_tab, "Chart")
+        self.tab_panel.addTab(self.data_settings_tab, "Data")
+        self.tab_panel.addTab(self.chart_settings_tab, "Graph")
 
         self.crosshair_settings_layout.addWidget(self.enable_crosshair_chk)
         self.crosshair_settings_layout.addWidget(self.crosshair_coord_lbl)
@@ -557,7 +553,7 @@ class TimeChartDisplay(Display):
 
         dialog.open()
 
-    def setup_chart_settings_layout(self):
+    def setup_data_tab_layout(self):
         self.chart_sync_mode_sync_radio.toggled.connect(
             partial(self.handle_sync_mode_radio_toggle,
                     self.chart_sync_mode_sync_radio))
@@ -565,26 +561,11 @@ class TimeChartDisplay(Display):
             partial(self.handle_sync_mode_radio_toggle,
                     self.chart_sync_mode_async_radio))
 
-        self.chart_title_layout.addWidget(self.chart_title_lbl)
-        self.chart_title_layout.addWidget(self.chart_title_line_edt)
-        self.chart_title_layout.addWidget(self.chart_title_font_btn)
-        self.title_settings_layout.addLayout(self.chart_title_layout)
-
-        legend_layout = QHBoxLayout()
-        legend_layout.addWidget(self.show_legend_chk)
-        legend_layout.addWidget(self.legend_font_btn)
-        self.title_settings_layout.addLayout(legend_layout)
-        self.title_settings_layout.addWidget(
-            self.chart_change_axis_settings_btn)
-        self.title_settings_grpbx.setLayout(self.title_settings_layout)
-        self.chart_settings_layout.addWidget(self.title_settings_grpbx)
-
         self.chart_sync_mode_layout.addWidget(self.chart_sync_mode_sync_radio)
         self.chart_sync_mode_layout.addWidget(self.chart_sync_mode_async_radio)
         self.chart_sync_mode_grpbx.setLayout(self.chart_sync_mode_layout)
-        self.chart_settings_layout.addWidget(self.chart_sync_mode_grpbx)
 
-        self.chart_settings_layout.addWidget(self.chart_sync_mode_grpbx)
+        self.data_tab_layout.addWidget(self.chart_sync_mode_grpbx)
 
         self.chart_limit_time_span_layout.addWidget(
             self.chart_limit_time_span_lbl)
@@ -615,11 +596,6 @@ class TimeChartDisplay(Display):
         self.chart_limit_time_span_activate_btn.clicked.connect(
             self.handle_chart_limit_time_span_activate_btn_clicked)
 
-        self.graph_background_color_layout.addRow(self.background_color_lbl,
-                                                  self.background_color_btn)
-        self.graph_drawing_settings_layout.addLayout(
-            self.graph_background_color_layout)
-
         self.chart_interval_layout.addRow(self.chart_redraw_rate_lbl,
                                           self.chart_redraw_rate_spin)
         self.chart_interval_layout.addRow(self.chart_data_sampling_rate_lbl,
@@ -639,19 +615,40 @@ class TimeChartDisplay(Display):
         self.graph_drawing_settings_grpbx.setLayout(
             self.graph_drawing_settings_layout)
 
+        self.data_tab_layout.addWidget(self.graph_drawing_settings_grpbx)
+        self.chart_sync_mode_async_radio.toggled.emit(True)
+
+    def setup_chart_settings_layout(self):
+        self.chart_title_layout.addWidget(self.chart_title_lbl)
+        self.chart_title_layout.addWidget(self.chart_title_line_edt)
+        self.chart_title_layout.addWidget(self.chart_title_font_btn)
+        self.title_settings_layout.addLayout(self.chart_title_layout)
+
+        legend_layout = QHBoxLayout()
+        legend_layout.addWidget(self.show_legend_chk)
+        legend_layout.addWidget(self.legend_font_btn)
+        self.title_settings_layout.addLayout(legend_layout)
+        self.title_settings_layout.addWidget(
+            self.chart_change_axis_settings_btn)
+        self.title_settings_grpbx.setLayout(self.title_settings_layout)
+        self.chart_settings_layout.addWidget(self.title_settings_grpbx)
+
+        self.graph_background_color_layout.addRow(self.background_color_lbl,
+                                                  self.background_color_btn)
+
+        self.axis_settings_layout.addLayout(self.graph_background_color_layout)
         self.axis_settings_layout.addWidget(self.show_x_grid_chk)
         self.axis_settings_layout.addWidget(self.show_y_grid_chk)
         self.axis_settings_layout.addWidget(self.axis_color_lbl)
         self.axis_settings_layout.addWidget(self.axis_color_btn)
         self.axis_settings_layout.addWidget(self.grid_opacity_lbl)
         self.axis_settings_layout.addWidget(self.grid_opacity_slr)
+
         self.axis_settings_grpbx.setLayout(self.axis_settings_layout)
 
-        self.chart_settings_layout.addWidget(self.graph_drawing_settings_grpbx)
         self.chart_settings_layout.addWidget(self.axis_settings_grpbx)
         self.chart_settings_layout.addWidget(self.reset_chart_settings_btn)
 
-        self.chart_sync_mode_async_radio.toggled.emit(True)
         self.update_datetime_timer.start(1000)
 
     def add_curve(self):
