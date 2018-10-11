@@ -482,7 +482,7 @@ class TimeChartDisplay(Display):
 
         self.splitter.addWidget(self.chart_panel)
         self.splitter.addWidget(self.tab_panel)
-        # self.splitter.setSizes({400, 0})
+        self.splitter.setSizes([1, 0])
 
         self.splitter.setHandleWidth(10)
         self.splitter.setStretchFactor(0, 0)
@@ -791,7 +791,6 @@ class TimeChartDisplay(Display):
         self.curve_settings_layout.addWidget(individual_curve_grpbx)
 
         self.tab_panel.setCurrentIndex(0)
-        # self.splitter.setSizes({400, 300})
 
     def handle_curve_chkbox_toggled(self, checkbox):
         """
