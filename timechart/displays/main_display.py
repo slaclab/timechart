@@ -236,7 +236,7 @@ class TimeChartDisplay(Display):
         self.chart_title_layout = QHBoxLayout()
         self.chart_title_layout.setSpacing(10)
 
-        self.chart_title_lbl = QLabel(text="Chart Title")
+        self.chart_title_lbl = QLabel(text="Graph Title")
         self.chart_title_line_edt = QLineEdit()
         self.chart_title_line_edt.setText(self.chart.getPlotTitle())
         self.chart_title_line_edt.textChanged.connect(
@@ -373,7 +373,7 @@ class TimeChartDisplay(Display):
         self.graph_drawing_settings_grpbx = QGroupBox("Graph Intervals")
         self.graph_drawing_settings_grpbx.setAlignment(Qt.AlignTop)
 
-        self.axis_settings_grpbx = QGroupBox("Grid and Axis")
+        self.axis_settings_grpbx = QGroupBox("Graph Appearance")
 
         self.app = QApplication.instance()
         self.setup_ui()
@@ -425,7 +425,7 @@ class TimeChartDisplay(Display):
         self.setup_chart_settings_layout()
 
         self.tab_panel.addTab(self.curve_settings_tab, "Curves")
-        self.tab_panel.addTab(self.chart_settings_tab, "Chart")
+        self.tab_panel.addTab(self.chart_settings_tab, "Graph")
 
         self.crosshair_settings_layout.addWidget(self.enable_crosshair_chk)
         self.crosshair_settings_layout.addWidget(self.crosshair_coord_lbl)
@@ -552,8 +552,6 @@ class TimeChartDisplay(Display):
 
         self.graph_background_color_layout.addRow(self.background_color_lbl,
                                                   self.background_color_btn)
-        self.graph_drawing_settings_layout.addLayout(
-            self.graph_background_color_layout)
 
         self.chart_interval_layout.addRow(self.chart_redraw_rate_lbl,
                                           self.chart_redraw_rate_spin)
@@ -574,12 +572,14 @@ class TimeChartDisplay(Display):
         self.graph_drawing_settings_grpbx.setLayout(
             self.graph_drawing_settings_layout)
 
+        self.axis_settings_layout.addLayout(self.graph_background_color_layout)
         self.axis_settings_layout.addWidget(self.show_x_grid_chk)
         self.axis_settings_layout.addWidget(self.show_y_grid_chk)
         self.axis_settings_layout.addWidget(self.axis_color_lbl)
         self.axis_settings_layout.addWidget(self.axis_color_btn)
         self.axis_settings_layout.addWidget(self.grid_opacity_lbl)
         self.axis_settings_layout.addWidget(self.grid_opacity_slr)
+
         self.axis_settings_grpbx.setLayout(self.axis_settings_layout)
 
         self.chart_settings_layout.addWidget(self.graph_drawing_settings_grpbx)
