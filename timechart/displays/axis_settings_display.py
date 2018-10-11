@@ -195,17 +195,21 @@ class AxisSettingsDisplay(Display):
             self.chart.labels[axis_position] = new_label
         return
 
+    def change_axis_font(self, axis, font):
+        axis.setTickFont(font)
+        axis.label.setFont(font)
+
     def handle_font_change(self, axis_position):
         axis = self.chart.getAxis(axis_position)
         label = axis.label
         initial = axis.tickFont
+
+        dialog = QFontDialog(self)
         if initial:
-            font, ok = QFontDialog.getFont(initial, self)
-        else:
-            font, ok = QFontDialog.getFont(self)
-        if ok:
-            axis.setTickFont(font)
-            label.setFont(font)
+            dialog.setCurrentFont(initial)
+        dialog.setOption(QFontDialog.DontUseNativeDialog, True)
+        dialog.fontSelected.connect(partial(self.change_axis_font, axis))
+        dialog.open()
 
     def closeEvent(self, event):
         self.handle_close_button_clicked()
