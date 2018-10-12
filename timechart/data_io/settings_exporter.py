@@ -1,4 +1,3 @@
-import versioneer
 from collections import OrderedDict
 import json
 
