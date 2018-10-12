@@ -11,26 +11,12 @@ requirements:
     build:
       - python
       - setuptools
-      - six
-      - numpy >=1.11.0
-      - pyepics >=3.2.7
-      - pyqt >=5
-      - pyqtgraph
-      - qtpy
-      - pydm
+      - pydm >=1.5.0
 
     run:
       - six
       - python
-      - numpy >=1.11.0
-      - scipy >=0.12.0
-      - pyepics >=3.2.7
-      - requests >=1.1.0
-      - psutil
-      - pyqt >=5
-      - qtpy
-      - pyqtgraph
-      - pydm
+      - pydm >=1.5.0
 
 test:
     imports:
