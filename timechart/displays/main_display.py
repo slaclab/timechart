@@ -663,6 +663,7 @@ class TimeChartDisplay(Display):
                     color = random_color()
 
             self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
+            self.handle_splitter_button(left=True)
 
     def show_mouse_coordinates(self, x, y):
         self.crosshair_coord_lbl.clear()
