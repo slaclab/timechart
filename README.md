@@ -52,6 +52,7 @@ This installation package then is ready to be uploaded to a conda channel for ot
 ```
 conda install timechart -c <channel_name>
 ```
+to install TimeChart in the conda environment.
 
 # Running TimeChart
 After installing TimeChart, you can start the application:
