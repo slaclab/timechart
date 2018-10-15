@@ -22,6 +22,7 @@ Python package requirements are listed in the requirements.txt file, which can
 be used to install all requirements from pip: 'pip install -r requirements.txt'
 
 # Installing TimeChart
+## Using pip
 You must first install PyDM as it is the framework TimeChart is built upon.
 In doing so, you must first satisfy the [PyDM prerequisites](https://github.com/slaclab/pydm/blob/master/requirements.txt, "PyDM Requirements"):
  
@@ -37,6 +38,19 @@ Next, clone this TimeChart repository:
 git clone https://github.com/slaclab/timechart.git
 cd timechart
 pip install .[all]
+```
+
+## Using conda
+TimeChart also includes a conda recipe for building an installation package for the conda package management environment.
+
+```sh
+git clone https://github.com/slaclab/timechart.git
+cd timechart
+conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
+```
+This installation package then is ready to be uploaded to a conda channel for other users, who will only need to issue the command
+```
+conda install timechart -c <channel_name>
 ```
 
 # Running TimeChart
