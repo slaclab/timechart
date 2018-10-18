@@ -51,8 +51,7 @@ IMPORT_FILE_FORMAT = "json"
 
 
 class TimeChartDisplay(Display):
-    def __init__(self, parent=None, config_file=None, args=[], macros=None,
-                 show_pv_add_panel=True):
+    def __init__(self, parent=None, args=[], macros=None, show_pv_add_panel=True, config_file=None):
         """
         Create all the widgets, including any child dialogs.
 
@@ -337,6 +336,7 @@ class TimeChartDisplay(Display):
         )
 
         self.graph_background_color_layout = QFormLayout()
+        self.axis_grid_color_layout = QFormLayout()
 
         self.background_color_lbl = QLabel("Graph Background Color ")
         self.background_color_btn = QPushButton()
@@ -641,12 +641,14 @@ class TimeChartDisplay(Display):
 
         self.graph_background_color_layout.addRow(self.background_color_lbl,
                                                   self.background_color_btn)
-
         self.axis_settings_layout.addLayout(self.graph_background_color_layout)
+
+        self.axis_grid_color_layout.addRow(self.axis_color_lbl,
+                                           self.axis_color_btn)
+        self.axis_settings_layout.addLayout(self.axis_grid_color_layout)
+
         self.axis_settings_layout.addWidget(self.show_x_grid_chk)
         self.axis_settings_layout.addWidget(self.show_y_grid_chk)
-        self.axis_settings_layout.addWidget(self.axis_color_lbl)
-        self.axis_settings_layout.addWidget(self.axis_color_btn)
         self.axis_settings_layout.addWidget(self.grid_opacity_lbl)
         self.axis_settings_layout.addWidget(self.grid_opacity_slr)
 
