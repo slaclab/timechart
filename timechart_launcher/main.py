@@ -43,7 +43,12 @@ def main():
     app_icon.addFile(icon_path_mask.format(256), QtCore.QSize(256, 256))
 
     app.setWindowIcon(app_icon)
-    display = TimeChartDisplay(args=extra_args)
+
+    config_file = None
+    if args.config_file:
+        config_file = os.path.expandvars(os.path.expanduser(args.config_file))
+
+    display = TimeChartDisplay(config_file=config_file, args=extra_args)
     display.show()
 
     sys.exit(app.exec_())
@@ -68,6 +73,8 @@ def _parse_arguments():
         default='INFO'
     )
 
+    parser.add_argument("--config-file",
+                        help = "The configuration file to import to and start TimeChart.")
     parser.add_argument('--version', action='version',
                         version='TimeChart {version}'.format(
                             version=timechart.__version__))
