@@ -51,7 +51,7 @@ IMPORT_FILE_FORMAT = "json"
 
 
 class TimeChartDisplay(Display):
-    def __init__(self, parent=None, args=[], macros=None,
+    def __init__(self, parent=None, config_file=None, args=[], macros=None,
                  show_pv_add_panel=True):
         """
         Create all the widgets, including any child dialogs.
@@ -69,9 +69,7 @@ class TimeChartDisplay(Display):
         """
         super(TimeChartDisplay, self).__init__(parent=parent, args=args,
                                                macros=macros)
-
         self.legend_font = None
-
         self.channel_map = dict()
         self.setWindowTitle("TimeChart Tool")
 
@@ -363,8 +361,6 @@ class TimeChartDisplay(Display):
             self.handle_show_y_grid_checkbox_clicked)
 
         self.axis_color_lbl = QLabel("Axis and Grid Color")
-        self.axis_color_lbl.setEnabled(False)
-
         self.axis_color_btn = QPushButton()
         self.axis_color_btn.setStyleSheet(
             "background-color: " + DEFAULT_CHART_AXIS_COLOR.name())
@@ -372,7 +368,6 @@ class TimeChartDisplay(Display):
         self.axis_color_btn.setMaximumWidth(20)
         self.axis_color_btn.clicked.connect(
             self.handle_axis_color_button_clicked)
-        self.axis_color_btn.setEnabled(False)
 
         self.grid_opacity_lbl = QLabel("Grid Opacity")
         self.grid_opacity_lbl.setEnabled(False)
@@ -411,6 +406,11 @@ class TimeChartDisplay(Display):
         self.time_span_limit_minutes = None
         self.time_span_limit_seconds = None
         self.data_sampling_mode = ASYNC_DATA_SAMPLING
+
+        # If there is an imported config file, let's start TimeChart with the imported configuration data
+        if config_file:
+            importer = SettingsImporter(self)
+            importer.import_settings(config_file)
 
     def ui_filepath(self):
         """
@@ -955,11 +955,6 @@ class TimeChartDisplay(Display):
 
     def handle_show_x_grid_checkbox_clicked(self, is_checked):
         self.chart.setShowXGrid(is_checked, self.grid_alpha)
-
-        self.axis_color_lbl.setEnabled(
-            is_checked or self.show_y_grid_chk.isChecked())
-        self.axis_color_btn.setEnabled(
-            is_checked or self.show_y_grid_chk.isChecked())
         self.grid_opacity_lbl.setEnabled(
             is_checked or self.show_y_grid_chk.isChecked())
         self.grid_opacity_slr.setEnabled(
@@ -967,11 +962,6 @@ class TimeChartDisplay(Display):
 
     def handle_show_y_grid_checkbox_clicked(self, is_checked):
         self.chart.setShowYGrid(is_checked, self.grid_alpha)
-
-        self.axis_color_lbl.setEnabled(
-            is_checked or self.show_x_grid_chk.isChecked())
-        self.axis_color_btn.setEnabled(
-            is_checked or self.show_x_grid_chk.isChecked())
         self.grid_opacity_lbl.setEnabled(
             is_checked or self.show_x_grid_chk.isChecked())
         self.grid_opacity_slr.setEnabled(

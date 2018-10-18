@@ -41,8 +41,10 @@ class SettingsImporter:
             chart.setLabel("left", text=chart_settings["left_y_axis_label"])
             chart.setLabel("left", unit=chart_settings["left_y_axis_unit"])
 
-            chart.setLabel("right", text=chart_settings["right_y_axis_label"])
-            chart.setLabel("right", unit=chart_settings["right_y_axis_unit"])
+            if chart_settings.get("show_right_y_axis", False):
+                chart.setShowRightAxis(True)
+                chart.setLabel("right", text=chart_settings["right_y_axis_label"])
+                chart.setLabel("right", unit=chart_settings["right_y_axis_unit"])
 
             self.main_display.chart_redraw_rate_spin.setValue(
                 chart_settings["redraw_rate"])

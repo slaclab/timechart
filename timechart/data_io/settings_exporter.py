@@ -46,6 +46,7 @@ class SettingsExporter:
             chart_settings["left_y_axis_label"] = chart.labels["left"]
             chart_settings["left_y_axis_unit"] = chart.units["left"]
 
+            chart_settings["show_right_y_axis"] = chart.getShowRightAxis()
             chart_settings["right_y_axis_label"] = chart.labels["right"]
             chart_settings["right_y_axis_unit"] = chart.units["right"]
 
