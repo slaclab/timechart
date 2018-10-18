@@ -51,8 +51,7 @@ IMPORT_FILE_FORMAT = "json"
 
 
 class TimeChartDisplay(Display):
-    def __init__(self, parent=None, args=[], macros=None,
-                 show_pv_add_panel=True):
+    def __init__(self, parent=None, args=[], macros=None, show_pv_add_panel=True, config_file=None):
         """
         Create all the widgets, including any child dialogs.
 
@@ -69,9 +68,7 @@ class TimeChartDisplay(Display):
         """
         super(TimeChartDisplay, self).__init__(parent=parent, args=args,
                                                macros=macros)
-
         self.legend_font = None
-
         self.channel_map = dict()
         self.setWindowTitle("TimeChart Tool")
 
@@ -339,6 +336,7 @@ class TimeChartDisplay(Display):
         )
 
         self.graph_background_color_layout = QFormLayout()
+        self.axis_grid_color_layout = QFormLayout()
 
         self.background_color_lbl = QLabel("Graph Background Color ")
         self.background_color_btn = QPushButton()
@@ -363,8 +361,6 @@ class TimeChartDisplay(Display):
             self.handle_show_y_grid_checkbox_clicked)
 
         self.axis_color_lbl = QLabel("Axis and Grid Color")
-        self.axis_color_lbl.setEnabled(False)
-
         self.axis_color_btn = QPushButton()
         self.axis_color_btn.setStyleSheet(
             "background-color: " + DEFAULT_CHART_AXIS_COLOR.name())
@@ -372,7 +368,6 @@ class TimeChartDisplay(Display):
         self.axis_color_btn.setMaximumWidth(20)
         self.axis_color_btn.clicked.connect(
             self.handle_axis_color_button_clicked)
-        self.axis_color_btn.setEnabled(False)
 
         self.grid_opacity_lbl = QLabel("Grid Opacity")
         self.grid_opacity_lbl.setEnabled(False)
@@ -387,6 +382,10 @@ class TimeChartDisplay(Display):
         self.grid_opacity_slr.valueChanged.connect(
             self.handle_grid_opacity_slider_mouse_release)
         self.grid_opacity_slr.setEnabled(False)
+
+        self.reset_data_settings_btn = QPushButton("Reset Data Settings")
+        self.reset_data_settings_btn.clicked.connect(
+            self.handle_reset_data_settings_btn_clicked)
 
         self.reset_chart_settings_btn = QPushButton("Reset Chart Settings")
         self.reset_chart_settings_btn.clicked.connect(
@@ -411,6 +410,11 @@ class TimeChartDisplay(Display):
         self.time_span_limit_minutes = None
         self.time_span_limit_seconds = None
         self.data_sampling_mode = ASYNC_DATA_SAMPLING
+
+        # If there is an imported config file, let's start TimeChart with the imported configuration data
+        if config_file:
+            importer = SettingsImporter(self)
+            importer.import_settings(config_file)
 
     def ui_filepath(self):
         """
@@ -618,6 +622,8 @@ class TimeChartDisplay(Display):
         self.data_tab_layout.addWidget(self.graph_drawing_settings_grpbx)
         self.chart_sync_mode_async_radio.toggled.emit(True)
 
+        self.data_tab_layout.addWidget(self.reset_data_settings_btn)
+
     def setup_chart_settings_layout(self):
         self.chart_title_layout.addWidget(self.chart_title_lbl)
         self.chart_title_layout.addWidget(self.chart_title_line_edt)
@@ -635,12 +641,14 @@ class TimeChartDisplay(Display):
 
         self.graph_background_color_layout.addRow(self.background_color_lbl,
                                                   self.background_color_btn)
-
         self.axis_settings_layout.addLayout(self.graph_background_color_layout)
+
+        self.axis_grid_color_layout.addRow(self.axis_color_lbl,
+                                           self.axis_color_btn)
+        self.axis_settings_layout.addLayout(self.axis_grid_color_layout)
+
         self.axis_settings_layout.addWidget(self.show_x_grid_chk)
         self.axis_settings_layout.addWidget(self.show_y_grid_chk)
-        self.axis_settings_layout.addWidget(self.axis_color_lbl)
-        self.axis_settings_layout.addWidget(self.axis_color_btn)
         self.axis_settings_layout.addWidget(self.grid_opacity_lbl)
         self.axis_settings_layout.addWidget(self.grid_opacity_slr)
 
@@ -955,11 +963,6 @@ class TimeChartDisplay(Display):
 
     def handle_show_x_grid_checkbox_clicked(self, is_checked):
         self.chart.setShowXGrid(is_checked, self.grid_alpha)
-
-        self.axis_color_lbl.setEnabled(
-            is_checked or self.show_y_grid_chk.isChecked())
-        self.axis_color_btn.setEnabled(
-            is_checked or self.show_y_grid_chk.isChecked())
         self.grid_opacity_lbl.setEnabled(
             is_checked or self.show_y_grid_chk.isChecked())
         self.grid_opacity_slr.setEnabled(
@@ -967,11 +970,6 @@ class TimeChartDisplay(Display):
 
     def handle_show_y_grid_checkbox_clicked(self, is_checked):
         self.chart.setShowYGrid(is_checked, self.grid_alpha)
-
-        self.axis_color_lbl.setEnabled(
-            is_checked or self.show_x_grid_chk.isChecked())
-        self.axis_color_btn.setEnabled(
-            is_checked or self.show_x_grid_chk.isChecked())
         self.grid_opacity_lbl.setEnabled(
             is_checked or self.show_x_grid_chk.isChecked())
         self.grid_opacity_slr.setEnabled(
@@ -1040,26 +1038,6 @@ class TimeChartDisplay(Display):
 
     @Slot()
     def handle_reset_chart_settings_btn_clicked(self):
-        self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
-
-        self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
-        self.chart_data_async_sampling_rate_spin.setValue(
-            DEFAULT_DATA_SAMPLING_RATE_HZ)
-        self.chart_data_sampling_rate_lbl.hide()
-        self.chart_data_async_sampling_rate_spin.hide()
-
-        self.chart_sync_mode_async_radio.setChecked(True)
-        self.chart_sync_mode_async_radio.toggled.emit(True)
-
-        self.chart_limit_time_span_chk.setChecked(False)
-        self.chart_limit_time_span_chk.setText(self.limit_time_plan_text)
-        self.chart_limit_time_span_chk.clicked.emit(False)
-
-        self.chart.setUpdatesAsynchronously(True)
-        self.chart.resetTimeSpan()
-        self.chart.resetUpdateInterval()
-        self.chart.setBufferSize(DEFAULT_BUFFER_SIZE)
-
         self.chart.setBackgroundColor(DEFAULT_CHART_BACKGROUND_COLOR)
         self.background_color_btn.setStyleSheet(
             "background-color: " + DEFAULT_CHART_BACKGROUND_COLOR.name())
@@ -1081,6 +1059,28 @@ class TimeChartDisplay(Display):
         self.chart.setShowXGrid(False)
         self.chart.setShowYGrid(False)
         self.chart.setShowLegend(False)
+
+    @Slot()
+    def handle_reset_data_settings_btn_clicked(self):
+        self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
+
+        self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
+        self.chart_data_async_sampling_rate_spin.setValue(
+            DEFAULT_DATA_SAMPLING_RATE_HZ)
+        self.chart_data_sampling_rate_lbl.hide()
+        self.chart_data_async_sampling_rate_spin.hide()
+
+        self.chart_sync_mode_async_radio.setChecked(True)
+        self.chart_sync_mode_async_radio.toggled.emit(True)
+
+        self.chart_limit_time_span_chk.setChecked(False)
+        self.chart_limit_time_span_chk.setText(self.limit_time_plan_text)
+        self.chart_limit_time_span_chk.clicked.emit(False)
+
+        self.chart.setUpdatesAsynchronously(True)
+        self.chart.resetTimeSpan()
+        self.chart.resetUpdateInterval()
+        self.chart.setBufferSize(DEFAULT_BUFFER_SIZE)
 
     def enable_chart_control_buttons(self, enabled=True):
         self.zoom_in_x_btn.setEnabled(enabled)
