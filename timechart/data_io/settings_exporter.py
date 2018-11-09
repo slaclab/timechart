@@ -1,3 +1,5 @@
+# Export the Current TimeChart Configurations into a JSON File
+
 from collections import OrderedDict
 import json
 
@@ -6,34 +8,57 @@ from timechart import __version__ as ver
 
 
 class SettingsExporter:
+    """
+    Export the current configuration data into a file.
+    """
     def __init__(self, pydm_main_display, include_pvs, include_chart_settings):
+        """
+        Parameters
+        ----------
+        pydm_main_display : PyDMDisplay
+            The Main Window object
+        include_pvs : bool
+            True is to export the names and settings of the current PVs plotted in the chart;
+            False if not include_chart_settings : bool
+            True is to export the current overall chart settings; False if not
+        """
         self.main_display = pydm_main_display
         self.include_pvs = include_pvs
         self.include_chart_settings = include_chart_settings
 
     def export_settings(self, filename):
+        """
+        Export the current settings into a JSON file.
+
+        Parameters
+        ----------
+        filename : str
+            The filename to export the configuration data to.
+        """
         settings = OrderedDict()
         settings["__version__"] = ver
         settings["pvs"] = OrderedDict()
         settings["chart_settings"] = OrderedDict()
+        chart = self.main_display.chart
 
         if self.include_pvs:
             pv_list = list()
             for k, v in self.main_display.channel_map.items():
                 curve_settings = OrderedDict()
+                curve = chart.findCurve(k)
+                curve_settings["is_visible"] = curve.isVisible()
                 curve_settings["color"] = v.color_string
                 curve_settings["y_channel"] = v.address
                 curve_settings["line_style"] = v.lineStyle
                 curve_settings["line_width"] = v.lineWidth
                 curve_settings["symbol"] = v.symbol
                 curve_settings["symbol_size"] = v.symbolSize
+
                 pv_list.append((k, curve_settings))
             for item in pv_list:
                 settings["pvs"][item[0]] = item[1]
         if self.include_chart_settings:
             chart_settings = OrderedDict()
-            chart = self.main_display.chart
-
             chart_settings["title"] = chart.getPlotTitle()
 
             x_axis_label = chart.labels["bottom"]

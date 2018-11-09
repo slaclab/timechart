@@ -1,5 +1,6 @@
 # The Main Display Window
 
+import os
 import logging
 
 from functools import partial
@@ -8,7 +9,7 @@ import datetime
 import numpy as np
 from pyqtgraph import TextItem
 
-from qtpy.QtCore import Qt, Slot, QSize, QTimer
+from qtpy.QtCore import Qt, Slot, QTimer
 from qtpy.QtWidgets import (QApplication, QWidget, QCheckBox, QHBoxLayout,
                             QVBoxLayout, QFormLayout, QLabel, QSplitter,
                             QComboBox, QLineEdit, QPushButton, QSlider,
@@ -25,29 +26,14 @@ from pydm.widgets.timeplot import (PyDMTimePlot, DEFAULT_X_MIN,
 from pydm.utilities.iconfont import IconFont
 from ..data_io.settings_importer import SettingsImporter
 
-logger = logging.getLogger(__name__)
 
 from .curve_settings_display import CurveSettingsDisplay
 from .axis_settings_display import AxisSettingsDisplay
 from .chart_data_export_display import ChartDataExportDisplay
 from ..utilities.utils import random_color, display_message_box
-from ..data_io.settings_importer import ASYNC_DATA_SAMPLING, SYNC_DATA_SAMPLING
 
-MIN_REDRAW_RATE_HZ = 1
-MAX_REDRAW_RATE_HZ = 240
-DEFAULT_REDRAW_RATE_HZ = 30
-
-MIN_DATA_SAMPLING_RATE_HZ = 1
-MAX_DATA_SAMPLING_RATE_HZ = 360
-DEFAULT_DATA_SAMPLING_RATE_HZ = 10
-
-DEFAULT_CHART_BACKGROUND_COLOR = QColor("black")
-DEFAULT_CHART_AXIS_COLOR = QColor("white")
-
-MAX_DISPLAY_PV_NAME_LENGTH = 30
-
-X_AXIS_LABEL_SEPARATOR = " -- "
-IMPORT_FILE_FORMAT = "json"
+from .defaults import *
+logger = logging.getLogger(__name__)
 
 
 class TimeChartDisplay(Display):
@@ -103,7 +89,7 @@ class TimeChartDisplay(Display):
         self.chart.setDownsampling(ds=False, auto=False, mode=None)
         self.chart.plot_redrawn_signal.connect(self.update_curve_data)
         self.chart.setBufferSize(DEFAULT_BUFFER_SIZE)
-        self.chart.setPlotTitle("Time Plot")
+        self.chart.setPlotTitle(DEFAULT_CHART_TITLE)
 
         self.splitter = QSplitter()
 
@@ -304,7 +290,7 @@ class TimeChartDisplay(Display):
         self.limit_time_plan_text = "Limit Time Span"
         self.chart_limit_time_span_chk = QCheckBox(self.limit_time_plan_text)
         self.chart_limit_time_span_chk.hide()
-        self.chart_limit_time_span_lbl = QLabel("H:MM:SS")
+        self.chart_limit_time_span_lbl = QLabel("Hr:Min:Sec")
         self.chart_limit_time_span_hours_spin_box = QSpinBox()
         self.chart_limit_time_span_hours_spin_box.setMaximum(999)
         self.chart_limit_time_span_minutes_spin_box = QSpinBox()
@@ -665,10 +651,10 @@ class TimeChartDisplay(Display):
         """
         pv_name = self._get_full_pv_name(self.pv_name_line_edt.text())
         if pv_name and len(pv_name):
-            color = random_color()
+            color = random_color(curve_colors_only=True)
             for k, v in self.channel_map.items():
                 if color == v.color:
-                    color = random_color()
+                    color = random_color(curve_colors_only=True)
 
             self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
             self.handle_splitter_button(left=True)
@@ -686,8 +672,7 @@ class TimeChartDisplay(Display):
             self.show_mouse_coordinates)
 
     def add_y_channel(self, pv_name, curve_name, color, line_style=Qt.SolidLine,
-                      line_width=2, symbol=None,
-                      symbol_size=None):
+                      line_width=2, symbol=None, symbol_size=None, is_visible=True):
         if pv_name in self.channel_map:
             logger.error("'{0}' has already been added.".format(pv_name))
             return
@@ -696,6 +681,8 @@ class TimeChartDisplay(Display):
                                        color=color, lineStyle=line_style,
                                        lineWidth=line_width, symbol=symbol,
                                        symbolSize=symbol_size)
+        curve.show() if is_visible else curve.hide()
+
         if self.show_legend_chk.isChecked():
             self.change_legend_font(self.legend_font)
         self.channel_map[pv_name] = curve
@@ -707,18 +694,18 @@ class TimeChartDisplay(Display):
     def generate_pv_controls(self, pv_name, curve_color):
         """
         Generate a set of widgets to manage the appearance of a curve. The set of widgets includes:
-            1. A checkbox which shows the curve on the chart if checked, and hide the curve if not checked
-            2. Two buttons -- Modify... and Remove. Modify... will bring up the Curve Settings dialog. Remove will
-               delete the curve from the chart
-        This set of widgets will be hidden initially, until the first curve is plotted.
-
+            1. A checkbox which shows the curve on the chart if checked, and hide the curve if not
+               checked
+            2. Three buttons -- Modify..., Focus, and Remove. Modify... will bring up the Curve
+               Settings dialog. Focus adjusts the chart's zooming for the current curve.
+               Remove will delete the curve from the chart
         Parameters
         ----------
         pv_name: str
             The name of the PV the current curve is being plotted for
-
         curve_color : QColor
-            The color of the curve to paint for the checkbox label to help the user track the curve to the checkbox
+            The color of the curve to paint for the checkbox label to help the user track the curve
+            to the checkbox
         """
         individual_curve_layout = QVBoxLayout()
 
@@ -759,8 +746,9 @@ class TimeChartDisplay(Display):
         data_text.setPalette(palette)
 
         checkbox.setChecked(True)
-        checkbox.clicked.connect(
-            partial(self.handle_curve_chkbox_toggled, checkbox))
+        checkbox.toggled.connect(partial(self.handle_curve_chkbox_toggled, checkbox))
+        if not self.chart.findCurve(pv_name).isVisible():
+            checkbox.setChecked(False)
 
         modify_curve_btn = QPushButton("Modify...",
                                        parent=individual_curve_grpbx)
@@ -820,10 +808,9 @@ class TimeChartDisplay(Display):
         if checkbox.isChecked():
             curve = self.channel_map.get(pv_name, None)
             if curve:
+                curve.show()
                 self.chart.addLegendItem(curve, pv_name,
                                          self.show_legend_chk.isChecked())
-
-                curve.show()
                 self.change_legend_font(self.legend_font)
         else:
             curve = self.chart.findCurve(pv_name)
@@ -856,7 +843,6 @@ class TimeChartDisplay(Display):
                 html='<div style="text-align: center"><span style="color: #FFF;">This is the'
                      '</span><br><span style="color: #FF0; font-size: 16pt;">PEAK</span></div>',
                 anchor=(-0.3, 0.5), border='w', fill=(0, 0, 255, 100))
-            annot = TextItem("test", anchor=(-0.3, 0.5))
             self.chart.annotateCurve(curve, annot)
 
     def remove_curve(self, pv_name):
@@ -879,7 +865,6 @@ class TimeChartDisplay(Display):
             widget = self.findChild(QGroupBox, pv_name + "_grb")
             if widget:
                 widget.deleteLater()
-                widget = None
 
         if len(self.chart.getCurves()) < 1:
             self.enable_chart_control_buttons(False)
@@ -905,7 +890,7 @@ class TimeChartDisplay(Display):
         if not is_checked:
             self.chart_limit_time_span_chk.setText(self.limit_time_plan_text)
 
-    def handle_time_span_changed(self, new_val):
+    def handle_time_span_changed(self):
         self.time_span_limit_hours = self.chart_limit_time_span_hours_spin_box.value()
         self.time_span_limit_minutes = self.chart_limit_time_span_minutes_spin_box.value()
         self.time_span_limit_seconds = self.chart_limit_time_span_seconds_spin_box.value()
@@ -915,9 +900,8 @@ class TimeChartDisplay(Display):
         self.chart_limit_time_span_activate_btn.setEnabled(status)
 
     def handle_chart_limit_time_span_activate_btn_clicked(self):
-        timeout_milliseconds = (
-                                       self.time_span_limit_hours * 3600 + self.time_span_limit_minutes * 60 +
-                                       self.time_span_limit_seconds) * 1000
+        timeout_milliseconds = (self.time_span_limit_hours * 3600 + self.time_span_limit_minutes * 60 +
+                                self.time_span_limit_seconds) * 1000
         self.chart.setTimeSpan(timeout_milliseconds / 1000.0)
         self.chart_ring_buffer_size_edt.setText(str(self.chart.getBufferSize()))
 
@@ -983,8 +967,8 @@ class TimeChartDisplay(Display):
         self.chart_data_export_disp.show()
 
     def handle_import_data_btn_clicked(self):
-        open_file_info = QFileDialog.getOpenFileName(self, caption="Open File",
-                                                     filter="*." + IMPORT_FILE_FORMAT)
+        open_file_info = QFileDialog.getOpenFileName(self, caption="Open File", directory=os.path.expanduser('~'),
+                                                     filter=IMPORT_FILE_FORMAT)
         open_file_name = open_file_info[0]
         if open_file_name:
             importer = SettingsImporter(self)
@@ -1065,6 +1049,8 @@ class TimeChartDisplay(Display):
         self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
 
         self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
+        self.handle_redraw_rate_changed()
+
         self.chart_data_async_sampling_rate_spin.setValue(
             DEFAULT_DATA_SAMPLING_RATE_HZ)
         self.chart_data_sampling_rate_lbl.hide()
@@ -1129,7 +1115,7 @@ class TimeChartDisplay(Display):
         curve : PlotItem
            A PlotItem, i.e. a plot, to draw on the chart.
         """
-        pv_name = curve.name()
+        pv_name = curve.address
         min_y = curve.minY if curve.minY else 0
         max_y = curve.maxY if curve.maxY else 0
         current_y = curve.data_buffer[1, -1]
