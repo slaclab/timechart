@@ -1129,7 +1129,7 @@ class TimeChartDisplay(Display):
         curve : PlotItem
            A PlotItem, i.e. a plot, to draw on the chart.
         """
-        pv_name = curve.name()
+        pv_name = curve.address
         min_y = curve.minY if curve.minY else 0
         max_y = curve.maxY if curve.maxY else 0
         current_y = curve.data_buffer[1, -1]
