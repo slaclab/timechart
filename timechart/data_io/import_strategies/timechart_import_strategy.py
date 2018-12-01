@@ -36,7 +36,7 @@ class TimeChartImportStrategy(SettingsImportStrategy):
         with open(filename, 'r') as settings_file:
             try:
                 settings = json.load(settings_file)
-                SettingsImportStrategy.apply_settings(settings, self.main_display)
+                SettingsImportStrategy(self.main_display).apply_settings(settings)
             except Exception as error:
                 raise SettingsImportException("Encountered exception: '{0}'".format(error))
 

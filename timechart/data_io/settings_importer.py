@@ -39,12 +39,12 @@ class SettingsImporter:
                 try:
                     self._import_strategies[i].import_file(filename)
                     successful_conversion = True
-                except SettingsImportException:
-                    logger.debug("Importing failed with '{0}'. Switching to the next conversion "
-                                 "strategy...".format(type(self._import_strategies[i]).__name__))
+                except SettingsImportException as error:
+                    logger.debug("Importing failed with '{0}'. Error: {1}. Switching to the next conversion "
+                                 "strategy...".format(type(self._import_strategies[i]).__name__, error))
                 except Exception as error:
                     logger.exception("Cannot import the settings file '{0}'. "
                                      "Error: {1}".format(filename, error))
         if not successful_conversion:
-            logger.exception("Cannot import the settings file '{0}'. Make sure there is a "
+            logger.exception("Importing the setting file '{0}' failed. Make sure there is a "
                              "conversion method for the file format.".format(filename))

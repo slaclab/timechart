@@ -309,9 +309,9 @@ class TimeChartDisplay(Display):
         self.chart_ring_buffer_size_edt.setText(str(DEFAULT_BUFFER_SIZE))
 
         self.show_legend_chk = QCheckBox("Show Legend")
-        self.show_legend_chk.setChecked(self.chart.showLegend)
         self.show_legend_chk.clicked.connect(
             self.handle_show_legend_checkbox_clicked)
+        self.show_legend_chk.setChecked(self.chart.showLegend)
 
         self.legend_font_btn = QPushButton()
         self.legend_font_btn.setFixedHeight(24)
@@ -1135,7 +1135,7 @@ class TimeChartDisplay(Display):
         chb.setEnabled(connected)
         btn_modify = grb.findChild(QPushButton, pv_name + "_btn_modify")
         btn_modify.setEnabled(connected)
-        btn_focus = grb.findChild(QPushButton, pv_name + "_btn_modify")
+        btn_focus = grb.findChild(QPushButton, pv_name + "_btn_focus")
         btn_focus.setEnabled(connected)
 
         # btn_ann = grb.findChild(QPushButton, pv_name + "_btn_ann")

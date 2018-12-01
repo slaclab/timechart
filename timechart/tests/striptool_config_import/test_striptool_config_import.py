@@ -7,6 +7,8 @@ from os.path import isfile
 import json
 import difflib
 
+from qtpy.QtGui import QColor
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -14,6 +16,7 @@ from pydm.utilities.colors import svg_color_from_hex
 
 from timechart.data_io.import_strategies.striptool_import_strategy import StripToolImportStrategy
 from timechart.data_io.import_strategies.settings_import_strategy import SettingsImportStrategy
+from timechart.utilities import utils
 
 
 def test_import_striptool_file(monkeypatch):
@@ -41,7 +44,7 @@ def test_import_striptool_file(monkeypatch):
 
     import_strategy = StripToolImportStrategy(None)
 
-    def mock_apply_settings(timechart_settings, main_display=None):
+    def mock_apply_settings(_, timechart_settings):
         logger.info("Applying settings to Main Display...")
 
         _serialize_colors(timechart_settings)
@@ -62,6 +65,34 @@ def test_import_striptool_file(monkeypatch):
     for striptool_filename in striptool_filenames:
         # Import each StripTool config file for conversion to TimeChart configurations
         import_strategy.import_file(os.path.join(input_dir_path, striptool_filename))
+
+
+
+@pytest.mark.parametrize("is_curve_color, randomized_color", [
+    (True, QColor("red")),
+    (False, QColor("red")),
+    (True, QColor("black")),
+    (True, QColor("white")),
+    (False, QColor("black")),
+    (False, QColor("white")),
+])
+def test_random_color(monkeypatch, is_curve_color, randomized_color):
+    true_pick_random_color = utils._pick_random_color
+
+    def mock_pick_random_color():
+        if is_curve_color and randomized_color in (QColor("black"), QColor("white")):
+            return true_pick_random_color()
+        return randomized_color
+
+    monkeypatch.setattr(utils, "_pick_random_color", mock_pick_random_color)
+    picked_color = utils.random_color(is_curve_color)
+
+    if is_curve_color:
+        assert picked_color not in (QColor("black"), QColor("white"))
+        if randomized_color not in (QColor("black"), QColor("white")):
+            assert picked_color == randomized_color
+    else:
+        assert picked_color == randomized_color
 
 
 def _serialize_colors(timechart_settings):

@@ -16,7 +16,6 @@ PREDEFINED_COLORS = (QColor(Qt.red), QColor(Qt.green),  QColor(Qt.darkRed),  QCo
 
 
 def add_striptool_color(color):
-    global STRIPTOOL_PREDEFINED_COLORS
     STRIPTOOL_PREDEFINED_COLORS.append(color)
 
 
@@ -32,17 +31,28 @@ def random_color(curve_colors_only=False):
 
     Returns
     -------
-    A color object randomly selected from the predefined list.
+    A color object randomly selected from the predefined list, and is not a white or black color if this is a color
+    purported for a curve.
     """
-    while True:
-        if len(STRIPTOOL_PREDEFINED_COLORS) > 0:
-            color_pick = random.choice(STRIPTOOL_PREDEFINED_COLORS)
-        else:
-            color_pick = random.choice(PREDEFINED_COLORS)
-        if not curve_colors_only or (curve_colors_only and color_pick not in (None, QColor("black"), QColor("white"))):
-            break
+    color_pick = _pick_random_color()
+    while curve_colors_only and color_pick in (QColor("black"), QColor("white")):
+        color_pick = _pick_random_color()
 
     return color_pick
+
+
+def _pick_random_color():
+    """
+    Straight-up pick a random color, with affinity given to the StripTool-predefined colors.
+
+    Returns : QColor
+    -------
+    A color object randomly selected from the predefined list.
+    """
+    if len(STRIPTOOL_PREDEFINED_COLORS) > 0:
+        return random.choice(STRIPTOOL_PREDEFINED_COLORS)
+    else:
+        return random.choice(PREDEFINED_COLORS)
 
 
 def display_message_box(icon, window_title, text):

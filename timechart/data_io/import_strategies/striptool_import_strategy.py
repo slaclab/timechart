@@ -181,7 +181,7 @@ class StripToolImportStrategy(SettingsImportStrategy):
             settings = self._convert_to_timechart_setting(stp_data)
 
             # Apply the settings to TimeChart
-            SettingsImportStrategy.apply_settings(settings, self.main_display)
+            SettingsImportStrategy(self.main_display).apply_settings(settings)
 
     def _import_to_dict(self, settings_file):
         """
