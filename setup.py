@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 with open('requirements.txt') as f:
     requirements = f.read().split()
 
-requirements = [r for r in requirements if not r.startswith('git+')]
 git_requirements = [r for r in requirements if r.startswith('git+')]
+requirements = [r for r in requirements if not r.startswith('git+')]
 print("User must install \n" +
       "\n".join(f' {r}' for r in git_requirements) +
       "\n\nmanually")
