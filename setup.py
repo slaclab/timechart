@@ -6,9 +6,11 @@ with open('requirements.txt') as f:
 
 git_requirements = [r for r in requirements if r.startswith('git+')]
 requirements = [r for r in requirements if not r.startswith('git+')]
-print("User must install \n" +
-      "\n".join(f' {r}' for r in git_requirements) +
-      "\n\nmanually")
+
+if len(git_requirements) > 0:
+    print("User must install \n" +
+          "\n".join(f' {r}' for r in git_requirements) +
+          "\n\nmanually")
 
 
 setup(
