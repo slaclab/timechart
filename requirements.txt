@@ -1,1 +1,4 @@
-pydm>=1.6.1
+pydm>=1.6.0
+numpy
+qtpy
+pyqtgraph
