@@ -1,5 +1,7 @@
 # The Dialog to Export Data from a Chart
 
+import os
+
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import (QVBoxLayout, QFormLayout, QCheckBox, QLineEdit,
                             QFileDialog, QLabel, QComboBox,
@@ -13,8 +15,7 @@ from pydm import Display
 from ..data_io.settings_exporter import SettingsExporter
 from ..utilities.utils import display_message_box
 
-DEFAULT_EXPORTED_IMAGE_WIDTH = "800"
-DEFAULT_EXPORTED_IMAGE_HEIGHT = "600"
+from .defaults import (DEFAULT_EXPORTED_IMAGE_WIDTH, DEFAULT_EXPORTED_IMAGE_HEIGHT)
 
 
 class TimeChartImageExporter(ImageExporter):
@@ -175,8 +176,9 @@ class ChartDataExportDisplay(Display):
         self.file_format_cmb.setEnabled(False)
 
     def handle_save_file_btn_clicked(self):
-        saved_file_info = QFileDialog.getSaveFileName(self, caption="Save File",
-                                                      filter=self.file_format)
+        saved_file_info = QFileDialog.getSaveFileName(
+            self, caption="Save File", directory=os.path.expanduser('~'),
+            filter=self.file_format)
         saved_file_name = saved_file_info[0]
         if saved_file_info[1][1:] not in saved_file_name:
             saved_file_name += saved_file_info[1][1:]
