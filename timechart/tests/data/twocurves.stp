@@ -1,0 +1,36 @@
+StripConfig                   1.2
+Strip.Time.Timespan           37
+Strip.Time.NumSamples         9000
+Strip.Time.SampleInterval     5.000000
+Strip.Time.RefreshInterval    1.000000
+Strip.Color.Background        65535     65535     65535     
+Strip.Color.Foreground        0         0         0         
+Strip.Color.Grid              49079     49079     49079     
+Strip.Color.Color1            0         0         65535     
+Strip.Color.Color2            27501     36497     8996      
+Strip.Color.Color3            42420     10789     10789     
+Strip.Color.Color4            24395     40595     41139     
+Strip.Color.Color5            65535     42420     0         
+Strip.Color.Color6            41139     8227      61693     
+Strip.Color.Color7            65535     0         0         
+Strip.Color.Color8            65535     55258     0         
+Strip.Color.Color9            48310     36753     36753     
+Strip.Color.Color10           39570     52696     12838     
+Strip.Option.GridXon          1
+Strip.Option.GridYon          1
+Strip.Option.AxisYcolorStat   1
+Strip.Option.GraphLineWidth   2
+Strip.Curve.2.Name            MTEST:SinVal
+Strip.Curve.3.Name            MTEST:CosVal
+Strip.Curve.2.Units
+Strip.Curve.3.Units
+Strip.Curve.2.Precision       0
+Strip.Curve.3.Precision       0
+Strip.Curve.2.Min              4
+Strip.Curve.3.Min              8
+Strip.Curve.2.Max              5
+Strip.Curve.3.Max              10
+Strip.Curve.2.Scale           0
+Strip.Curve.3.Scale           0
+Strip.Curve.2.PlotStatus      0
+Strip.Curve.3.PlotStatus      1

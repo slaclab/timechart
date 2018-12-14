@@ -8,7 +8,7 @@ from qtpy.QtWidgets import (QFormLayout, QCheckBox, QLabel, QLineEdit,
 from pydm import Display
 from pydm.utilities.iconfont import IconFont
 
-X_AXIS_LABEL_SEPARATOR = " -- "
+from .defaults import X_AXIS_LABEL_SEPARATOR
 
 
 class AxisSettingsDisplay(Display):
