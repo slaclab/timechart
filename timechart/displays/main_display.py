@@ -689,7 +689,11 @@ class TimeChartDisplay(Display):
         self.generate_pv_controls(pv_name, color)
 
         self.enable_chart_control_buttons()
-        self.app.add_connection(curve.channel)
+        try:
+            self.app.add_connection(curve.channel)
+        except AttributeError:
+            # these methods are not needed on future versions of pydm
+            pass
 
     def generate_pv_controls(self, pv_name, curve_color):
         """
@@ -857,7 +861,11 @@ class TimeChartDisplay(Display):
         """
         curve = self.chart.findCurve(pv_name)
         if curve:
-            self.app.remove_connection(curve.channel)
+            try:
+                self.app.remove_connection(curve.channel)
+            except AttributeError:
+                # these methods are not needed on future versions of pydm
+                pass
             self.chart.removeYChannel(curve)
             del self.channel_map[pv_name]
             self.chart.removeLegendItem(pv_name)
@@ -996,7 +1004,11 @@ class TimeChartDisplay(Display):
                 self.chart_limit_time_span_chk.show()
 
                 self.chart.setUpdatesAsynchronously(True)
-        self.app.establish_widget_connections(self)
+        try:
+            self.app.establish_widget_connections(self)
+        except AttributeError:
+            # these methods are not needed on future versions of pydm
+            pass
 
     def handle_zoom_in_btn_clicked(self, axis, is_zoom_in):
         scale_factor = 0.5
@@ -1050,7 +1062,7 @@ class TimeChartDisplay(Display):
 
         self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
         self.handle_redraw_rate_changed()
-
+        
         self.chart_data_async_sampling_rate_spin.setValue(
             DEFAULT_DATA_SAMPLING_RATE_HZ)
         self.chart_data_sampling_rate_lbl.hide()
