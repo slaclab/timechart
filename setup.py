@@ -1,6 +1,18 @@
 import versioneer
 from setuptools import setup, find_packages
 
+with open('requirements.txt') as f:
+    requirements = f.read().split()
+
+git_requirements = [r for r in requirements if r.startswith('git+')]
+requirements = [r for r in requirements if not r.startswith('git+')]
+
+if len(git_requirements) > 0:
+    print("User must install \n" +
+          "\n".join(f' {r}' for r in git_requirements) +
+          "\n\nmanually")
+
+
 setup(
     name='timechart',
     version=versioneer.get_version(),
@@ -28,5 +40,6 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-    ]
+    ],
+    install_requires=requirements,
 )
