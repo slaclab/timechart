@@ -1,8 +1,13 @@
-# Configuration Data Importing, for Both TimeChart and StripTool Configuration Files
+"""
+Configuration Data Importing, for Both TimeChart and StripTool Configuration Files
+"""
 
-from .import_strategies.settings_import_strategy import SettingsImportException
-from .import_strategies.timechart_import_strategy import TimeChartImportStrategy
-from .import_strategies.striptool_import_strategy import StripToolImportStrategy
+import json
+
+from .import_strategies.timechart_config_importer import TimeChartConfigImporter
+from .import_strategies.striptool_config_importer import StripToolConfigImporter
+from ..utilities.utils import serialize_colors
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -20,31 +25,56 @@ class SettingsImporter:
         pydm_main_display : PyDMDisplay
             The Main Window object.
         """
-        self._import_strategies = (TimeChartImportStrategy(pydm_main_display),
-                                   StripToolImportStrategy(pydm_main_display))
+        self.timechart_importer = TimeChartConfigImporter(pydm_main_display)
+        self.striptool_importer = StripToolConfigImporter(pydm_main_display)
 
     def import_settings(self, filename):
         """
-        Switch conversion strategies to import a configuration file into TimeChart until running out
-        of known conversion strategies.
+        Import the settings from a file, which could be a TimeChart JSON file, or a StripTool .stp file.
 
         Parameters
         ----------
         filename : The path to a configuration data file.
         """
-        successful_conversion = False
+        with open(filename, 'r') as settings_file:
+            if filename.endswith(".stp"):
+                logger.warning("The StripTool config file format will be deprecated. You must convert this file to "
+                               "the TimeChart config format.")
+                timechart_settings = self.convert_stp_file(settings_file)
+            else:
+                timechart_settings = json.load(settings_file)
 
-        for i in range(len(self._import_strategies)):
-            if not successful_conversion:
-                try:
-                    self._import_strategies[i].import_file(filename)
-                    successful_conversion = True
-                except SettingsImportException as error:
-                    logger.debug("Importing failed with '{0}'. Error: {1}. Switching to the next conversion "
-                                 "strategy...".format(type(self._import_strategies[i]).__name__, error))
-                except Exception as error:
-                    logger.exception("Cannot import the settings file '{0}'. "
-                                     "Error: {1}".format(filename, error))
-        if not successful_conversion:
-            logger.exception("Importing the setting file '{0}' failed. Make sure there is a "
-                             "conversion method for the file format.".format(filename))
+        # Apply the settings as TimeChart settings, now that we have all the file data converted to the same TimeChart
+        # config format
+        self.timechart_importer.apply_settings(timechart_settings)
+
+    def convert_stp_file(self, stp_file_handle, new_timechart_file=None):
+        """
+        Convert a StripTool STP file into the TimeChart config data, and write to a TimeChart JSON config file if
+        requested.
+
+        Parameters
+        ----------
+        stp_file_handle : io
+            The handle to the STP config file
+        new_timechart_file : str
+            The full path to the TimeChart file to write the TimeChart config dict to.
+
+        Returns
+        -------
+            The TimeChart settings dictionary.
+
+        """
+        # Parse the StripTool file
+        stp_data = self.striptool_importer.import_to_dict(stp_file_handle)
+
+        # Convert to the equivalent TimeChart settings
+        timechart_settings = self.striptool_importer.convert_to_timechart_setting(stp_data)
+
+        if new_timechart_file:
+            serialize_colors(timechart_settings)
+
+            with open(new_timechart_file, 'w') as output_file:
+                json.dump(timechart_settings, fp=output_file, indent=4, separators=(',', ': '))
+
+        return timechart_settings

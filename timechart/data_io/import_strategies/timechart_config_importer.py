@@ -1,4 +1,6 @@
-# Base Import Strategy Class
+"""
+The settings importer to process TimeChart configuration data
+"""
 
 from abc import ABC, abstractmethod
 from qtpy.QtGui import QColor
@@ -7,11 +9,7 @@ from ...displays.defaults import ASYNC_DATA_SAMPLING, SYNC_DATA_SAMPLING
 from ...utilities.utils import random_color
 
 
-class SettingsImportException(Exception):
-    pass
-
-
-class SettingsImportStrategy:
+class TimeChartConfigImporter:
     __metaclass__ = ABC
 
     def __init__(self, pydm_main_dislay):
@@ -168,6 +166,3 @@ class SettingsImportStrategy:
                                                    self.main_display.chart.setAxisColor)
             }
             self._set_chart_colors(color_data)
-
-            self.main_display.app.establish_widget_connections(
-                self.main_display)

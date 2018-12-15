@@ -1,4 +1,6 @@
-# The Main Display Window
+"""
+The Main Display Window
+"""
 
 import os
 import logging
@@ -996,7 +998,6 @@ class TimeChartDisplay(Display):
                 self.chart_limit_time_span_chk.show()
 
                 self.chart.setUpdatesAsynchronously(True)
-        self.app.establish_widget_connections(self)
 
     def handle_zoom_in_btn_clicked(self, axis, is_zoom_in):
         scale_factor = 0.5
@@ -1120,8 +1121,6 @@ class TimeChartDisplay(Display):
         max_y = curve.maxY if curve.maxY else 0
         current_y = curve.data_buffer[1, -1]
 
-        connected = not np.isnan(current_y)
-
         grb = self.findChild(QGroupBox, pv_name + "_grb")
 
         lbl = grb.findChild(QLabel, pv_name + "_lbl")
@@ -1129,6 +1128,8 @@ class TimeChartDisplay(Display):
             min_y, max_y, current_y))
 
         chb = grb.findChild(QCheckBox, pv_name + "_chb")
+
+        connected = curve.connected
         if connected and chb.isEnabled():
             return
 

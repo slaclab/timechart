@@ -1,4 +1,6 @@
-# Unit Test for StripTool Config File Importing
+"""
+Unit Test for StripTool Config File Importing
+"""
 
 import pytest
 
@@ -9,14 +11,12 @@ import difflib
 
 from qtpy.QtGui import QColor
 
+from timechart.data_io.settings_importer import SettingsImporter
+from timechart.data_io.import_strategies.timechart_config_importer import TimeChartConfigImporter
+from timechart.utilities import utils
+
 import logging
 logger = logging.getLogger(__name__)
-
-from pydm.utilities.colors import svg_color_from_hex
-
-from timechart.data_io.import_strategies.striptool_import_strategy import StripToolImportStrategy
-from timechart.data_io.import_strategies.settings_import_strategy import SettingsImportStrategy
-from timechart.utilities import utils
 
 
 def test_import_striptool_file(monkeypatch):
@@ -42,12 +42,10 @@ def test_import_striptool_file(monkeypatch):
             raise err
     output_dir_path = "output"
 
-    import_strategy = StripToolImportStrategy(None)
-
     def mock_apply_settings(_, timechart_settings):
         logger.info("Applying settings to Main Display...")
 
-        _serialize_colors(timechart_settings)
+        utils.serialize_colors(timechart_settings)
         del timechart_settings["__version__"]
 
         # Dump converted contents into a JSON file
@@ -58,14 +56,47 @@ def test_import_striptool_file(monkeypatch):
         # Compare the output file to the expected file
         _compare_with_expected_output(output_dir_path, output_filename)
 
-    monkeypatch.setattr(SettingsImportStrategy, "apply_settings", mock_apply_settings)
+    monkeypatch.setattr(TimeChartConfigImporter, "apply_settings", mock_apply_settings)
 
+    settings_importer = SettingsImporter(None)
     striptool_filenames = [f for f in os.listdir(input_dir_path) if isfile(os.path.join(
         input_dir_path, f))]
     for striptool_filename in striptool_filenames:
         # Import each StripTool config file for conversion to TimeChart configurations
-        import_strategy.import_file(os.path.join(input_dir_path, striptool_filename))
+        settings_importer.import_settings(os.path.join(input_dir_path, striptool_filename))
 
+        # Now try outputting the converted files, too
+        with open(os.path.join(input_dir_path, striptool_filename), 'r') as input_file:
+            output_filename = striptool_filename + ".json"
+            settings_importer.convert_stp_file(input_file, os.path.join(output_dir_path, output_filename))
+
+
+def test_export_converted_files():
+    """
+    Import all StripTool config files, one-by-one, from the "data" directory, convert the StripTool config data into
+    the TimeChart config data, and save the data as JSON files.
+
+    This test executes a different code path then the previous test, i.e. testing the convert_stp_file method with the
+    path to export a TimeChart JSON config file as the second parameter.
+    """
+    settings_importer = SettingsImporter(None)
+
+    input_dir_path = "data"
+
+    try:
+        os.makedirs("output")
+    except os.error as err:
+        # It's OK if the directory exists. This is to be compatible with Python 2.7
+        if err.errno != os.errno.EEXIST:
+            raise err
+    output_dir_path = "output"
+
+    striptool_filenames = [f for f in os.listdir(input_dir_path) if isfile(os.path.join(
+        input_dir_path, f))]
+    for striptool_filename in striptool_filenames:
+        with open(os.path.join(input_dir_path, striptool_filename), 'r') as input_file:
+            output_filename = striptool_filename + ".json"
+            settings_importer.convert_stp_file(input_file, os.path.join(output_dir_path, output_filename))
 
 
 @pytest.mark.parametrize("is_curve_color, randomized_color", [
@@ -77,14 +108,14 @@ def test_import_striptool_file(monkeypatch):
     (False, QColor("white")),
 ])
 def test_random_color(monkeypatch, is_curve_color, randomized_color):
-    true_pick_random_color = utils._pick_random_color
+    true_pick_random_color = utils.pick_random_color
 
     def mock_pick_random_color():
         if is_curve_color and randomized_color in (QColor("black"), QColor("white")):
             return true_pick_random_color()
         return randomized_color
 
-    monkeypatch.setattr(utils, "_pick_random_color", mock_pick_random_color)
+    monkeypatch.setattr(utils, "pick_random_color", mock_pick_random_color)
     picked_color = utils.random_color(is_curve_color)
 
     if is_curve_color:
@@ -93,23 +124,6 @@ def test_random_color(monkeypatch, is_curve_color, randomized_color):
             assert picked_color == randomized_color
     else:
         assert picked_color == randomized_color
-
-
-def _serialize_colors(timechart_settings):
-    """
-    Helper method to serialize QColor objects to string, useful for dumping converted contents into
-    a JSON file.
-
-    Parameters
-    ----------
-    timechart_settings : OrderDict
-        The dictionary containing the converted configuration data.
-    """
-    for k, v in timechart_settings.items():
-        if isinstance(timechart_settings[k], dict):
-            _serialize_colors(timechart_settings[k])
-        elif "color" in k and v is not None:
-            timechart_settings[k] = str(svg_color_from_hex(v.name(), hex_on_fail=True))
 
 
 def _compare_with_expected_output(output_dir_path, output_filename):

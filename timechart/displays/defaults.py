@@ -1,4 +1,6 @@
-# Global Constant Definitions
+"""
+Global Constant Definitions
+"""
 
 from qtpy.QtGui import QColor
 

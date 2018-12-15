@@ -1,4 +1,6 @@
-# StripTool Configuration Data File Import Strategy
+"""
+StripTool Configuration Data File Import Strategy
+"""
 
 from collections import OrderedDict
 import re
@@ -8,7 +10,7 @@ from qtpy.QtCore import Qt
 
 from timechart import __version__ as ver
 
-from .settings_import_strategy import SettingsImportStrategy
+from .timechart_config_importer import TimeChartConfigImporter
 from ...utilities.utils import add_striptool_color
 from timechart.displays.defaults import DEFAULT_CHART_TITLE, ASYNC_DATA_SAMPLING
 
@@ -94,7 +96,7 @@ def _add_to_curves(key, value, chart_pvs, index_to_pv_names):
         index_to_pv_names[key_index] = value
     else:
         pv_name = index_to_pv_names[key_index]
-        converted_content = StripToolImportStrategy.CONVERSION_TABLE[key_specific_item]
+        converted_content = StripToolConfigImporter.CONVERSION_TABLE[key_specific_item]
 
         if isinstance(converted_content, tuple):
             if converted_content[0]:
@@ -132,7 +134,7 @@ def _convert_to_line_width(_, __, line_width_value):
     LINE_WIDTH = int(line_width_value)
 
 
-class StripToolImportStrategy(SettingsImportStrategy):
+class StripToolConfigImporter(TimeChartConfigImporter):
     """
     The strategy to import a StripTool configuration data file.
     """
@@ -162,28 +164,9 @@ class StripToolImportStrategy(SettingsImportStrategy):
         pydm_main_display : PyDMDisplay
             The Main Display Window.
         """
-        super(StripToolImportStrategy, self).__init__(pydm_main_display)
+        super(StripToolConfigImporter, self).__init__(pydm_main_display)
 
-    def import_file(self, filename):
-        """
-        Import a StripTool configuration data file, and apply the settings to TimeChart.
-
-        Parameters
-        ----------
-        filename : str
-            The path to a StripTool configuration file.
-        """
-        with open(filename, 'r') as settings_file:
-            # Parse the StripTool file
-            stp_data = self._import_to_dict(settings_file)
-
-            # Convert to the equivalent TimeChart settings
-            settings = self._convert_to_timechart_setting(stp_data)
-
-            # Apply the settings to TimeChart
-            SettingsImportStrategy(self.main_display).apply_settings(settings)
-
-    def _import_to_dict(self, settings_file):
+    def import_to_dict(self, settings_file):
         """
         Parse the StripTool config file.
 
@@ -200,7 +183,7 @@ class StripToolImportStrategy(SettingsImportStrategy):
         stp_data = self._read_file_into_dict(lines)
         return stp_data
 
-    def _convert_to_timechart_setting(self, stp_data):
+    def convert_to_timechart_setting(self, stp_data):
         """
         Convert StripTool settings into TimeChart settings
 
@@ -231,15 +214,9 @@ class StripToolImportStrategy(SettingsImportStrategy):
         timechart_settings["chart_settings"]["show_legend"] = False
         timechart_settings["chart_settings"]["grid_alpha"] = 5
 
-        try:
-            del stp_data["StripConfig"]
-            del stp_data["Strip.Option.AxisYcolorStat"]
-        except KeyError:
-            pass
-
         index_to_pv_name = OrderedDict()
         for k, v in stp_data.items():
-            converted_content = StripToolImportStrategy.CONVERSION_TABLE.get(k, None)
+            converted_content = StripToolConfigImporter.CONVERSION_TABLE.get(k, None)
 
             if "Strip.Curve" in k:
                 _add_to_curves(k, v, timechart_settings["pvs"], index_to_pv_name)
