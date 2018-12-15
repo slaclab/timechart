@@ -1,5 +1,5 @@
 {
-    "__version__": "0+untagged.77.g4bb4ee2.dirty",
+    "__version__": "1.1.0+21.gf3a9274.dirty",
     "pvs": {
         "ca://MTEST:SinVal": {
             "line_width": 2,

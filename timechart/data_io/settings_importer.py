@@ -18,7 +18,7 @@ class SettingsImporter:
     Import configuration data from files exported from different sources, i.e. TimeChart and
     StripTool.
     """
-    def __init__(self, pydm_main_display):
+    def __init__(self, pydm_main_display=None):
         """
         Parameters
         ----------
@@ -38,8 +38,9 @@ class SettingsImporter:
         """
         with open(filename, 'r') as settings_file:
             if filename.endswith(".stp"):
-                logger.warning("The StripTool config file format will be deprecated. You must convert this file to "
-                               "the TimeChart config format.")
+                logger.warning("The StripTool config file format will soon be unsupported. You can convert this file "
+                               "to the TimeChart config format by clicking on the Export button, then select "
+                               "Chart Settings while running TimeChart.")
                 timechart_settings = self.convert_stp_file(settings_file)
             else:
                 timechart_settings = json.load(settings_file)

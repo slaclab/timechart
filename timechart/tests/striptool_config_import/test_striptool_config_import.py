@@ -79,7 +79,7 @@ def test_export_converted_files():
     This test executes a different code path then the previous test, i.e. testing the convert_stp_file method with the
     path to export a TimeChart JSON config file as the second parameter.
     """
-    settings_importer = SettingsImporter(None)
+    settings_importer = SettingsImporter()
 
     input_dir_path = "data"
 
