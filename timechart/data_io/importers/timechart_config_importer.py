@@ -51,6 +51,10 @@ class TimeChartConfigImporter:
 
         self.main_display.handle_data_sampling_rate_changed()
         self.main_display.handle_redraw_rate_changed()
+        if self.main_display.chart_limit_time_span_chk.isChecked():
+            self.main_display.chart_limit_time_span_chk.clicked.emit(True)
+            self.main_display.handle_time_span_changed()
+            self.main_display.chart_limit_time_span_activate_btn.clicked.emit()
 
     def _set_chart_checkboxes(self, checked_data):
         """
@@ -145,19 +149,16 @@ class TimeChartConfigImporter:
             time_span_limit_hours = int(chart_settings["time_span_limit_hours"])
             time_span_limit_minutes = int(chart_settings["time_span_limit_minutes"])
             time_span_limit_seconds = int(chart_settings["time_span_limit_seconds"])
-            if time_span_limit_hours != 0 or time_span_limit_minutes != 0 or time_span_limit_seconds != 0:
-                timespan_values = {
-                    self.main_display.chart_limit_time_span_hours_spin_box: time_span_limit_hours,
-                    self.main_display.chart_limit_time_span_minutes_spin_box: time_span_limit_minutes,
-                    self.main_display.chart_limit_time_span_seconds_spin_box: time_span_limit_seconds,
-                }
-                chart_values.update(timespan_values)
-                self._set_chart_values(chart_values)
-                self.main_display.chart_limit_time_span_activate_btn.clicked.emit()
+            timespan_values = {
+                self.main_display.chart_limit_time_span_hours_spin_box: time_span_limit_hours,
+                self.main_display.chart_limit_time_span_minutes_spin_box: time_span_limit_minutes,
+                self.main_display.chart_limit_time_span_seconds_spin_box: time_span_limit_seconds,
+            }
+            chart_values.update(timespan_values)
+            self._set_chart_values(chart_values)
 
             self.main_display.chart_ring_buffer_size_edt.setText(str(chart_settings["buffer_size"]))
             self.main_display.handle_buffer_size_changed()
-            self.main_display.chart_limit_time_span_activate_btn.clicked.emit()
 
             color_data = {
                 self.main_display.background_color_btn: (chart_settings["background_color"],

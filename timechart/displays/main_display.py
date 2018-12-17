@@ -8,7 +8,6 @@ import logging
 from functools import partial
 import datetime
 
-import numpy as np
 from pyqtgraph import TextItem
 
 from qtpy.QtCore import Qt, Slot, QTimer
@@ -26,7 +25,7 @@ from pydm import Display
 from pydm.widgets.timeplot import (PyDMTimePlot, DEFAULT_X_MIN,
                                    MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE)
 from pydm.utilities.iconfont import IconFont
-from ..data_io.settings_importer import SettingsImporter
+from ..data_io.settings_importer import SettingsImporter, SettingsImporterException
 
 
 from .curve_settings_display import CurveSettingsDisplay
@@ -402,7 +401,13 @@ class TimeChartDisplay(Display):
         # If there is an imported config file, let's start TimeChart with the imported configuration data
         if config_file:
             importer = SettingsImporter(self)
-            importer.import_settings(config_file)
+            try:
+                importer.import_settings(config_file)
+            except SettingsImporterException as error:
+                display_message_box(QMessageBox.Critical, "Import Failure",
+                                    "Cannot import the file '{0}'. Check the log for the error details."
+                                    .format(config_file))
+                logger.error("Cannot import the file '{0}'. Error: {1}".format(config_file, error))
 
     def ui_filepath(self):
         """
@@ -979,10 +984,16 @@ class TimeChartDisplay(Display):
     def handle_import_data_btn_clicked(self):
         open_file_info = QFileDialog.getOpenFileName(self, caption="Open File", directory=os.path.expanduser('~'),
                                                      filter=IMPORT_FILE_FORMAT)
-        open_file_name = open_file_info[0]
-        if open_file_name:
-            importer = SettingsImporter(self)
-            importer.import_settings(open_file_name)
+        open_filename = open_file_info[0]
+        if open_filename:
+            try:
+                importer = SettingsImporter(self)
+                importer.import_settings(open_filename)
+            except SettingsImporterException as error:
+                display_message_box(QMessageBox.Critical, "Import Failure",
+                                    "Cannot import the file '{0}'. Check the log for the error details."
+                                    .format(open_filename))
+                logger.error("Cannot import the file '{0}'. Error: {1}".format(open_filename, error))
 
     def handle_sync_mode_radio_toggle(self, radio_btn):
         if radio_btn.isChecked():

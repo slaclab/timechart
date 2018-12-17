@@ -12,7 +12,7 @@ import difflib
 from qtpy.QtGui import QColor
 
 from timechart.data_io.settings_importer import SettingsImporter
-from timechart.data_io.import_strategies.timechart_config_importer import TimeChartConfigImporter
+from timechart.data_io.importers.timechart_config_importer import TimeChartConfigImporter
 from timechart.utilities import utils
 
 import logging

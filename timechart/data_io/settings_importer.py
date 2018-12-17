@@ -2,15 +2,20 @@
 Configuration Data Importing, for Both TimeChart and StripTool Configuration Files
 """
 
+import six
 import json
 
-from .import_strategies.timechart_config_importer import TimeChartConfigImporter
-from .import_strategies.striptool_config_importer import StripToolConfigImporter
+from .importers.timechart_config_importer import TimeChartConfigImporter
+from .importers.striptool_config_importer import StripToolConfigImporter
 from ..utilities.utils import serialize_colors
 
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+class SettingsImporterException(Exception):
+    pass
 
 
 class SettingsImporter:
@@ -36,18 +41,21 @@ class SettingsImporter:
         ----------
         filename : The path to a configuration data file.
         """
-        with open(filename, 'r') as settings_file:
-            if filename.endswith(".stp"):
-                logger.warning("The StripTool config file format will soon be unsupported. You can convert this file "
-                               "to the TimeChart config format by clicking on the Export button, then select "
-                               "Chart Settings while running TimeChart.")
-                timechart_settings = self.convert_stp_file(settings_file)
-            else:
-                timechart_settings = json.load(settings_file)
+        try:
+            with open(filename, 'r') as settings_file:
+                if filename.endswith(".stp"):
+                    logger.warning("The StripTool config file format will soon be unsupported. You can convert this "
+                                   "file to the TimeChart config format by clicking on the Export button, then select "
+                                   "Chart Settings while running TimeChart.")
+                    timechart_settings = self.convert_stp_file(settings_file)
+                else:
+                    timechart_settings = json.load(settings_file)
 
-        # Apply the settings as TimeChart settings, now that we have all the file data converted to the same TimeChart
-        # config format
-        self.timechart_importer.apply_settings(timechart_settings)
+            # Apply the settings as TimeChart settings, now that we have all the file data converted to the same
+            # TimeChart config format
+            self.timechart_importer.apply_settings(timechart_settings)
+        except Exception as error:
+            six.raise_from(SettingsImporterException(str(error)), error)
 
     def convert_stp_file(self, stp_file_handle, new_timechart_file=None):
         """
