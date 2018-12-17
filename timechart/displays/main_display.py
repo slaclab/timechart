@@ -403,11 +403,11 @@ class TimeChartDisplay(Display):
             importer = SettingsImporter(self)
             try:
                 importer.import_settings(config_file)
-            except SettingsImporterException as error:
+            except SettingsImporterException:
                 display_message_box(QMessageBox.Critical, "Import Failure",
                                     "Cannot import the file '{0}'. Check the log for the error details."
                                     .format(config_file))
-                logger.error("Cannot import the file '{0}'. Error: {1}".format(config_file, error))
+                logger.exception("Cannot import the file '{0}'.".format(config_file))
 
     def ui_filepath(self):
         """
@@ -989,11 +989,11 @@ class TimeChartDisplay(Display):
             try:
                 importer = SettingsImporter(self)
                 importer.import_settings(open_filename)
-            except SettingsImporterException as error:
+            except SettingsImporterException:
                 display_message_box(QMessageBox.Critical, "Import Failure",
                                     "Cannot import the file '{0}'. Check the log for the error details."
                                     .format(open_filename))
-                logger.error("Cannot import the file '{0}'. Error: {1}".format(open_filename, error))
+                logger.exception("Cannot import the file '{0}'".format(open_filename))
 
     def handle_sync_mode_radio_toggle(self, radio_btn):
         if radio_btn.isChecked():

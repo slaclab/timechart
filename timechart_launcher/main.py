@@ -15,14 +15,6 @@ import timechart
 from timechart.displays.main_display import TimeChartDisplay
 
 
-try:
-    os.makedirs("logs")
-except os.error as err:
-    # It's OK if the log directory exists. This is to be compatible with Python 2.7
-    if err.errno != os.errno.EEXIST:
-        raise err
-
-
 def main():
     args, extra_args = _parse_arguments()
 
@@ -45,20 +37,6 @@ def main():
     if args.log_level:
         logger.setLevel(args.log_level)
         console_handler.setLevel(args.log_level)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     base_path = os.path.dirname(os.path.realpath(__file__))
     icon_path_mask = os.path.join(base_path, "icons", "charts_{}.png")
