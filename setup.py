@@ -9,7 +9,7 @@ requirements = [r for r in requirements if not r.startswith('git+')]
 
 if len(git_requirements) > 0:
     print("User must install \n" +
-          "\n".join(f' {r}' for r in git_requirements) +
+          "\n".join('{}'.format(r) for r in git_requirements) +
           "\n\nmanually")
 
 
