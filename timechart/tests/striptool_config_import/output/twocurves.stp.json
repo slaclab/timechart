@@ -1,17 +1,29 @@
 {
-    "__version__": "1.1.0+24.g6ff00aa.dirty",
+    "__version__": "1.2.1+32.g48e0c87.dirty",
     "pvs": {
-        "ca://XXIO:XX22:XX330:XX": {
+        "ca://MTEST:SinVal": {
             "line_width": 2,
-            "y_channel": "ca://XXIO:XX22:XX330:XX",
+            "y_channel": "ca://MTEST:SinVal",
             "line_style": 1,
             "symbol": null,
             "symbol_size": 1,
-            "unit": "Torr",
-            "comment": "XXIO:XX22:XX330:XX",
-            "precision": 11,
-            "x_min": 2.8e-10,
-            "x_max": 0.00032,
+            "unit": null,
+            "precision": 0,
+            "x_min": 4.0,
+            "x_max": 5.0,
+            "scale": 0,
+            "is_visible": false
+        },
+        "ca://MTEST:CosVal": {
+            "line_width": 2,
+            "y_channel": "ca://MTEST:CosVal",
+            "line_style": 1,
+            "symbol": null,
+            "symbol_size": 1,
+            "unit": null,
+            "precision": 0,
+            "x_min": 8.0,
+            "x_max": 10.0,
             "scale": 0,
             "is_visible": true
         }
@@ -29,10 +41,10 @@
         "grid_alpha": 5,
         "limit_time_span": true,
         "time_span_limit_hours": 0,
-        "time_span_limit_minutes": 5,
-        "time_span_limit_seconds": 0,
-        "buffer_size": "7200",
-        "update_interval_hz": 1.0,
+        "time_span_limit_minutes": 0,
+        "time_span_limit_seconds": 37,
+        "buffer_size": "9000",
+        "update_interval_hz": 0.2,
         "redraw_rate": 1.0,
         "background_color": "white",
         "axis_color": "#bebebe",

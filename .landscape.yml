@@ -1,0 +1,16 @@
+test-warnings: no
+strictness: medium
+python-targets:
+    - 2
+    - 3
+ignore-paths:
+    - timechart/__init__.py
+    - timechart/_version.py
+    - versioneer.py
+    - setup.py
+ignore-patterns:
+    - (^|/)*(/|$)__init__.py
+pylint:
+  disable:
+    - protected-access
+    - too-many-arguments
