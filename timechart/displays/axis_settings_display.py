@@ -1,4 +1,6 @@
-# The Dialog to Export Data from a Chart
+"""
+The Dialog to Export Data from a Chart
+"""
 
 from functools import partial
 

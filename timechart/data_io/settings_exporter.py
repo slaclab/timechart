@@ -1,4 +1,6 @@
-# Export the Current TimeChart Configurations into a JSON File
+"""
+Export the Current TimeChart Configurations into a JSON File
+"""
 
 from collections import OrderedDict
 import json

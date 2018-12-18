@@ -4,7 +4,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QMessageBox
 
+from pydm.utilities.colors import svg_color_from_hex
 
+# If TimeChart is importing a StripTool config file, which contains a list of preferred colors, TimeChart will populate
+# the STRIPTOOL_PREDEFINED_COLORS list. When TimeChart picks a random color for a curve, it'll pick from
+# STRIPTOOL_PREDEFINED_COLORS instead of the predefined colors of TimeChart's own.
+#
+# On the other hand, if TimeChart imports its own JSON config file, it'll pick a random color for a curve from its
+# own color list.
 global STRIPTOOL_PREDEFINED_COLORS
 STRIPTOOL_PREDEFINED_COLORS = []
 
@@ -34,14 +41,14 @@ def random_color(curve_colors_only=False):
     A color object randomly selected from the predefined list, and is not a white or black color if this is a color
     purported for a curve.
     """
-    color_pick = _pick_random_color()
+    color_pick = pick_random_color()
     while curve_colors_only and color_pick in (QColor("black"), QColor("white")):
-        color_pick = _pick_random_color()
+        color_pick = pick_random_color()
 
     return color_pick
 
 
-def _pick_random_color():
+def pick_random_color():
     """
     Straight-up pick a random color, with affinity given to the StripTool-predefined colors.
 
@@ -53,6 +60,23 @@ def _pick_random_color():
         return random.choice(STRIPTOOL_PREDEFINED_COLORS)
     else:
         return random.choice(PREDEFINED_COLORS)
+
+
+def serialize_colors(timechart_settings):
+    """
+    Helper method to serialize QColor objects to string, useful for dumping converted contents into
+    a JSON file.
+
+    Parameters
+    ----------
+    timechart_settings : OrderDict
+        The dictionary containing the converted configuration data.
+    """
+    for k, v in timechart_settings.items():
+        if isinstance(timechart_settings[k], dict):
+            serialize_colors(timechart_settings[k])
+        elif "color" in k and v is not None:
+            timechart_settings[k] = str(svg_color_from_hex(v.name(), hex_on_fail=True))
 
 
 def display_message_box(icon, window_title, text):

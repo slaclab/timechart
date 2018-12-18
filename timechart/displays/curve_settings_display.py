@@ -1,4 +1,6 @@
-# The Curve Settings Dialog
+"""
+The Curve Settings Dialog
+"""
 
 from pydm import Display
 from pydm.widgets.baseplot import BasePlotCurveItem
@@ -161,8 +163,6 @@ class CurveSettingsDisplay(Display):
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
 
-            self.app.establish_widget_connections(self.main_display)
-
     def handle_symbol_index_changed(self, selected_index):
         """
         Handle the change in the curve's symbol from a combo box.
@@ -179,8 +179,6 @@ class CurveSettingsDisplay(Display):
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
 
-            self.app.establish_widget_connections(self.main_display)
-
     def handle_symbol_size_changed(self, new_size):
         """
         Handle the symbol size value change from the symbol size spinner.
@@ -195,8 +193,6 @@ class CurveSettingsDisplay(Display):
             curve.symbolSize = new_size
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
-
-            self.app.establish_widget_connections(self.main_display)
 
     def handle_line_width_changed(self, new_width):
         """
@@ -213,8 +209,6 @@ class CurveSettingsDisplay(Display):
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
 
-            self.app.establish_widget_connections(self.main_display)
-
     def handle_line_style_index_changed(self, selected_index):
         """
         Handle the change in the curve's line style from a combo box.
@@ -230,8 +224,6 @@ class CurveSettingsDisplay(Display):
                 self.line_style_cmb.itemText(selected_index)]
             self.chart.refreshCurve(curve)
             self.channel_map[self.pv_name] = curve
-
-            self.app.establish_widget_connections(self.main_display)
 
     def handle_reset_button_clicked(self):
         """
