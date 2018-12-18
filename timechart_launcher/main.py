@@ -18,15 +18,25 @@ from timechart.displays.main_display import TimeChartDisplay
 def main():
     args, extra_args = _parse_arguments()
 
+    try:
+        os.makedirs("logs")
+    except os.error as err:
+        # It's OK if the log directory exists. This is to be compatible with Python 2.7
+        if err.errno != os.errno.EEXIST:
+            raise err
+
+    logging.basicConfig(level=logging.INFO, filename=os.path.join("logs", "timechart.log"),
+                        format="[%(asctime)s] [%(levelname)-8s] - %(message)s")
+
     logger = logging.getLogger('')
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        '[%(asctime)s] [%(levelname)-8s] - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(logging.Formatter("%(message)s"))
+    logger.addHandler(console_handler)
+
     if args.log_level:
         logger.setLevel(args.log_level)
-        handler.setLevel(args.log_level)
+        console_handler.setLevel(args.log_level)
 
     base_path = os.path.dirname(os.path.realpath(__file__))
     icon_path_mask = os.path.join(base_path, "icons", "charts_{}.png")
@@ -74,7 +84,7 @@ def _parse_arguments():
     )
 
     parser.add_argument("--config-file",
-                        help = "The configuration file to import to and start TimeChart.")
+                        help="The configuration file to import to and start TimeChart.")
     parser.add_argument('--version', action='version',
                         version='TimeChart {version}'.format(
                             version=timechart.__version__))

@@ -2,3 +2,5 @@ pydm>=1.6.0
 numpy
 qtpy
 pyqtgraph
+six
+
