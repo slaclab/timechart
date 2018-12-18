@@ -248,10 +248,10 @@ class StripToolConfigImporter(TimeChartConfigImporter):
         -------
             A dictionary with the keys and values parsed from the file contents.
         """
-        settings_modules = dict()
+        settings_modules = OrderedDict()
         for line in file_contents:
             tokens = re.sub(' +', ' ', line.lstrip())
-            tokens = tokens.split(' ', maxsplit=1)
+            tokens = tokens.split(' ', 1)
             try:
                 settings_modules[tokens[0]] = tokens[1]
             except IndexError:

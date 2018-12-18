@@ -2,23 +2,16 @@
 The settings importer to process TimeChart configuration data
 """
 
-from abc import ABC, abstractmethod
 from qtpy.QtGui import QColor
 
 from ...displays.defaults import ASYNC_DATA_SAMPLING, SYNC_DATA_SAMPLING
 from ...utilities.utils import random_color
 
 
-class TimeChartConfigImporter:
-    __metaclass__ = ABC
-
+class TimeChartConfigImporter(object):
     def __init__(self, pydm_main_dislay):
         self.main_display = pydm_main_dislay
         self.chart = self.main_display.chart if self.main_display else None
-
-    @abstractmethod
-    def import_file(self, settings_file):
-        raise NotImplementedError
 
     def _set_chart_labels(self, chart_labels):
         """

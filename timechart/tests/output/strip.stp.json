@@ -1,5 +1,5 @@
 {
-    "__version__": "1.1.0+23.ge8cbb44.dirty",
+    "__version__": "1.1.0+24.g6ff00aa.dirty",
     "pvs": {
         "ca://XXIO:XX22:XX330:XX": {
             "line_width": 2,
