@@ -70,11 +70,6 @@ def test_import_striptool_file(monkeypatch):
         # Import each StripTool config file for conversion to TimeChart configurations
         settings_importer.import_settings(os.path.join(INPUT_DIR_PATH, striptool_filename))
 
-        # Now try outputting the converted files, too
-        with open(os.path.join(INPUT_DIR_PATH, striptool_filename), 'r') as input_file:
-            output_filename = striptool_filename + ".json"
-            settings_importer.convert_stp_file(input_file, os.path.join(OUTPUT_DIR_PATH, output_filename))
-
 
 def test_export_converted_files():
     """
