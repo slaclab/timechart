@@ -5,6 +5,12 @@ Unit Test for StripTool Config File Importing
 import pytest
 
 import os
+try:
+    from os import errno
+except ImportError:
+    # For Python 3.7
+    import errno
+
 from os.path import isfile
 import json
 import difflib
@@ -17,6 +23,12 @@ from timechart.utilities import utils
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+TEST_DIR_PATH = os.path.join(os.getcwd(),'timechart', 'tests', 'striptool_config_import')
+INPUT_DIR_PATH = os.path.join(TEST_DIR_PATH, 'data')
+OUTPUT_DIR_PATH = os.path.join(TEST_DIR_PATH, 'output')
+EXPECTED_OUTPUT_DIR_PATH = os.path.join(TEST_DIR_PATH, 'expected_output')
 
 
 def test_import_striptool_file(monkeypatch):
@@ -32,15 +44,7 @@ def test_import_striptool_file(monkeypatch):
         out converted contents as JSON files, and compare those files to the expected.
 
     """
-    input_dir_path = "data"
-
-    try:
-        os.makedirs("output")
-    except os.error as err:
-        # It's OK if the directory exists. This is to be compatible with Python 2.7
-        if err.errno != os.errno.EEXIST:
-            raise err
-    output_dir_path = "output"
+    _make_output_dir()
 
     def mock_apply_settings(_, timechart_settings):
         logger.info("Applying settings to Main Display...")
@@ -50,25 +54,21 @@ def test_import_striptool_file(monkeypatch):
 
         # Dump converted contents into a JSON file
         output_filename = striptool_filename + ".json"
-        with open(os.path.join(output_dir_path, output_filename), 'w') as json_file:
+        with open(os.path.join(OUTPUT_DIR_PATH, output_filename), 'w') as json_file:
             json.dump(timechart_settings, json_file, separators=(',', ':'), indent=4)
 
         # Compare the output file to the expected file
-        _compare_with_expected_output(output_dir_path, output_filename)
+        _compare_with_expected_output(OUTPUT_DIR_PATH, output_filename)
 
     monkeypatch.setattr(TimeChartConfigImporter, "apply_settings", mock_apply_settings)
 
     settings_importer = SettingsImporter(None)
-    striptool_filenames = [f for f in os.listdir(input_dir_path) if isfile(os.path.join(
-        input_dir_path, f))]
+
+    striptool_filenames = [f for f in os.listdir(INPUT_DIR_PATH) if isfile(os.path.join(
+        INPUT_DIR_PATH, f))]
     for striptool_filename in striptool_filenames:
         # Import each StripTool config file for conversion to TimeChart configurations
-        settings_importer.import_settings(os.path.join(input_dir_path, striptool_filename))
-
-        # Now try outputting the converted files, too
-        with open(os.path.join(input_dir_path, striptool_filename), 'r') as input_file:
-            output_filename = striptool_filename + ".json"
-            settings_importer.convert_stp_file(input_file, os.path.join(output_dir_path, output_filename))
+        settings_importer.import_settings(os.path.join(INPUT_DIR_PATH, striptool_filename))
 
 
 def test_export_converted_files():
@@ -80,23 +80,14 @@ def test_export_converted_files():
     path to export a TimeChart JSON config file as the second parameter.
     """
     settings_importer = SettingsImporter()
+    _make_output_dir()
 
-    input_dir_path = "data"
-
-    try:
-        os.makedirs("output")
-    except os.error as err:
-        # It's OK if the directory exists. This is to be compatible with Python 2.7
-        if err.errno != os.errno.EEXIST:
-            raise err
-    output_dir_path = "output"
-
-    striptool_filenames = [f for f in os.listdir(input_dir_path) if isfile(os.path.join(
-        input_dir_path, f))]
+    striptool_filenames = [f for f in os.listdir(INPUT_DIR_PATH) if isfile(os.path.join(
+        INPUT_DIR_PATH, f))]
     for striptool_filename in striptool_filenames:
-        with open(os.path.join(input_dir_path, striptool_filename), 'r') as input_file:
+        with open(os.path.join(INPUT_DIR_PATH, striptool_filename), 'r') as input_file:
             output_filename = striptool_filename + ".json"
-            settings_importer.convert_stp_file(input_file, os.path.join(output_dir_path, output_filename))
+            settings_importer.convert_stp_file(input_file, os.path.join(OUTPUT_DIR_PATH, output_filename))
 
 
 @pytest.mark.parametrize("is_curve_color, randomized_color", [
@@ -138,10 +129,8 @@ def _compare_with_expected_output(output_dir_path, output_filename):
     output_filename : str
         The name of the JSON file, containing the converted configuration data.
     """
-    expected_output_dir_path = "expected_output"
-
     with open(os.path.join(output_dir_path, output_filename), 'r') as output:
-        with open(os.path.join(expected_output_dir_path, output_filename), 'r') as expected_output:
+        with open(os.path.join(EXPECTED_OUTPUT_DIR_PATH, output_filename), 'r') as expected_output:
             diffs = difflib.unified_diff(output.readlines(), expected_output.readlines(),
                                          fromfile="converted_output",
                                          tofile="expected_output")
@@ -150,3 +139,15 @@ def _compare_with_expected_output(output_dir_path, output_filename):
                 diff_lines.append(line)
 
             assert len(diff_lines) == 0
+
+
+def _make_output_dir():
+    """
+    Make a directory to store test output files. These files will be compared with the expected output files.
+    """
+    try:
+        os.makedirs(OUTPUT_DIR_PATH)
+    except os.error as err:
+        # It's OK if the directory exists. This is to be compatible with Python 2.7
+        if err.errno != errno.EEXIST:
+            raise err

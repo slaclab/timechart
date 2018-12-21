@@ -1070,7 +1070,7 @@ class TimeChartDisplay(Display):
 
         self.chart_redraw_rate_spin.setValue(DEFAULT_REDRAW_RATE_HZ)
         self.handle_redraw_rate_changed()
-        
+
         self.chart_data_async_sampling_rate_spin.setValue(
             DEFAULT_DATA_SAMPLING_RATE_HZ)
         self.chart_data_sampling_rate_lbl.hide()

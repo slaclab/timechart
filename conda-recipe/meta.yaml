@@ -11,12 +11,12 @@ requirements:
     build:
       - python
       - setuptools
-      - pydm >=1.5.0
+      - pydm >=1.6.0
 
     run:
       - six
       - python
-      - pydm >=1.5.0
+      - pydm >=1.6.0
 
 test:
     imports:
