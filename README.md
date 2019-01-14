@@ -15,8 +15,8 @@ Its charting capability is built upon [pyqtgraph](http://pyqtgraph.org/ "PyQtGra
 and the PyDM's TimePlot is the central widget in TimeChart.
 
 # Prerequisites
-* Python 2.7, 3.5, or 3.6+
-* PyDM >= 1..60
+* Python 2.7, or 3.5+ (3.6+ recommended)
+* PyDM >= 1.6.0
 
 Python package requirements are listed in the requirements.txt file, which can
 be used to install all requirements from pip: 'pip install -r requirements.txt'
