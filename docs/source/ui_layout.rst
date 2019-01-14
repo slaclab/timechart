@@ -17,12 +17,12 @@ The initial UI of TimeChart, when first started, presents the following layout:
         you will be able to change the protocol selection, e.g. to ``archive://`` .
 
 #. **PV Address Input**:
-        You can either type or copy and paste, and then hitting the <Enter> or <Return>keyboard key to
-        start TimeChart charting, or click on the Connect button next to the text input.
+        You can either type or copy and paste, and then hitting the <Enter> or <Return> keyboard key to
+        start TimeChart charting, or click on the Connect button next to the PV Address Input.
 
 #. **PV Connect Button**:
         Click on this button for TimeChart to start rendering the curve for the PV address provided in
-        the PV address text input if you do not want to press the <Enter> or <Return> keyboard key.
+        the PV Adress Input if you do not want to press the <Enter> or <Return> keyboard key.
 
 #. **Graph Canvas**:
         The area where a graph is to be drawn.
@@ -32,7 +32,7 @@ The initial UI of TimeChart, when first started, presents the following layout:
         you enter for charting. You can click on this button to show the Control Panel whenever it is hidden.
 
 #. **Hide Control Panel Button**:
-        Click on this button to hide the Control Panel and provide more space to the Graph Canvas.
+        Click on this button to hide the Control Panel and provide more space for the Graph Canvas.
 
 #. **Graph View Buttons**:
         Use these buttons to adjust the viewing of the graph:
@@ -42,7 +42,7 @@ The initial UI of TimeChart, when first started, presents the following layout:
            * **\+ Y-Zoom**: Zoom in on the y-axis
            * **\- Y-Zoom**: Zoom out on the y-axis
            * **Reset**: Restore the zoom levels of the x-axis and the y-axis to the default
-           * **View All**: Automatically adjust the zoom levels of both the x-axis and the y-axis so that all the current curves being drawn on the graph will be visible.
+           * **View All**: Automatically adjust the zoom levels of both the x-axis and the y-axis so that all the current curves' data points already plotted on the graph will be visible.
 
 #. **Graph Pause Button**:
         Click on this button to toggle pausing or resuming drawing an ongoing graph. During pausing,

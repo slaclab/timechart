@@ -9,11 +9,13 @@ Installing TimeChart
 Prerequisites
 **************
 
-* Python 2.7, 3.5, or 3.6+
+* Python 2.7, or 3.5+ (3.6+ recommended)
 * PyDM >= 1.6.0
 
 Python package requirements are listed in the `requirements.txt` file, which can be used to install all requirements
 from pip: `pip install -r requirements.txt`
+
+You will also need to install ``git`` for the platform on which you are about to run TimeChart.
 
 ***********
 Installing

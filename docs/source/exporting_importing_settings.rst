@@ -23,7 +23,7 @@ Export Chart Data dialog:
 
     * Under the Export Options list, select Chart Settings
     * Check the ``Include currently plotted PVs`` to save the current PVs into the config file if you want TimeChart
-      will plot these PVs immediately the next time it runs
+      to plot these PVs immediately the next time it runs
     * Check the ``Include current chart settings`` to save the rest of TimeChart's customized settings
     * Click on the Export Button to select the location to save the file. The file will be saved in the JSON format,
       which can be viewed and edited in a text editor.

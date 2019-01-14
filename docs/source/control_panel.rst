@@ -31,7 +31,7 @@ For every curve being drawn on the graph, the following curve data and control o
         Although invisible, the PV's curve will continue to be plotted.
 
 #. **Curve Name**:
-        The name of the PV whose curve is being plotted. Under the Curve Name are the current min and max
+        The name of the PV whose curve is being plotted. Under the Curve Name are the current y-min and y-max
         values of the curve, and the current y-value just plotted on the curve.
 
         .. important::
@@ -53,8 +53,7 @@ For every curve being drawn on the graph, the following curve data and control o
             * **Symbol Size**: The size of the markers. The default is 10
             * **Line Style**: Whether the line is solid (default) or is a combination of dashes and dots
             * **Line Width**: How thick the curve line is. The default is 2
-            * **Reset**: Click on the Reset button to reset all the curve settings, except for the already selected
-                         curve color, to the default values.
+            * **Reset**: Click on the Reset button to reset all the curve settings, except for the already selected curve color, to the default values.
 
 #. **Focus Button**:
         Click on this button to automatically adjust the x and y value ranges so that the current curve (which
@@ -84,15 +83,15 @@ Data
             TimeChart plots a new data point for a curve as soon as it receives a new data point from the PV.
 
         * **Asynchronous**:
-            Default mode. TimeChart checks for new data points at a regular interval (frequency), as specified by the Data
+            Default. TimeChart checks for new data points at a regular interval (frequency), as specified by the Data
             Sampling Rate (Hz) value in the ``Graph Intervals`` section, as provided by the user. TimeChart then plots any
             accummulated new data points.
 
                 .. important::
                     If you select the Synchronous data sampling mode, you cannot make any setting changes affecting
                     how often TimeChart checks for new data points or how long TimeChart should collect the data
-                    points. Consequently, ``Data Sampling Rate`` and :``Limit Time Span`` will be disabled for the
-                    Synchronous Data Sampling Mode.
+                    points. Consequently, the ``Data Sampling Rate`` and ``Limit Time Span`` inputs will be hidden in
+                    the Synchronous Data Sampling Mode.
 
 .. _graph_intervals:
 
@@ -101,7 +100,7 @@ Data
 
         * **Redraw Rate (Hz)**:
             Default is 30 Hz. Minimum 1 Hz. Maximum 240 Hz. How often TimeChart redraws the current curves already
-            plotted. This controls how smooth the curves are drawn.
+            plotted. This controls how smoothly the curves are to be drawn.
 
         .. _data_sampling_rate:
 
@@ -115,20 +114,20 @@ Data
         * **Limit Time Span**:
             Default is Off. If checked, limit the charting operations to a time constraint of maximum 999 hours,
             59 minutes, and 59 seconds. Depending on the hour, minute, and second values provided for this time
-            constraint, TimeChart will limit the data points collected so that it will provide the graph for the
-            duration provided by this Limit Time Span.
+            constraint, TimeChart will limit the number of data points collected so that it will provide the graph for
+            the duration provided by this Limit Time Span.
 
                 .. important::
                     You must click on the Apply Button after setting the hour, minute, and second constraint values for
                     the Time Span Limit to take effect.
 
-        * **Ring Buffer Size**. Default is 18000. The number of data points to be collected and charted by TimeChart.
+        * **Ring Buffer Size**. Default is 18000. The number of data points to be collected and charted by TimeChart before writing the latest data points over the oldest data in the data point circular buffer.
 
                 .. important::
                         The time constraint set by ``Limit Time Span`` directly affects the ``Ring Buffer Size``.
                         Consequently, if you set a time span limit, you cannot manually set the ring buffer size. So,
-                        The Ring Buffer Size UI will be disabled (grayed out) if you check on the Limit Time Span
-                        checkbox.
+                        The Ring Buffer Size text input will be disabled (grayed out) if you check on the Limit Time
+                        Span checkbox.
 
     * **Reset Data Settings Button**:
         Click on this button to reset all the settings in the Data tab to the default values.
@@ -150,19 +149,19 @@ Graph
         Change the Title and Legend settings of the entire graph:
 
     * **Graph Title**:
-            Default is "TimeChart". You can customize the graph title, and its font, font style, and font size by
+            Default is "TimeChart". You can customize the graph title, and also its font, font style, and font size by
             clicking on the Style button next to the text edit.
 
     * **Show Legend Checkbox**:
             Default is unchecked. You can check this box to display the legend, which provides all the active curves'
-            names and line colors on the graph.
+            names and their line colors on the graph.
 
     * **Change Axis Settings Button**:
             Click on this button will allow you to set:
 
                 * Labels and Units for the x-axis and y-axis
                 * Whether to display a right y-axis (not displaying by default), and the Label and Unit for the right y-axis
-                * The font, font style, and font size for the Labels and Units.
+                * The font, font style, and font size for the Labels.
 
     * **Graph Context Menu**:
             You can also right-click on the Graph Canvas to access additional setting options
