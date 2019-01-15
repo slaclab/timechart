@@ -15,24 +15,15 @@ Its charting capability is built upon [pyqtgraph](http://pyqtgraph.org/ "PyQtGra
 and the PyDM's TimePlot is the central widget in TimeChart.
 
 # Prerequisites
-* Python 2.7 or 3.5
-* PyDM >= 1.4.0
+* Python 2.7, or 3.5+ (3.6+ recommended)
+* PyDM >= 1.6.0
 
 Python package requirements are listed in the requirements.txt file, which can
 be used to install all requirements from pip: 'pip install -r requirements.txt'
 
 # Installing TimeChart
 ## Using pip
-You must first install PyDM as it is the framework TimeChart is built upon.
-In doing so, you must first satisfy the [PyDM prerequisites](https://github.com/slaclab/pydm/blob/master/requirements.txt, "PyDM Requirements"):
- 
-```sh
-git clone https://github.com/slaclab/pydm.git
-cd pydm
-pip install .[all]
-```
-
-Next, clone this TimeChart repository:
+Clone this TimeChart repository, and then start ```pip install```
 
 ```sh
 git clone https://github.com/slaclab/timechart.git
