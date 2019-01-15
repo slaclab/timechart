@@ -4,7 +4,7 @@ sudo: required
 env:
   global:
     - OFFICIAL_REPO="slaclab/timechart"
-    # Doctr deploy key for hmbui/timechart-fork
+    # Doctr deploy key for slaclab/timechart
     - secure: "Dy2ZOHhHQvk3S1nbdGqEFcCiKLw6FWEhuRC9wAsZLI622bh/SZU0iBrQ64iDtrtujC2sq3cuiTYipM1WyUwGxiqr45BFb5HISSv5qIJz1Kr4+MJE8Ygzk1aMZ8Wh5OmEeXsUw9IcSQzX6WY5gqlDBTyA5NPebYidZ5P+OYlbKmvySGgSAh6zvSPWhtbj5OVSUgt3sbtlCIyMglH8XzvMpyeoH4MlQBh420Q0LKCSs4GNrzrHXgJLkHtIrV5oVn3GXF9QuxGxAKl5w2adl9WjJET3iXSu8YLUeMGvEDlHAysQX3Kvfyoxy2nUedg7LiV/pP6hEGxdBdyQK0iWqjEOQ9Qupf+ZBLAF/FS0EvoggoY9/PfxJZfcu3ZNaPC5+2zhEcdFvbqgu414O46+ojXady5JotoiPhfKHObZVdklJF7hEY1Vk0+KKqf0GdoZ7rG/y1MxDc0Cpx99UZ1EjOkHGMpvYBGDwJLbAQ3XxdWl4UZDk/eOwaBXqpD84E1cNzZdVxMwqyyIK3R8PycDMoycSGYURaS+kHH0ZhYqL+AlUe8u2KjimIpdzVs/8fC6DAxD3EsjnynSL4C6JwRM+z4kjCMJrYOURx6v4T50ZpfrO9tbqiqr/K/Li1QX03ILw8GzFaiwjw69Suz20su6YzhMJDdlKKy/rdbKGCxTOR33jjM="
 
 matrix:
