@@ -5,14 +5,16 @@ env:
   global:
     - OFFICIAL_REPO="slaclab/timechart"
     # Doctr deploy key for slaclab/timechart
-    #- secure: "ZpbEFHUMVvNorSL19HMT7MD7D4/0q3tk3uyeNqzfVQE0tH0RM437AApZEQ35C4ndKeu97s9uY+Ajs9jfy1N2d/HcApP+n33EX+ufdPbYIL/7eUJnU8yu7paWII1oka76gkQMrJJvVhLzhDa5JtUhs/WR6LmBmYMucKRXaN9UFpwQ13WmNxbHEd71TyY4eYRhq4CNR0JYXKPcl7qVEt3GJ8OG9s71qamyBbCdkZFOylbcKJ0PVVi9OX/UrDarRBQgN7XmUptHocED6kjvmrhjqxg4aZ5c8v+9t00o8dMxHTXituuadcGDhYuic8ZVLm0v6dZxH7fK1hgXxY9t0gWvYv/PSIN7FME5tU9DcTfC36UtMCN5Jkz1ohH5PSJ2AeTeM/akfeiTxusQWrqIWNt32i8HlZvqtUK3Iss9SGQIrgGeusu5S4TqjUb6hgbkDlQmpZ3KqOcoRk/8rBKIfOoqJSs3m5qg0v5Zz95V07K+wsTNuMO0Zb5El+BCHcLGIFleu+m73qxJ1byz0sQhcqAaUt3y3kzxIwOYSOqYJQLCIHXnnFZyIcow6KJZQYO2ib78fpZmNoeXjoO2rA9ZziJuU/nyKKQncJSdKEAplUFG2Uir9r0aRitCsfjtgrUh9fj/n3OXOas8gS0VJ+F4SQUkrhgSwOsFilB4xzHeGYNz/i0="
+    - secure: "Dy2ZOHhHQvk3S1nbdGqEFcCiKLw6FWEhuRC9wAsZLI622bh/SZU0iBrQ64iDtrtujC2sq3cuiTYipM1WyUwGxiqr45BFb5HISSv5qIJz1Kr4+MJE8Ygzk1aMZ8Wh5OmEeXsUw9IcSQzX6WY5gqlDBTyA5NPebYidZ5P+OYlbKmvySGgSAh6zvSPWhtbj5OVSUgt3sbtlCIyMglH8XzvMpyeoH4MlQBh420Q0LKCSs4GNrzrHXgJLkHtIrV5oVn3GXF9QuxGxAKl5w2adl9WjJET3iXSu8YLUeMGvEDlHAysQX3Kvfyoxy2nUedg7LiV/pP6hEGxdBdyQK0iWqjEOQ9Qupf+ZBLAF/FS0EvoggoY9/PfxJZfcu3ZNaPC5+2zhEcdFvbqgu414O46+ojXady5JotoiPhfKHObZVdklJF7hEY1Vk0+KKqf0GdoZ7rG/y1MxDc0Cpx99UZ1EjOkHGMpvYBGDwJLbAQ3XxdWl4UZDk/eOwaBXqpD84E1cNzZdVxMwqyyIK3R8PycDMoycSGYURaS+kHH0ZhYqL+AlUe8u2KjimIpdzVs/8fC6DAxD3EsjnynSL4C6JwRM+z4kjCMJrYOURx6v4T50ZpfrO9tbqiqr/K/Li1QX03ILw8GzFaiwjw69Suz20su6YzhMJDdlKKy/rdbKGCxTOR33jjM="
 
 matrix:
   include:
     - python: 2.7
       env: PYDM_CHANNEL=pydm-tag
     - python: 3.6
-      env: PYDM_CHANNEL=pydm-tag
+      env:
+        - BUILD=1
+        - PYDM_CHANNEL=pydm-tag
     - python: 3.7
       dist: xenial
       env: PYDM_CHANNEL=pydm-tag
@@ -59,6 +61,7 @@ script:
   - |
     if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY" && $BUILD ]]; then
       # Create HTML documentation
+      pip install -r docs-requirements.txt
       pushd docs
       make html
       popd
