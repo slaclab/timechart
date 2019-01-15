@@ -5,7 +5,7 @@ env:
   global:
     - OFFICIAL_REPO="slaclab/timechart"
     # Doctr deploy key for hmbui/timechart-fork
-    - secure: "0+4cxRDEbDLFsVda49dYRJ9R8Xl/yGD2P5XkZshY4RGSCrKXMgNx9Beeb/6iTZ1E5jdihx3CrUvoxUYyrktvj1BBc8qtbGydaIJBCHTOJ0MBHGZniUuyxuaQ3EnpY4TO8+GVM+xqVSVramVOsesCcw9d0kxe71oVEH3j90Li3ZeHueZcEnF9Z2mZAiQrbYTjFQSuTTwKZRk1+0Yxx0eYSM72IZYxJ0GfPEwLNWKf+9nFrfwC447qjkopi5+vfxJCb5EjNcxFC7IHt5S/Hqwh2aLKFOeE6G9vTx7H8k5Tf1hcwvPre5y6kfqpIdbfA/iO3f0xTI4e5G+BHt6dAtoeCxHA/tNpzYHdPXlexcfbx2r8QG5fuDTMLq6mrUZMcE4suFhCPoqfJthi3c1WtmwoR2w0aBD0fH7m4L9/u7XFjlyh1QhokrPZu8Brmq+AxOBPmg7N9SHf2LsY4JG0ahhiI5GFY46jgSsYCdV2Ak0zjuEvwX3z2t/j+FIC4j5z04zgmiwr3XY7oHoqEmyQd85zQplQkjJpC+6VzrdfsJoac/gal7jnUG1MLAQa34vFWynZBKEwTaFU2ip3obsHybtcxRGhT/Mkjyj7iesqglCl6ld4vqV8e3xOAPtpnPj8eK1dGxwJftjDUpu8P/FCkHkYty2Q4CqaL3KfSi8OgSSFtnU="
+    - secure: "Dy2ZOHhHQvk3S1nbdGqEFcCiKLw6FWEhuRC9wAsZLI622bh/SZU0iBrQ64iDtrtujC2sq3cuiTYipM1WyUwGxiqr45BFb5HISSv5qIJz1Kr4+MJE8Ygzk1aMZ8Wh5OmEeXsUw9IcSQzX6WY5gqlDBTyA5NPebYidZ5P+OYlbKmvySGgSAh6zvSPWhtbj5OVSUgt3sbtlCIyMglH8XzvMpyeoH4MlQBh420Q0LKCSs4GNrzrHXgJLkHtIrV5oVn3GXF9QuxGxAKl5w2adl9WjJET3iXSu8YLUeMGvEDlHAysQX3Kvfyoxy2nUedg7LiV/pP6hEGxdBdyQK0iWqjEOQ9Qupf+ZBLAF/FS0EvoggoY9/PfxJZfcu3ZNaPC5+2zhEcdFvbqgu414O46+ojXady5JotoiPhfKHObZVdklJF7hEY1Vk0+KKqf0GdoZ7rG/y1MxDc0Cpx99UZ1EjOkHGMpvYBGDwJLbAQ3XxdWl4UZDk/eOwaBXqpD84E1cNzZdVxMwqyyIK3R8PycDMoycSGYURaS+kHH0ZhYqL+AlUe8u2KjimIpdzVs/8fC6DAxD3EsjnynSL4C6JwRM+z4kjCMJrYOURx6v4T50ZpfrO9tbqiqr/K/Li1QX03ILw8GzFaiwjw69Suz20su6YzhMJDdlKKy/rdbKGCxTOR33jjM="
 
 matrix:
   include:
@@ -13,8 +13,8 @@ matrix:
       env: PYDM_CHANNEL=pydm-tag
     - python: 3.6
       env:
-	- BUILD=1 
-	- PYDM_CHANNEL=pydm-tag
+        - BUILD=1
+        - PYDM_CHANNEL=pydm-tag
     - python: 3.7
       dist: xenial
       env: PYDM_CHANNEL=pydm-tag
