@@ -59,7 +59,7 @@ script:
   # Build docs
   - set -e
   - |
-    if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY" && $BUILD ]]; then
+    if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY_SLACLAB_TIMECHART" && $BUILD ]]; then
       # Create HTML documentation
       pip install -r docs-requirements.txt
       pushd docs
