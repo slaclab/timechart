@@ -4,15 +4,17 @@ sudo: required
 env:
   global:
     - OFFICIAL_REPO="slaclab/timechart"
-    # Doctr deploy key for slaclab/timechart
-    #- secure: "ZpbEFHUMVvNorSL19HMT7MD7D4/0q3tk3uyeNqzfVQE0tH0RM437AApZEQ35C4ndKeu97s9uY+Ajs9jfy1N2d/HcApP+n33EX+ufdPbYIL/7eUJnU8yu7paWII1oka76gkQMrJJvVhLzhDa5JtUhs/WR6LmBmYMucKRXaN9UFpwQ13WmNxbHEd71TyY4eYRhq4CNR0JYXKPcl7qVEt3GJ8OG9s71qamyBbCdkZFOylbcKJ0PVVi9OX/UrDarRBQgN7XmUptHocED6kjvmrhjqxg4aZ5c8v+9t00o8dMxHTXituuadcGDhYuic8ZVLm0v6dZxH7fK1hgXxY9t0gWvYv/PSIN7FME5tU9DcTfC36UtMCN5Jkz1ohH5PSJ2AeTeM/akfeiTxusQWrqIWNt32i8HlZvqtUK3Iss9SGQIrgGeusu5S4TqjUb6hgbkDlQmpZ3KqOcoRk/8rBKIfOoqJSs3m5qg0v5Zz95V07K+wsTNuMO0Zb5El+BCHcLGIFleu+m73qxJ1byz0sQhcqAaUt3y3kzxIwOYSOqYJQLCIHXnnFZyIcow6KJZQYO2ib78fpZmNoeXjoO2rA9ZziJuU/nyKKQncJSdKEAplUFG2Uir9r0aRitCsfjtgrUh9fj/n3OXOas8gS0VJ+F4SQUkrhgSwOsFilB4xzHeGYNz/i0="
+    # Doctr deploy key for hmbui/timechart-fork
+    - secure: "0+4cxRDEbDLFsVda49dYRJ9R8Xl/yGD2P5XkZshY4RGSCrKXMgNx9Beeb/6iTZ1E5jdihx3CrUvoxUYyrktvj1BBc8qtbGydaIJBCHTOJ0MBHGZniUuyxuaQ3EnpY4TO8+GVM+xqVSVramVOsesCcw9d0kxe71oVEH3j90Li3ZeHueZcEnF9Z2mZAiQrbYTjFQSuTTwKZRk1+0Yxx0eYSM72IZYxJ0GfPEwLNWKf+9nFrfwC447qjkopi5+vfxJCb5EjNcxFC7IHt5S/Hqwh2aLKFOeE6G9vTx7H8k5Tf1hcwvPre5y6kfqpIdbfA/iO3f0xTI4e5G+BHt6dAtoeCxHA/tNpzYHdPXlexcfbx2r8QG5fuDTMLq6mrUZMcE4suFhCPoqfJthi3c1WtmwoR2w0aBD0fH7m4L9/u7XFjlyh1QhokrPZu8Brmq+AxOBPmg7N9SHf2LsY4JG0ahhiI5GFY46jgSsYCdV2Ak0zjuEvwX3z2t/j+FIC4j5z04zgmiwr3XY7oHoqEmyQd85zQplQkjJpC+6VzrdfsJoac/gal7jnUG1MLAQa34vFWynZBKEwTaFU2ip3obsHybtcxRGhT/Mkjyj7iesqglCl6ld4vqV8e3xOAPtpnPj8eK1dGxwJftjDUpu8P/FCkHkYty2Q4CqaL3KfSi8OgSSFtnU="
 
 matrix:
   include:
     - python: 2.7
       env: PYDM_CHANNEL=pydm-tag
     - python: 3.6
-      env: PYDM_CHANNEL=pydm-tag
+      env:
+	- BUILD=1 
+	- PYDM_CHANNEL=pydm-tag
     - python: 3.7
       dist: xenial
       env: PYDM_CHANNEL=pydm-tag
@@ -59,6 +61,7 @@ script:
   - |
     if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY" && $BUILD ]]; then
       # Create HTML documentation
+      pip install -r docs-requirements.txt
       pushd docs
       make html
       popd
