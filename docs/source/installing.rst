@@ -40,8 +40,8 @@ You can install TimeChart for the conda environment::
 
     conda install timechart -c tidair-tag -c pydm-tag
 
-`tidair-dev` is to build TimeChart using the latest code.
-`tidair-tag` is to build TimeChart using the most current release.
+* `tidair-dev` has the latest development code
+* `tidair-tag` has the latest stable released version (tag).
 
 
 In Development Environment
@@ -54,14 +54,17 @@ For developers, you can install TimeChart in development mode::
     python setup.py develop
 
 
-If you want to install a conda installation package for TimeChart:
+If you want to build an Anaconda package for TimeChart:
 
-    * First, you must have ``conda-build`` installed::
+#. Install `Miniconda <https://conda.io/miniconda.html>`_. Pick the Miniconda for Python 3.6+
+#. Run the following commands:::
 
-        conda install conda-build
+    conda install conda-build anaconda-client
+    conda update -q conda conda-build
 
-    * Then::
+    git clone https://github.com/slaclab/timechart.git
+    cd timechart
 
-        git clone https://github.com/slaclab/timechart.git
-        cd timechart
-        conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
+    conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
+
+Note that you must change the value of the parameter `python=...` to the Python version you are using.
