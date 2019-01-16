@@ -32,19 +32,16 @@ First, clone this TimeChart repository, and then start ``pip install``::
 
 Using conda
 ============
-TimeChart also includes a conda recipe for building an installation package for the conda package management
-environment::
+You can install TimeChart for the conda environment::
 
-    git clone https://github.com/slaclab/timechart.git
-    cd timechart
-    conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
+    conda install timechart -c tidair-dev -c pydm-tag
 
-This installation package then is ready to be uploaded to a conda channel for other users, who will only need to issue
-the command::
+    or
 
-    conda install timechart -c <channel_name>
+    conda install timechart -c tidair-tag -c pydm-tag
 
-to install TimeChart in the conda environment.
+`tidair-dev` is to build TimeChart using the latest code.
+`tidair-tag` is to build TimeChart using the most current release.
 
 
 In Development Environment
@@ -55,3 +52,16 @@ For developers, you can install TimeChart in development mode::
     git clone https://github.com/slaclab/timechart.git
     cd timechart
     python setup.py develop
+
+
+If you want to install a conda installation package for TimeChart:
+
+    * First, you must have ``conda-build`` installed::
+
+        conda install conda-build
+
+    * Then::
+
+        git clone https://github.com/slaclab/timechart.git
+        cd timechart
+        conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge

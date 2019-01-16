@@ -32,6 +32,21 @@ pip install .[all]
 ```
 
 ## Using conda
+
+If you are using conda, you can install either the dev or the tag TimeChart build:
+
+```sh
+conda install timechart -c tidair-dev -c pydm-tag
+```
+
+or
+
+```sh
+conda install timechart -c tidair-tag -c pydm-tag
+```
+
+`tidair-dev` is to be built with the latest code, and `tidair-tag` is to be built with the latest release (tag).
+
 TimeChart also includes a conda recipe for building an installation package for the conda package management environment.
 
 ```sh
@@ -39,6 +54,7 @@ git clone https://github.com/slaclab/timechart.git
 cd timechart
 conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
 ```
+
 This installation package then is ready to be uploaded to a conda channel for other users, who will only need to issue the command
 ```
 conda install timechart -c <channel_name>
