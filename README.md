@@ -32,13 +32,38 @@ pip install .[all]
 ```
 
 ## Using conda
-TimeChart also includes a conda recipe for building an installation package for the conda package management environment.
+
+If you are using conda, you can install either the dev or the tag TimeChart build:
 
 ```sh
+conda install timechart -c tidair-dev -c pydm-tag
+```
+
+or
+
+```sh
+conda install timechart -c tidair-tag -c pydm-tag
+```
+`tidair-dev` has the latest development code, and `tidair-tag` has the latest stable released version (tag).
+
+If you want to build an Anaconda package for TimeChart:
+
+1. Install Miniconda (https://conda.io/miniconda.html). Pick the Miniconda for Python 3.6+
+2. Run the following commands
+
+```sh
+conda install conda-build anaconda-client
+conda update -q conda conda-build
+
 git clone https://github.com/slaclab/timechart.git
 cd timechart
+
 conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
 ```
+
+Note that you must change the value of the parameter python=... to the Python version you are using.
+
+
 This installation package then is ready to be uploaded to a conda channel for other users, who will only need to issue the command
 ```
 conda install timechart -c <channel_name>
