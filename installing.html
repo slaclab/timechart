@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installing TimeChart &mdash; TimeChart 1.2.1+24.g8ce2d34.dirty documentation</title>
+  <title>Installing TimeChart &mdash; TimeChart 1.2.1+27.ga0ce2ce.dirty documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                1.2.1+24.g8ce2d34.dirty
+                1.2.1+27.ga0ce2ce.dirty
               </div>
             
           
@@ -200,19 +200,18 @@ from pip: <cite>pip install -r requirements.txt</cite></p>
 </div>
 <div class="section" id="using-conda">
 <h3>Using conda<a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h3>
-<p>TimeChart also includes a conda recipe for building an installation package for the conda package management
-environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">slaclab</span><span class="o">/</span><span class="n">timechart</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">timechart</span>
-<span class="n">conda</span> <span class="n">build</span> <span class="o">-</span><span class="n">q</span> <span class="n">conda</span><span class="o">-</span><span class="n">recipe</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">folder</span> <span class="n">bld</span><span class="o">-</span><span class="nb">dir</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">-</span><span class="n">c</span> <span class="n">pydm</span><span class="o">-</span><span class="n">tag</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+<p>You can install TimeChart for the conda environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">timechart</span> <span class="o">-</span><span class="n">c</span> <span class="n">tidair</span><span class="o">-</span><span class="n">dev</span> <span class="o">-</span><span class="n">c</span> <span class="n">pydm</span><span class="o">-</span><span class="n">tag</span>
+
+<span class="ow">or</span>
+
+<span class="n">conda</span> <span class="n">install</span> <span class="n">timechart</span> <span class="o">-</span><span class="n">c</span> <span class="n">tidair</span><span class="o">-</span><span class="n">tag</span> <span class="o">-</span><span class="n">c</span> <span class="n">pydm</span><span class="o">-</span><span class="n">tag</span>
 </pre></div>
 </div>
-<p>This installation package then is ready to be uploaded to a conda channel for other users, who will only need to issue
-the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">timechart</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">channel_name</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>to install TimeChart in the conda environment.</p>
+<ul class="simple">
+<li><cite>tidair-dev</cite> has the latest development code</li>
+<li><cite>tidair-tag</cite> has the latest stable released version (tag).</li>
+</ul>
 </div>
 <div class="section" id="in-development-environment">
 <h3>In Development Environment<a class="headerlink" href="#in-development-environment" title="Permalink to this headline">¶</a></h3>
@@ -222,6 +221,23 @@ the command:</p>
 <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
 </pre></div>
 </div>
+<p>If you want to build an Anaconda package for TimeChart:</p>
+<ol class="arabic">
+<li><p class="first">Install <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>. Pick the Miniconda for Python 3.6+</p>
+</li>
+<li><p class="first">Run the following commands::</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">conda</span><span class="o">-</span><span class="n">build</span> <span class="n">anaconda</span><span class="o">-</span><span class="n">client</span>
+<span class="n">conda</span> <span class="n">update</span> <span class="o">-</span><span class="n">q</span> <span class="n">conda</span> <span class="n">conda</span><span class="o">-</span><span class="n">build</span>
+
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">slaclab</span><span class="o">/</span><span class="n">timechart</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">timechart</span>
+
+<span class="n">conda</span> <span class="n">build</span> <span class="o">-</span><span class="n">q</span> <span class="n">conda</span><span class="o">-</span><span class="n">recipe</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">folder</span> <span class="n">bld</span><span class="o">-</span><span class="nb">dir</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">-</span><span class="n">c</span> <span class="n">pydm</span><span class="o">-</span><span class="n">tag</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Note that you must change the value of the parameter <cite>python=…</cite> to the Python version you are using.</p>
 </div>
 </div>
 </div>
