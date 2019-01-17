@@ -18,7 +18,18 @@ At the minimum, you will need:
 * pyqtgraph >= 0.10.0
 * six
 
-You will also need to install ``git`` for the platform on which you are about to run TimeChart.
+.. important::
+
+    If your computer does not have Python, or your Python version does not meet the requirement, you
+    must `update Python <https://www.python.org/downloads/>`_.
+
+    To check the Python version::
+
+        python --version
+
+    You will also need to install ``git`` for the platform on which you are about to run TimeChart. Follow these
+    `Git Installation Instructions <https://git-scm.com/book/en/v2/Getting-Started-Installing-Git>`_.
+
 
 ***********
 Installing
