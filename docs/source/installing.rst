@@ -9,11 +9,14 @@ Installing TimeChart
 Prerequisites
 **************
 
+At the minimum, you will need:
+
 * Python 2.7, or 3.5+ (3.6+ recommended)
 * PyDM >= 1.6.0
-
-Python package requirements are listed in the `requirements.txt` file, which can be used to install all requirements
-from pip: `pip install -r requirements.txt`
+* numpy >= 1.11.0
+* qtpy
+* pyqtgraph >= 0.10.0
+* six
 
 You will also need to install ``git`` for the platform on which you are about to run TimeChart.
 
@@ -21,18 +24,24 @@ You will also need to install ``git`` for the platform on which you are about to
 Installing
 ***********
 
-Using pip
-===========
-First, clone this TimeChart repository, and then start ``pip install``::
+.. _setuptools:
+
+Using setuptools
+=================
+First, clone the TimeChart repository, and then run ``setup.py`` with the ``install`` option::
 
     git clone https://github.com/slaclab/timechart.git
     cd timechart
-    pip install .[all]
+    python setup.py install
 
+
+.. _conda:
 
 Using conda
 ============
-You can install TimeChart for the conda environment::
+You must first install install `Miniconda <https://conda.io/miniconda.html>`_. Pick the Miniconda for Python 3.6+.
+
+Then, use the ``conda`` command to install TimeChart::
 
     conda install timechart -c tidair-dev -c pydm-tag
 
@@ -44,9 +53,28 @@ You can install TimeChart for the conda environment::
 * `tidair-tag` has the latest stable released version (tag).
 
 
+Using pip
+===========
+    .. important::
+
+        Your computer may not have ``pip`` pre-installed. If that is the case, refer to the
+        `pip Installation Instructions <https://pip.pypa.io/en/stable/installing/>`_ before proceeding.
+
+        Some of TimeChart's requirements, such as ``numpy``, could run into conflict with an existing application's
+        in your computer. You will have to resolve those conflicts while using ``pip``. If there are conflicts, the
+        alternative could be that you run TimeChart in the Miniconda environment (see :ref:`conda`), or create a
+        virtual environment (`virtualenv <https://virtualenv.pypa.io/en/latest/>`_) to install TimeChart in it.
+
+For ``pip`` installation, you must first clone this TimeChart repository, and then run ``pip install``::
+
+    git clone https://github.com/slaclab/timechart.git
+    cd timechart
+    pip install .[all]
+
+
 In Development Environment
 ===========================
-For developers, you can install TimeChart in development mode::
+For developers, you can install TimeChart in development mode using ``setuptools``::
 
 
     git clone https://github.com/slaclab/timechart.git
@@ -54,10 +82,7 @@ For developers, you can install TimeChart in development mode::
     python setup.py develop
 
 
-If you want to build an Anaconda package for TimeChart:
-
-#. Install `Miniconda <https://conda.io/miniconda.html>`_. Pick the Miniconda for Python 3.6+
-#. Run the following commands:::
+If you want to build an Anaconda package for TimeChart::
 
     conda install conda-build anaconda-client
     conda update -q conda conda-build

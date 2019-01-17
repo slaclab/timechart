@@ -14,76 +14,12 @@ As a Python Qt-based framework, PyDM is also created and maintained by SLAC.
 Its charting capability is built upon [pyqtgraph](http://pyqtgraph.org/ "PyQtGraph"),
 and the PyDM's TimePlot is the central widget in TimeChart.
 
-# Prerequisites
-* Python 2.7, or 3.5+ (3.6+ recommended)
-* PyDM >= 1.6.0
+# Installing and Running TimeChart
 
-Python package requirements are listed in the requirements.txt file, which can
-be used to install all requirements from pip: 'pip install -r requirements.txt'
-
-# Installing TimeChart
-## Using pip
-Clone this TimeChart repository, and then start ```pip install```
-
-```sh
-git clone https://github.com/slaclab/timechart.git
-cd timechart
-pip install .[all]
-```
-
-## Using conda
-
-If you are using conda, you can install either the dev or the tag TimeChart build:
-
-```sh
-conda install timechart -c tidair-dev -c pydm-tag
-```
-
-or
-
-```sh
-conda install timechart -c tidair-tag -c pydm-tag
-```
-`tidair-dev` has the latest development code, and `tidair-tag` has the latest stable released version (tag).
-
-If you want to build an Anaconda package for TimeChart:
-
-1. Install Miniconda (https://conda.io/miniconda.html). Pick the Miniconda for Python 3.6+
-2. Run the following commands
-
-```sh
-conda install conda-build anaconda-client
-conda update -q conda conda-build
-
-git clone https://github.com/slaclab/timechart.git
-cd timechart
-
-conda build -q conda-recipe --python=3.6 --output-folder bld-dir -c conda-forge -c pydm-tag -c conda-forge
-```
-
-Note that you must change the value of the parameter python=... to the Python version you are using.
-
-
-This installation package then is ready to be uploaded to a conda channel for other users, who will only need to issue the command
-```
-conda install timechart -c <channel_name>
-```
-to install TimeChart in the conda environment.
-
-# Running TimeChart
-After installing TimeChart, you can start the application:
-
-```timechart```
-
-For developers, you can install TimeChart in development mode:
-
-```sh
-git clone https://github.com/slaclab/timechart.git
-cd timechart
-python setup.py develop
-timechart
-```
+Refer to [TimeChart Documentation] (https://slaclab.github.io/timechart/ "TimeChart Documentation") for detailed
+instructions on how to install and run TimeChart.
 
 # Acknowledgements
 
-Icons made by [monkik](https://www.flaticon.com/authors/monkik) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/).
+Icons made by [monkik](https://www.flaticon.com/authors/monkik) from [www.flaticon.com](https://www.flaticon.com/) is
+licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/).
