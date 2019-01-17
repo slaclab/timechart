@@ -1,6 +1,6 @@
 pydm>=1.6.0
-numpy
+numpy>=1.11.0
 qtpy
-pyqtgraph
+pyqtgraph>=0.10.0
 six
 
