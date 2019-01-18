@@ -8,8 +8,8 @@ Installing TimeChart
 Prerequisites
 **************
 
-At the minimum, you will need:
-
+Python and Python Libraries
+============================
 * Python 2.7 (2.7.15+ recommended), or 3.5+ (3.6+ recommended)
 * PyDM >= 1.6.0
 * numpy >= 1.11.0
@@ -29,6 +29,12 @@ At the minimum, you will need:
 
     If your computer does not have Python, or your Python version does not meet the requirement, you
     must `install or update Python <https://www.python.org/downloads/>`_.
+
+Operating Systems
+=================
+* Linux: RHEL 6.10+, CentOS 7.5+
+* macOS: High Sierra (10.13)+
+* Windows: Windows 10+, Windows 2016+
 
 
 .. _obtain the TimeChart source code:
