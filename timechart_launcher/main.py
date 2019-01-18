@@ -1,4 +1,10 @@
 import os
+try:
+    from os import errno
+except ImportError:
+    # For Python 3.7
+    import errno
+
 import sys
 import traceback
 import argparse
@@ -22,7 +28,7 @@ def main():
         os.makedirs("logs")
     except os.error as err:
         # It's OK if the log directory exists. This is to be compatible with Python 2.7
-        if err.errno != os.errno.EEXIST:
+        if err.errno != errno.EEXIST:
             raise err
 
     logging.basicConfig(level=logging.INFO, filename=os.path.join("logs", "timechart.log"),

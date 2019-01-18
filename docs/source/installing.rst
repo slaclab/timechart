@@ -32,9 +32,8 @@ Python and Python Libraries
 
 Operating Systems
 =================
-* Linux: RHEL 6.10+, CentOS 7.5+
-* macOS: High Sierra (10.13)+
-* Windows: Windows 10+, Windows 2016+
+* Linux (tested on RHEL 6.10+, CentOS 7.5+)
+* macOS (tested on High Sierra (10.13)+)
 
 
 .. _obtain the TimeChart source code:
@@ -70,15 +69,14 @@ Cloning the Source Code
     git clone https://github.com/slaclab/timechart.git
 
 #. If you want to build TimeChart with the latest code, you can stop here. Otherwise, to build TimeChart with source
-   code from a stable release, you will need to check out a release tag into a new branch, and then check out that
-   branch. All of these can be accomplished with one single command::
+   code from a stable release, you will need to check out a release tag::
 
-    git checkout <tag> -b <new_branch_name>
+    git checkout <tag>
 
 For example, if you want to build TimeChart with the stable release
 `v1.2.1 <https://github.com/slaclab/timechart/releases/tag/v1.2.1>`_, use this command::
 
-    git checkout v1.2.1 -b my_release_branch
+    git checkout v1.2.1
 
 Now, you can proceed to installing TimeChart.
 
