@@ -10,7 +10,7 @@ Prerequisites
 
 Python and Python Libraries
 ============================
-* Python 2.7 (2.7.15+ recommended), or 3.5+ (3.6+ recommended)
+* Python 2.7 (2.7.9+ recommended), or 3.5+ (3.6+ recommended)
 * PyDM >= 1.6.0
 * numpy >= 1.11.0
 * qtpy
@@ -74,9 +74,9 @@ Cloning the Source Code
     git checkout <tag>
 
 For example, if you want to build TimeChart with the stable release
-`v1.2.1 <https://github.com/slaclab/timechart/releases/tag/v1.2.1>`_, use this command::
+`v1.2.2 <https://github.com/slaclab/timechart/releases/tag/v1.2.2>`_, use this command::
 
-    git checkout v1.2.1
+    git checkout v1.2.2
 
 Now, you can proceed to installing TimeChart.
 
