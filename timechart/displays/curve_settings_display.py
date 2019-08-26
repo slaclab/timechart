@@ -7,7 +7,8 @@ from pydm.widgets.baseplot import BasePlotCurveItem
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import (QFormLayout, QLabel, QComboBox, QSpinBox,
-                            QPushButton, QColorDialog, QCheckBox, QGroupBox)
+                            QPushButton, QColorDialog, QCheckBox, QGroupBox,
+                            QLineEdit)
 from qtpy.QtGui import QPalette
 
 
@@ -34,6 +35,11 @@ class CurveSettingsDisplay(Display):
         self.channel_map = self.main_display.channel_map
         self.app = self.main_display.app
 
+        self.curve_expre_lbl = QLabel("Expression")
+        self.curve_expre_le = QLineEdit()
+        self.curve_expre_le.returnPressed.connect(
+            self.handle_curve_expre_le_edited)
+
         self.curve_original_color = None
         self.curve_color_lbl = QLabel("Curve Color ")
         self.curve_color_btn = QPushButton()
@@ -58,7 +64,7 @@ class CurveSettingsDisplay(Display):
         self.close_dialog_btn.clicked.connect(self.handle_close_button_clicked)
 
         self.setWindowTitle(self.pv_name.split("://")[1])
-        self.setFixedSize(QSize(300, 200))
+        self.setFixedSize(QSize(300, 231))
         self.setWindowModality(Qt.ApplicationModal)
 
         self.setup_ui()
@@ -82,6 +88,9 @@ class CurveSettingsDisplay(Display):
         Initialize the widgets and layouts.
         """
         # Populate the values
+        self.curve_expre_le.setText(
+            self.main_display.channel_expre[self.pv_name])
+
         for k, _ in BasePlotCurveItem.symbols.items():
             self.symbol_cmb.addItem(k)
         self.symbol_size_spin.setRange(1, 10)
@@ -106,6 +115,7 @@ class CurveSettingsDisplay(Display):
 
         # Add widgets to the form layout
         self.main_layout.setSpacing(10)
+        self.main_layout.addRow(self.curve_expre_lbl, self.curve_expre_le)
         self.main_layout.addRow(self.curve_color_lbl, self.curve_color_btn)
         self.main_layout.addRow(self.symbol_lbl, self.symbol_cmb)
         self.main_layout.addRow(self.symbol_size_lbl, self.symbol_size_spin)
@@ -150,6 +160,10 @@ class CurveSettingsDisplay(Display):
             if curve_setting_value == v:
                 combo_box.setCurrentText(k)
                 break
+
+    def handle_curve_expre_le_edited(self):
+        text = self.curve_expre_le.text()
+        self.main_display.channel_expre[self.pv_name] = text
 
     def handle_curve_color_button_clicked(self):
         selected_color = QColorDialog.getColor()
@@ -237,6 +251,8 @@ class CurveSettingsDisplay(Display):
                 self.curve_color_btn.setStyleSheet(
                     "background-color: " + curve.color.name())
 
+            self.curve_expre_le.setText('')
+            self.curve_expre_le.returnPressed.emit()
             self.symbol_cmb.setCurrentIndex(0)
             self.symbol_size_spin.setValue(10)
 

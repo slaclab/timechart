@@ -7,7 +7,9 @@ import logging
 
 from functools import partial
 import datetime
+import math
 
+import numpy as np
 from pyqtgraph import TextItem
 
 from qtpy.QtCore import Qt, Slot, QTimer
@@ -22,11 +24,11 @@ from qtpy.QtWidgets import (QApplication, QWidget, QCheckBox, QHBoxLayout,
 from qtpy.QtGui import QColor, QPalette
 
 from pydm import Display
+from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.timeplot import (PyDMTimePlot, DEFAULT_X_MIN,
                                    MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE)
 from pydm.utilities.iconfont import IconFont
 from ..data_io.settings_importer import SettingsImporter, SettingsImporterException
-
 
 from .curve_settings_display import CurveSettingsDisplay
 from .axis_settings_display import AxisSettingsDisplay
@@ -57,6 +59,7 @@ class TimeChartDisplay(Display):
                                                macros=macros)
         self.legend_font = None
         self.channel_map = dict()
+        self.channel_expre = dict()
         self.setWindowTitle("TimeChart Tool")
 
         self.main_layout = QVBoxLayout()
@@ -684,15 +687,20 @@ class TimeChartDisplay(Display):
             logger.error("'{0}' has already been added.".format(pv_name))
             return
 
-        curve = self.chart.addYChannel(y_channel=pv_name, name=curve_name,
+        curve = self.chart.addYChannel(y_channel=None, name=curve_name,
                                        color=color, lineStyle=line_style,
                                        lineWidth=line_width, symbol=symbol,
                                        symbolSize=symbol_size)
+        self.channel_map[pv_name] = curve
+        self.channel_expre[pv_name] = ''
+        curve.channel = PyDMChannel(
+            address=pv_name,
+            connection_slot=curve.connectionStateChanged,
+            value_slot=partial(self.receiveNewValue, pv_name))
         curve.show() if is_visible else curve.hide()
 
         if self.show_legend_chk.isChecked():
             self.change_legend_font(self.legend_font)
-        self.channel_map[pv_name] = curve
         self.generate_pv_controls(pv_name, color)
 
         self.enable_chart_control_buttons()
@@ -701,6 +709,22 @@ class TimeChartDisplay(Display):
         except AttributeError:
             # these methods are not needed on future versions of pydm
             pass
+
+    def receiveNewValue(self, pv_name, value):
+        curve = self.chart.findCurve(pv_name)
+        expre = self.channel_expre[pv_name]
+        eval_env = {'np': np, 'ch': value}
+        eval_env.update({k: v
+                         for k, v in math.__dict__.items()
+                         if k[0] != '_'})
+        try:
+            if expre:
+                value = eval(expre, eval_env)
+        except Exception as err:
+            pass
+        if isinstance(value, np.ndarray):
+            value = value[0]
+        curve.receiveNewValue(value)
 
     def generate_pv_controls(self, pv_name, curve_color):
         """
