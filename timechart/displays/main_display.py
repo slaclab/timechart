@@ -899,6 +899,7 @@ class TimeChartDisplay(Display):
                 pass
             self.chart.removeYChannel(curve)
             del self.channel_map[pv_name]
+            del self.channel_expre[pv_name]
             self.chart.removeLegendItem(pv_name)
 
             widget = self.findChild(QGroupBox, pv_name + "_grb")
