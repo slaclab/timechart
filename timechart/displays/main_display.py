@@ -681,8 +681,9 @@ class TimeChartDisplay(Display):
         self.chart.crosshair_position_updated.connect(
             self.show_mouse_coordinates)
 
-    def add_y_channel(self, pv_name, curve_name, color, line_style=Qt.SolidLine,
-                      line_width=2, symbol=None, symbol_size=None, is_visible=True):
+    def add_y_channel(self, pv_name, curve_name, color,
+                      line_style=Qt.SolidLine, line_width=2, symbol=None,
+                      symbol_size=None, is_visible=True, expression=''):
         if pv_name in self.channel_map:
             logger.error("'{0}' has already been added.".format(pv_name))
             return
@@ -692,7 +693,7 @@ class TimeChartDisplay(Display):
                                        lineWidth=line_width, symbol=symbol,
                                        symbolSize=symbol_size)
         self.channel_map[pv_name] = curve
-        self.channel_expre[pv_name] = ''
+        self.channel_expre[pv_name] = expression
         curve.channel = PyDMChannel(
             address=pv_name,
             connection_slot=curve.connectionStateChanged,

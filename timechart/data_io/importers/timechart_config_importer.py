@@ -91,19 +91,18 @@ class TimeChartConfigImporter(object):
 
         self.main_display : PyDMDisplay
             The TimeChart's Main Display
-        """        
+        """
         pv_settings = settings["pvs"]
         for k, v in pv_settings.items():
             color_value = v.get("color", None)
+            expression = v.get('expression', '')
             color = QColor(color_value) if color_value else random_color(curve_colors_only=True)
-            self.main_display.add_y_channel(pv_name=v["y_channel"],
-                                            curve_name=k,
-                                            color=color,
-                                            line_style=v["line_style"],
-                                            line_width=v["line_width"],
-                                            symbol=v["symbol"],
-                                            symbol_size=v["symbol_size"],
-                                            is_visible=v.get("is_visible", True))
+            self.main_display.add_y_channel(
+                pv_name=v["y_channel"], curve_name=k, color=color,
+                line_style=v["line_style"], line_width=v["line_width"],
+                symbol=v["symbol"], symbol_size=v["symbol_size"],
+                is_visible=v.get("is_visible", True),
+                expression=expression)
 
         chart_settings = settings["chart_settings"]
         if len(chart_settings):

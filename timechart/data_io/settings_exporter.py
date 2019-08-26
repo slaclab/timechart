@@ -51,6 +51,8 @@ class SettingsExporter:
                 curve_settings["is_visible"] = curve.isVisible()
                 curve_settings["color"] = v.color_string
                 curve_settings["y_channel"] = v.address
+                curve_settings["expression"] = \
+                    self.main_display.channel_expre[k]
                 curve_settings["line_style"] = v.lineStyle
                 curve_settings["line_width"] = v.lineWidth
                 curve_settings["symbol"] = v.symbol
