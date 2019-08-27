@@ -773,6 +773,11 @@ class TimeChartDisplay(Display):
         focus_curve_btn.setMaximumWidth(80)
         focus_curve_btn.clicked.connect(partial(self.focus_curve, pv_name))
 
+        clear_curve_btn = QPushButton("Clear", parent=individual_curve_grpbx)
+        clear_curve_btn.setObjectName(pv_name + "_btn_clear")
+        clear_curve_btn.setMaximumWidth(80)
+        clear_curve_btn.clicked.connect(partial(self.clear_curve, pv_name))
+
         # annotate_curve_btn = QPushButton("Annotate...",
         #                                  parent=individual_curve_grpbx)
         # annotate_curve_btn.setObjectName(pv_name+"_btn_ann")
@@ -789,6 +794,7 @@ class TimeChartDisplay(Display):
         curve_btn_layout.setSpacing(5)
         curve_btn_layout.addWidget(modify_curve_btn)
         curve_btn_layout.addWidget(focus_curve_btn)
+        curve_btn_layout.addWidget(clear_curve_btn)
         # curve_btn_layout.addWidget(annotate_curve_btn)
         curve_btn_layout.addWidget(remove_curve_btn)
 
@@ -846,6 +852,11 @@ class TimeChartDisplay(Display):
         curve = self.chart.findCurve(pv_name)
         if curve:
             self.chart.plotItem.setYRange(curve.minY, curve.maxY, padding=0)
+
+    def clear_curve(self, pv_name):
+        curve = self.chart.findCurve(pv_name)
+        if curve:
+            curve.initialize_buffer()
 
     def annotate_curve(self, pv_name):
         curve = self.chart.findCurve(pv_name)
