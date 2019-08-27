@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installing TimeChart &mdash; TimeChart 1.2.1+35.g806f77e.dirty documentation</title>
+  <title>Installing TimeChart &mdash; TimeChart 1.2.2+4.g64fa9fd.dirty documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Running TimeChart" href="running.html" />
     <link rel="prev" title="Introduction" href="introduction.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                1.2.1+35.g806f77e.dirty
+                1.2.2+4.g64fa9fd.dirty
               </div>
             
           
@@ -193,15 +195,15 @@
 <div class="section" id="python-and-python-libraries">
 <h3>Python and Python Libraries<a class="headerlink" href="#python-and-python-libraries" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Python 2.7 (2.7.9+ recommended), or 3.5+ (3.6+ recommended)</li>
-<li>PyDM &gt;= 1.6.0</li>
-<li>numpy &gt;= 1.11.0</li>
-<li>qtpy</li>
-<li>pyqtgraph &gt;= 0.10.0</li>
-<li>six</li>
+<li><p>Python 2.7 (2.7.9+ recommended), or 3.5+ (3.6+ recommended)</p></li>
+<li><p>PyDM &gt;= 1.6.0</p></li>
+<li><p>numpy &gt;= 1.11.0</p></li>
+<li><p>qtpy</p></li>
+<li><p>pyqtgraph &gt;= 0.10.0</p></li>
+<li><p>six</p></li>
 </ul>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
+<p class="admonition-title">Important</p>
 <p>To check the Python version:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">--</span><span class="n">version</span>
 </pre></div>
@@ -210,15 +212,15 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">--</span><span class="n">version</span>
 </pre></div>
 </div>
-<p class="last">If your computer does not have Python, or your Python version does not meet the requirement, you
+<p>If your computer does not have Python, or your Python version does not meet the requirement, you
 must <a class="reference external" href="https://www.python.org/downloads/">install or update Python</a>.</p>
 </div>
 </div>
 <div class="section" id="operating-systems">
 <h3>Operating Systems<a class="headerlink" href="#operating-systems" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Linux (tested on RHEL 6.10+, CentOS 7.5+)</li>
-<li>macOS (tested on High Sierra (10.13)+)</li>
+<li><p>Linux (tested on RHEL 6.10+, CentOS 7.5+)</p></li>
+<li><p>macOS (tested on High Sierra (10.13)+)</p></li>
 </ul>
 </div>
 </div>
@@ -235,18 +237,18 @@ directory.</p>
 <div class="section" id="cloning-the-source-code">
 <h3>Cloning the Source Code<a class="headerlink" href="#cloning-the-source-code" title="Permalink to this headline">¶</a></h3>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">If you opt to clone the TimeChart source code from GitHub, you will also need to install <code class="docutils literal notranslate"><span class="pre">git</span></code> for the
+<p class="admonition-title">Important</p>
+<p>If you opt to clone the TimeChart source code from GitHub, you will also need to install <code class="docutils literal notranslate"><span class="pre">git</span></code> for the
 platform on which you are about to run TimeChart. Follow these
 <a class="reference external" href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">Git Installation Instructions</a> to install <code class="docutils literal notranslate"><span class="pre">git</span></code>.</p>
 </div>
 <ol class="arabic">
-<li><p class="first">Clone the TimeChart repo:</p>
+<li><p>Clone the TimeChart repo:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">slaclab</span><span class="o">/</span><span class="n">timechart</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">If you want to build TimeChart with the latest code, you can stop here. Otherwise, to build TimeChart with source
+<li><p>If you want to build TimeChart with the latest code, you can stop here. Otherwise, to build TimeChart with source
 code from a stable release, you will need to check out a release tag:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span>
 </pre></div>
@@ -266,9 +268,8 @@ code from a stable release, you will need to check out a release tag:</p>
 <div class="section" id="using-setuptools">
 <span id="setuptools"></span><h3>Using setuptools<a class="headerlink" href="#using-setuptools" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
-<li><p class="first">First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p>
-</li>
-<li><p class="first">Then, run <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> with the <code class="docutils literal notranslate"><span class="pre">install</span></code> option:</p>
+<li><p>First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p></li>
+<li><p>Then, run <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> with the <code class="docutils literal notranslate"><span class="pre">install</span></code> option:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">timechart</span>
 <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
@@ -276,8 +277,8 @@ code from a stable release, you will need to check out a release tag:</p>
 </li>
 </ol>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 3,
+<p class="admonition-title">Important</p>
+<p>If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 3,
 use the command <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">setup.py</span> <span class="pre">install</span></code> instead.</p>
 </div>
 </div>
@@ -285,9 +286,8 @@ use the command <code class="docutils literal notranslate"><span class="pre">pyt
 <span id="id2"></span><h3>Using conda<a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h3>
 <p>You do not have to obtain the TimeChart source code with this installation option.</p>
 <ol class="arabic">
-<li><p class="first">You must first install <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>. Pick the Miniconda for Python 3.6+.</p>
-</li>
-<li><p class="first">Then, use the <code class="docutils literal notranslate"><span class="pre">conda</span></code> command to install TimeChart:</p>
+<li><p>You must first install <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>. Pick the Miniconda for Python 3.6+.</p></li>
+<li><p>Then, use the <code class="docutils literal notranslate"><span class="pre">conda</span></code> command to install TimeChart:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">timechart</span> <span class="o">-</span><span class="n">c</span> <span class="n">tidair</span><span class="o">-</span><span class="n">dev</span> <span class="o">-</span><span class="n">c</span> <span class="n">pydm</span><span class="o">-</span><span class="n">tag</span>
 
 <span class="ow">or</span>
@@ -298,27 +298,26 @@ use the command <code class="docutils literal notranslate"><span class="pre">pyt
 </li>
 </ol>
 <ul class="simple">
-<li><cite>tidair-dev</cite> has the latest development code</li>
-<li><cite>tidair-tag</cite> has the latest stable released version (tag).</li>
+<li><p><cite>tidair-dev</cite> has the latest development code</p></li>
+<li><p><cite>tidair-tag</cite> has the latest stable released version (tag).</p></li>
 </ul>
 </div>
 <div class="section" id="using-pip">
 <h3>Using pip<a class="headerlink" href="#using-pip" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><div class="admonition important">
-<p class="first admonition-title">Important</p>
+<p class="admonition-title">Important</p>
 <p>Your computer may not have <code class="docutils literal notranslate"><span class="pre">pip</span></code> pre-installed. If that is the case, refer to the
 <a class="reference external" href="https://pip.pypa.io/en/stable/installing/">pip Installation Instructions</a> before proceeding.</p>
-<p class="last">Some of TimeChart’s requirements, such as <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, could run into conflict with an existing application’s
+<p>Some of TimeChart’s requirements, such as <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, could run into conflict with an existing application’s
 in your computer. You will have to resolve those conflicts while using <code class="docutils literal notranslate"><span class="pre">pip</span></code>. If there are conflicts, the
 alternative could be that you run TimeChart in the Miniconda environment (see <a class="reference internal" href="#using-conda"><span class="std std-ref">Using conda</span></a>), or create a
 virtual environment (<a class="reference external" href="https://virtualenv.pypa.io/en/latest/">virtualenv</a>) to install TimeChart in it.</p>
 </div>
 </div></blockquote>
 <ol class="arabic">
-<li><p class="first">First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p>
-</li>
-<li><p class="first">Then, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>:</p>
+<li><p>First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p></li>
+<li><p>Then, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">timechart</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
 </pre></div>
@@ -326,8 +325,8 @@ virtual environment (<a class="reference external" href="https://virtualenv.pypa
 </li>
 </ol>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 2,
+<p class="admonition-title">Important</p>
+<p>If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 2,
 use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>. If you want to run TimeChart with Python 3 instead, run the <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">.</span></code> command.</p>
 </div>
 </div>
@@ -335,9 +334,8 @@ use <code class="docutils literal notranslate"><span class="pre">pip</span> <spa
 <h3>In Development Environment<a class="headerlink" href="#in-development-environment" title="Permalink to this headline">¶</a></h3>
 <p>For developers, you can install TimeChart in development mode using <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>.</p>
 <ol class="arabic">
-<li><p class="first">First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p>
-</li>
-<li><p class="first">Then, run <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> with the <code class="docutils literal notranslate"><span class="pre">develop</span></code> option:</p>
+<li><p>First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p></li>
+<li><p>Then, run <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> with the <code class="docutils literal notranslate"><span class="pre">develop</span></code> option:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">timechart</span>
 <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
 </pre></div>
@@ -345,17 +343,15 @@ use <code class="docutils literal notranslate"><span class="pre">pip</span> <spa
 </li>
 </ol>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 3,
+<p class="admonition-title">Important</p>
+<p>If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 3,
 use the command <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">setup.py</span> <span class="pre">develop</span></code> instead.</p>
 </div>
 <p>If you want to build an Anaconda package for TimeChart:</p>
 <ol class="arabic">
-<li><p class="first">First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p>
-</li>
-<li><p class="first">Next, install <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>. Pick the Miniconda build for Python 3.6+.</p>
-</li>
-<li><p class="first">Finally, issue the following commands:</p>
+<li><p>First, you must perform the steps in <a class="reference internal" href="#obtain-the-timechart-source-code"><span class="std std-ref">Obtaining the TimeChart Source Code</span></a></p></li>
+<li><p>Next, install <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>. Pick the Miniconda build for Python 3.6+.</p></li>
+<li><p>Finally, issue the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">timechart</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="n">conda</span><span class="o">-</span><span class="n">build</span> <span class="n">anaconda</span><span class="o">-</span><span class="n">client</span>
 <span class="n">conda</span> <span class="n">update</span> <span class="o">-</span><span class="n">q</span> <span class="n">conda</span> <span class="n">conda</span><span class="o">-</span><span class="n">build</span>
@@ -374,8 +370,8 @@ use the command <code class="docutils literal notranslate"><span class="pre">pyt
 </pre></div>
 </div>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 2,
+<p class="admonition-title">Important</p>
+<p>If you have both Python 2 and Python 3 installed on your computer, and you want to run TimeChart with Python 2,
 use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">timechart</span></code>. If you want to run TimeChart with Python 3 instead, run the
 <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">uninstall</span> <span class="pre">timechart</span></code> command.</p>
 </div>
@@ -393,7 +389,7 @@ use <code class="docutils literal notranslate"><span class="pre">pip</span> <spa
         <a href="running.html" class="btn btn-neutral float-right" title="Running TimeChart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -419,26 +415,16 @@ use <code class="docutils literal notranslate"><span class="pre">pip</span> <spa
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

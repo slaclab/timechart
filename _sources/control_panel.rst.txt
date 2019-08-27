@@ -59,6 +59,10 @@ For every curve being drawn on the graph, the following curve data and control o
         Click on this button to automatically adjust the x and y value ranges so that the current curve (which
         the Focus Button is assigned for) will be displayed completely in the Graph Canvas.
 
+#. **Clear Button**:
+        Click on this button to clear the history of the current curve and
+        continue accummulating new data.
+
 #. **Remove Button**:
         Click on this button to delete the PV's curve from the Graph Canvas. TimeChart will also stop collecting data
         for this PV.
@@ -210,10 +214,3 @@ Graph
     * **Reset Chart Settings Button**:
             Click on this button to revert all the Title and Legend and Graph Appearance setting values back to the
             defaults.
-
-
-
-
-
-
-

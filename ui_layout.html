@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>TimeChart UI Layout &mdash; TimeChart 1.2.1+35.g806f77e.dirty documentation</title>
+  <title>TimeChart UI Layout &mdash; TimeChart 1.2.2+4.g64fa9fd.dirty documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Graphing" href="graphing.html" />
     <link rel="prev" title="Running TimeChart" href="running.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                1.2.1+35.g806f77e.dirty
+                1.2.2+4.g64fa9fd.dirty
               </div>
             
           
@@ -171,96 +173,85 @@
 <p>The initial UI of TimeChart, when first started, presents the following layout:</p>
 <a class="reference internal image-reference" href="_images/ui_layout.png"><img alt="TimeChart UI Layout" class="align-center" src="_images/ui_layout.png" style="width: 800.0px; height: 600.0px;" /></a>
 <ol class="arabic">
-<li><dl class="first docutils">
-<dt><strong>Process Variable (PV) Protocol Selector</strong>:</dt>
-<dd><p class="first last">Currently, only Channel Access (CA) is supported. If another protocol support is available, e.g. Archiver,
+<li><dl class="simple">
+<dt><strong>Process Variable (PV) Protocol Selector</strong>:</dt><dd><p>Currently, only Channel Access (CA) is supported. If another protocol support is available, e.g. Archiver,
 you will be able to change the protocol selection, e.g. to <code class="docutils literal notranslate"><span class="pre">archive://</span></code> .</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>PV Address Input</strong>:</dt>
-<dd><p class="first last">You can either type or copy and paste, and then hitting the &lt;Enter&gt; or &lt;Return&gt; keyboard key to
+<li><dl class="simple">
+<dt><strong>PV Address Input</strong>:</dt><dd><p>You can either type or copy and paste, and then hitting the &lt;Enter&gt; or &lt;Return&gt; keyboard key to
 start TimeChart charting, or click on the Connect button next to the PV Address Input.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>PV Connect Button</strong>:</dt>
-<dd><p class="first last">Click on this button for TimeChart to start rendering the curve for the PV address provided in
+<li><dl class="simple">
+<dt><strong>PV Connect Button</strong>:</dt><dd><p>Click on this button for TimeChart to start rendering the curve for the PV address provided in
 the PV Adress Input if you do not want to press the &lt;Enter&gt; or &lt;Return&gt; keyboard key.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Graph Canvas</strong>:</dt>
-<dd><p class="first last">The area where a graph is to be drawn.</p>
+<li><dl class="simple">
+<dt><strong>Graph Canvas</strong>:</dt><dd><p>The area where a graph is to be drawn.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Show Control Panel Button</strong>:</dt>
-<dd><p class="first last">Click on this button to review the Control Panel, which will also be automatically revealed when the first PV
+<li><dl class="simple">
+<dt><strong>Show Control Panel Button</strong>:</dt><dd><p>Click on this button to review the Control Panel, which will also be automatically revealed when the first PV
 you enter for charting. You can click on this button to show the Control Panel whenever it is hidden.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Hide Control Panel Button</strong>:</dt>
-<dd><p class="first last">Click on this button to hide the Control Panel and provide more space for the Graph Canvas.</p>
+<li><dl class="simple">
+<dt><strong>Hide Control Panel Button</strong>:</dt><dd><p>Click on this button to hide the Control Panel and provide more space for the Graph Canvas.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Graph View Buttons</strong>:</dt>
-<dd><p class="first">Use these buttons to adjust the viewing of the graph:</p>
-<blockquote class="last">
+<li><dl>
+<dt><strong>Graph View Buttons</strong>:</dt><dd><p>Use these buttons to adjust the viewing of the graph:</p>
+<blockquote>
 <div><ul class="simple">
-<li><strong>+ X-Zoom</strong>: Zoom in on the x-axis</li>
-<li><strong>- X-Zoom</strong>: Zoom out on the x-axis</li>
-<li><strong>+ Y-Zoom</strong>: Zoom in on the y-axis</li>
-<li><strong>- Y-Zoom</strong>: Zoom out on the y-axis</li>
-<li><strong>Reset</strong>: Restore the zoom levels of the x-axis and the y-axis to the default</li>
-<li><strong>View All</strong>: Automatically adjust the zoom levels of both the x-axis and the y-axis so that all the current curves’ data points already plotted on the graph will be visible.</li>
+<li><p><strong>+ X-Zoom</strong>: Zoom in on the x-axis</p></li>
+<li><p><strong>- X-Zoom</strong>: Zoom out on the x-axis</p></li>
+<li><p><strong>+ Y-Zoom</strong>: Zoom in on the y-axis</p></li>
+<li><p><strong>- Y-Zoom</strong>: Zoom out on the y-axis</p></li>
+<li><p><strong>Reset</strong>: Restore the zoom levels of the x-axis and the y-axis to the default</p></li>
+<li><p><strong>View All</strong>: Automatically adjust the zoom levels of both the x-axis and the y-axis so that all the current curves’ data points already plotted on the graph will be visible.</p></li>
 </ul>
 </div></blockquote>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Graph Pause Button</strong>:</dt>
-<dd><p class="first last">Click on this button to toggle pausing or resuming drawing an ongoing graph. During pausing,
+<li><dl class="simple">
+<dt><strong>Graph Pause Button</strong>:</dt><dd><p>Click on this button to toggle pausing or resuming drawing an ongoing graph. During pausing,
 data continues to be collected and buffered. During resume, the graph continues drawing at the last data point
 where it was paused.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Crosshair Button</strong>:</dt>
-<dd><p class="first last">Click on this button to toggle turning on or off the crosshair on the Graph Canvas. The
+<li><dl class="simple">
+<dt><strong>Crosshair Button</strong>:</dt><dd><p>Click on this button to toggle turning on or off the crosshair on the Graph Canvas. The
 crosshair can moved across the Graph Canvas, with TimeChart UI providing the current x and y coordinates of the
 crosshair. This can be useful to obtain the x and y coordinates of any point on a curve.</p>
 </dd>
 </dl>
 </li>
-<li><p class="first"><strong>Import and Export Buttons</strong>:</p>
+<li><p><strong>Import and Export Buttons</strong>:</p>
 <ul>
-<li><dl class="first docutils">
-<dt><strong>Import Button</strong>:</dt>
-<dd><p class="first last">Clicking on this button will let you to import configuration settings and also PV addresses
+<li><dl class="simple">
+<dt><strong>Import Button</strong>:</dt><dd><p>Clicking on this button will let you to import configuration settings and also PV addresses
 from a file for TimeChart to draw immediately. The file can be a TimeChart configuration file (in the JSON
 format), or an EPICS StripTool file (in the STP format).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>Export Button</strong>:</dt>
-<dd><p class="first">Clicking on this button will let you export the following data:</p>
-<blockquote class="last">
+<li><dl>
+<dt><strong>Export Button</strong>:</dt><dd><p>Clicking on this button will let you export the following data:</p>
+<blockquote>
 <div><ul class="simple">
-<li>Graph data points, into a CSV file</li>
-<li>Chart configuration settings, including the optional PV addresses, into a JSON file</li>
-<li>A snapshot image of the current graph, into a PNG file</li>
+<li><p>Graph data points, into a CSV file</p></li>
+<li><p>Chart configuration settings, including the optional PV addresses, into a JSON file</p></li>
+<li><p>A snapshot image of the current graph, into a PNG file</p></li>
 </ul>
 </div></blockquote>
 </dd>
@@ -282,7 +273,7 @@ format), or an EPICS StripTool file (in the STP format).</p>
         <a href="graphing.html" class="btn btn-neutral float-right" title="Graphing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="running.html" class="btn btn-neutral" title="Running TimeChart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="running.html" class="btn btn-neutral float-left" title="Running TimeChart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -308,26 +299,16 @@ format), or an EPICS StripTool file (in the STP format).</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
