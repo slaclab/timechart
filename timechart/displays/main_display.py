@@ -149,8 +149,14 @@ class TimeChartDisplay(Display):
         self.plus_icon = IconFont().icon("plus", color=QColor("green"))
         self.minus_icon = IconFont().icon("minus", color=QColor("red"))
         self.view_all_icon = IconFont().icon("globe", color=QColor("blue"))
-        self.reset_icon = IconFont().icon("circle-o-notch",
-                                          color=QColor("green"))
+        try:
+            # New name for the icon (pydm >= 1.11.0)
+            self.reset_icon = IconFont().icon("circle-notch",
+                                              color=QColor("green"))
+        except ValueError:
+            # Old name for the icon (pydm < 1.11.0)
+            self.reset_icon = IconFont().icon("circle-o-notch",
+                                              color=QColor("green"))
 
         self.zoom_in_x_btn = QPushButton("X Zoom")
         self.zoom_in_x_btn.setIcon(self.plus_icon)
