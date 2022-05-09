@@ -22,6 +22,7 @@ from qtpy.QtWidgets import (QApplication, QWidget, QCheckBox, QHBoxLayout,
 from qtpy.QtGui import QColor, QPalette
 
 from pydm import Display
+from pydm.widgets.archiver_time_plot import PyDMArchiverTimePlot
 from pydm.widgets.timeplot import (PyDMTimePlot, DEFAULT_X_MIN,
                                    MINIMUM_BUFFER_SIZE, DEFAULT_BUFFER_SIZE)
 from pydm.utilities.iconfont import IconFont
@@ -35,7 +36,6 @@ from ..utilities.utils import random_color, display_message_box
 
 from .defaults import *
 logger = logging.getLogger(__name__)
-
 
 class TimeChartDisplay(Display):
     def __init__(self, parent=None, args=[], macros=None, show_pv_add_panel=True, config_file=None):
@@ -139,7 +139,10 @@ class TimeChartDisplay(Display):
         self.chart_panel = QWidget()
         self.chart_panel.setMinimumHeight(400)
 
+        self.chart_control_frame = QFrame()
+
         self.chart_control_layout = QHBoxLayout()
+        self.chart_control_frame.setLayout(self.chart_control_layout)
         self.chart_control_layout.setAlignment(Qt.AlignHCenter)
         self.chart_control_layout.setSpacing(10)
         self.zoom_x_layout = QVBoxLayout()
@@ -384,6 +387,10 @@ class TimeChartDisplay(Display):
         self.reset_chart_settings_btn.clicked.connect(
             self.handle_reset_chart_settings_btn_clicked)
 
+        self.fullscreen_mode_toggle_btn = QPushButton('Toggle Fullscreen-Like Mode')
+        self.fullscreen_mode_toggle_btn.setCheckable(True)
+        self.fullscreen_mode_toggle_btn.clicked.connect(self.handle_fullscreen_mode_toggled)
+
         self.curve_checkbox_panel = QWidget()
 
         self.graph_drawing_settings_grpbx = QGroupBox("Graph Intervals")
@@ -479,7 +486,7 @@ class TimeChartDisplay(Display):
         self.chart_control_layout.insertSpacing(5, 30)
 
         self.chart_layout.addWidget(self.chart)
-        self.chart_layout.addLayout(self.chart_control_layout)
+        self.chart_layout.addWidget(self.chart_control_frame)
 
         self.chart_panel.setLayout(self.chart_layout)
 
@@ -656,7 +663,19 @@ class TimeChartDisplay(Display):
         self.chart_settings_layout.addWidget(self.axis_settings_grpbx)
         self.chart_settings_layout.addWidget(self.reset_chart_settings_btn)
 
+        self.chart_settings_layout.addWidget(self.fullscreen_mode_toggle_btn)
+
         self.update_datetime_timer.start(1000)
+
+    def handle_fullscreen_mode_toggled(self):
+        toggled = self.fullscreen_mode_toggle_btn.isChecked()
+        if toggled == True:
+            self.chart_control_frame.hide()
+            self.pv_add_panel.hide()
+            self.handle_splitter_button(False)
+        else:
+            self.chart_control_frame.show()
+            self.pv_add_panel.show()
 
     def add_curve(self):
         """
