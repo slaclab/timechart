@@ -1126,6 +1126,7 @@ class TimeChartDisplay(Display):
         pv_name : str
             The name of the PV the curve is being plotted for
         """
+        pv_name = pv_name.strip()
         if pv_name and "://" not in pv_name:
             pv_name = ''.join([self.pv_protocol_cmb.currentText(), pv_name])
         return pv_name
