@@ -178,49 +178,52 @@ class ChartDataExportDisplay(Display):
         self.file_format_cmb.setEnabled(False)
 
     def handle_save_file_btn_clicked(self):
-        saved_file_info = QFileDialog.getSaveFileName(
-            self, caption="Save File", directory=os.path.expanduser('~'),
-            filter=self.file_format)
-        saved_file_name = saved_file_info[0]
-        if saved_file_info[1][1:] not in saved_file_name:
-            saved_file_name += saved_file_info[1][1:]
+        saved_file_name, selected_filter = QFileDialog.getSaveFileName(
+            self,
+            caption="Save File",
+            filter=self.file_format
+        )
+        if not saved_file_name:
+            return
 
-        if saved_file_name:
-            if self.export_options_cmb.currentIndex() == 0:
-                data_exporter = CSVExporter(self.main_display.chart.plotItem)
-                data_exporter.export(saved_file_name)
-            elif self.export_options_cmb.currentIndex() == 2:
-                image_exporter = TimeChartImageExporter(
-                    self.main_display.chart.plotItem)
-                image_exporter.params = Parameter(name='params', type='group',
-                                                  children=[
-                                                      {'name': 'width',
-                                                       'type': 'int',
-                                                       'value': self.image_width,
-                                                       'limits': (0, None)},
-                                                      {'name': 'height',
-                                                       'type': 'int',
-                                                       'value': self.image_height,
-                                                       'limits': (0, None)},
-                                                      {'name': 'antialias',
-                                                       'type': 'bool',
-                                                       'value': True},
-                                                      {'name': 'background',
-                                                       'type': 'color',
-                                                       'value': self.exported_image_background_color},
-                                                  ])
+        if selected_filter[1:] not in saved_file_name:
+            saved_file_name += selected_filter[1:]
 
-                image_exporter.widthChanged()
-                image_exporter.heightChanged()
-                image_exporter.export(fileName=saved_file_name)
-            else:
-                settings_exporter = SettingsExporter(self.main_display,
-                                                     self.include_pv_chk.isChecked(),
-                                                     self.include_chart_settings_chk.isChecked())
-                settings_exporter.export_settings(saved_file_name)
+        if self.export_options_cmb.currentIndex() == 0:
+            data_exporter = CSVExporter(self.main_display.chart.plotItem)
+            data_exporter.export(saved_file_name)
+        elif self.export_options_cmb.currentIndex() == 2:
+            image_exporter = TimeChartImageExporter(
+                self.main_display.chart.plotItem)
+            image_exporter.params = Parameter(name='params', type='group',
+                                              children=[
+                                                  {'name': 'width',
+                                                   'type': 'int',
+                                                   'value': self.image_width,
+                                                   'limits': (0, None)},
+                                                  {'name': 'height',
+                                                   'type': 'int',
+                                                   'value': self.image_height,
+                                                   'limits': (0, None)},
+                                                  {'name': 'antialias',
+                                                   'type': 'bool',
+                                                   'value': True},
+                                                  {'name': 'background',
+                                                   'type': 'color',
+                                                   'value': self.exported_image_background_color},
+                                              ])
 
-            self.close()
-            QMessageBox.information(self, "Data Export", "Data exported successfully!")
+            image_exporter.widthChanged()
+            image_exporter.heightChanged()
+            image_exporter.export(fileName=saved_file_name)
+        else:
+            settings_exporter = SettingsExporter(self.main_display,
+                                                 self.include_pv_chk.isChecked(),
+                                                 self.include_chart_settings_chk.isChecked())
+            settings_exporter.export_settings(saved_file_name)
+
+        self.close()
+        QMessageBox.information(self, "Data Export", "Data exported successfully!")
 
     def handle_export_image_background_button_clicked(self):
         self.exported_image_background_color = QColorDialog.getColor()

@@ -2,7 +2,6 @@
 The Main Display Window
 """
 
-import os
 import logging
 
 from functools import partial
@@ -33,7 +32,25 @@ from .axis_settings_display import AxisSettingsDisplay
 from .chart_data_export_display import ChartDataExportDisplay
 from ..utilities.utils import random_color, display_message_box
 
-from .defaults import *
+from .defaults import (
+    ASYNC_DATA_SAMPLING,
+    DEFAULT_CHART_AXIS_COLOR,
+    DEFAULT_CHART_BACKGROUND_COLOR,
+    DEFAULT_CHART_TITLE,
+    DEFAULT_DATA_SAMPLING_RATE_HZ,
+    # DEFAULT_EXPORTED_IMAGE_HEIGHT,
+    # DEFAULT_EXPORTED_IMAGE_WIDTH,
+    DEFAULT_REDRAW_RATE_HZ,
+    IMPORT_FILE_FORMAT,
+    MAX_DATA_SAMPLING_RATE_HZ,
+    MAX_DISPLAY_PV_NAME_LENGTH,
+    MAX_REDRAW_RATE_HZ,
+    MIN_DATA_SAMPLING_RATE_HZ,
+    MIN_REDRAW_RATE_HZ,
+    SYNC_DATA_SAMPLING,
+    X_AXIS_LABEL_SEPARATOR,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -999,18 +1016,23 @@ class TimeChartDisplay(Display):
         self.chart_data_export_disp.show()
 
     def handle_import_data_btn_clicked(self):
-        open_file_info = QFileDialog.getOpenFileName(self, caption="Open File", directory=os.path.expanduser('~'),
-                                                     filter=IMPORT_FILE_FORMAT)
-        open_filename = open_file_info[0]
-        if open_filename:
-            try:
-                importer = SettingsImporter(self)
-                importer.import_settings(open_filename)
-            except SettingsImporterException:
-                display_message_box(QMessageBox.Critical, "Import Failure",
-                                    "Cannot import the file '{0}'. Check the log for the error details."
-                                    .format(open_filename))
-                logger.exception("Cannot import the file '{0}'".format(open_filename))
+        open_filename, _ = QFileDialog.getOpenFileName(
+            self,
+            caption="Open File",
+            filter=IMPORT_FILE_FORMAT
+        )
+
+        if not open_filename:
+            return
+
+        try:
+            importer = SettingsImporter(self)
+            importer.import_settings(open_filename)
+        except SettingsImporterException:
+            display_message_box(QMessageBox.Critical, "Import Failure",
+                                "Cannot import the file '{0}'. Check the log for the error details."
+                                .format(open_filename))
+            logger.exception("Cannot import the file '{0}'".format(open_filename))
 
     def handle_sync_mode_radio_toggle(self, radio_btn):
         if radio_btn.isChecked():
