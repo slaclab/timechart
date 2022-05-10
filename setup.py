@@ -25,7 +25,7 @@ setup(
     entry_points={
         "gui_scripts": ["timechart=timechart_launcher.main:main"],
         "pydm.tool": [
-            "timechart=timechart.tool:PydmTool",
+            "timechart=timechart.tool:PydmTimeChartTool",
         ],
     },
     license="BSD",
