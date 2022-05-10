@@ -74,6 +74,7 @@ class TimeChartDisplay(Display):
         """
         super(TimeChartDisplay, self).__init__(parent=parent, args=args,
                                                macros=macros)
+
         self.legend_font = None
         self.channel_map = dict()
         self.setWindowTitle("TimeChart Tool")
@@ -696,11 +697,15 @@ class TimeChartDisplay(Display):
             self.chart_control_frame.show()
             self.pv_add_panel.show()
 
-    def add_curve(self):
+    def add_curve(self, command_pv=None):
         """
         Add a new curve to the chart.
         """
-        pv_name = self._get_full_pv_name(self.pv_name_line_edt.text())
+        if command_pv:
+            pv_name = self._get_full_pv_name(command_pv)
+        else:
+            pv_name = self._get_full_pv_name(self.pv_name_line_edt.text())
+
         if pv_name and len(pv_name):
             color = random_color(curve_colors_only=True)
             for k, v in self.channel_map.items():
@@ -1049,7 +1054,7 @@ class TimeChartDisplay(Display):
         try:
             importer = SettingsImporter(self)
             importer.import_settings(open_filename)
-            
+
             terse_name = os.path.split(open_filename)[1]
             self.setWindowTitle("TimeChart Tool - " + terse_name)
         except SettingsImporterException:
@@ -1236,3 +1241,4 @@ class TimeChartDisplay(Display):
     @property
     def gridAlpha(self):
         return self.grid_alpha
+
