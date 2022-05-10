@@ -4,6 +4,8 @@ The Main Display Window
 
 import logging
 
+import os
+
 from functools import partial
 import datetime
 
@@ -1047,6 +1049,9 @@ class TimeChartDisplay(Display):
         try:
             importer = SettingsImporter(self)
             importer.import_settings(open_filename)
+            
+            terse_name = os.path.split(open_filename)[1]
+            self.setWindowTitle("TimeChart Tool - " + terse_name)
         except SettingsImporterException:
             display_message_box(QMessageBox.Critical, "Import Failure",
                                 "Cannot import the file '{0}'. Check the log for the error details."
