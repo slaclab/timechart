@@ -3,7 +3,7 @@ The Main Display Window
 """
 
 import logging
-
+import argparse
 import os
 
 from functools import partial
@@ -430,6 +430,14 @@ class TimeChartDisplay(Display):
         self.time_span_limit_seconds = None
         self.data_sampling_mode = ASYNC_DATA_SAMPLING
 
+        parser = argparse.ArgumentParser(description='TimeChart')
+        parser.add_argument("--pvs", help="Launch TimeChart with PVs loaded from command line", nargs='*')
+        args = parser.parse_args()
+        self.pv_arg_list = args.pvs
+        if len(self.pv_arg_list):
+            self.add_curve_command_line()
+
+
         # If there is an imported config file, let's start TimeChart with the imported configuration data
         if config_file:
             importer = SettingsImporter(self)
@@ -710,6 +718,21 @@ class TimeChartDisplay(Display):
             self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
             self.handle_splitter_button(left=True)
 
+    def add_curve_command_line(self):
+        """
+        Add curves to the chart from the command line.
+        """
+        for pv in self.pv_arg_list:
+            pv_name = self._get_full_pv_name(pv)
+            if pv_name and len(pv_name):
+                color = random_color(curve_colors_only=True)
+                for k, v in self.channel_map.items():
+                    if color == v.color:
+                        color = random_color(curve_colors_only=True)
+
+                self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
+                self.handle_splitter_button(left=True)
+                
     def show_mouse_coordinates(self, x, y):
         self.crosshair_coord_lbl.clear()
         self.crosshair_coord_lbl.setText(
@@ -1049,7 +1072,7 @@ class TimeChartDisplay(Display):
         try:
             importer = SettingsImporter(self)
             importer.import_settings(open_filename)
-            
+
             terse_name = os.path.split(open_filename)[1]
             self.setWindowTitle("TimeChart Tool - " + terse_name)
         except SettingsImporterException:
@@ -1236,3 +1259,4 @@ class TimeChartDisplay(Display):
     @property
     def gridAlpha(self):
         return self.grid_alpha
+
