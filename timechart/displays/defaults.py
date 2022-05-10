@@ -26,5 +26,5 @@ ASYNC_DATA_SAMPLING = 0
 SYNC_DATA_SAMPLING = 1
 
 X_AXIS_LABEL_SEPARATOR = " -- "
-IMPORT_FILE_FORMAT = "TimeChart or EPICS StripTool file (*.json *.stp)"
+IMPORT_FILE_FORMAT = "TimeChart StripTool file (*.stp);;Timechart JSON file (*.json);;All files (*.*)"
 
