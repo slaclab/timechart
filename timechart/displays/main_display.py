@@ -1045,7 +1045,8 @@ class TimeChartDisplay(Display):
         open_filename, _ = QFileDialog.getOpenFileName(
             self,
             caption="Open File",
-            filter=IMPORT_FILE_FORMAT
+            filter=IMPORT_FILE_FORMAT,
+            initialFilter=IMPORT_FILE_FORMAT.split(';;')[0]
         )
 
         if not open_filename:
