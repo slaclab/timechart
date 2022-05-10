@@ -10,6 +10,7 @@ from functools import partial
 import datetime
 
 from pyqtgraph import TextItem
+from pyqtgraph.GraphicsScene import exportDialog
 
 from qtpy.QtCore import Qt, Slot, QTimer
 from qtpy.QtWidgets import (QApplication, QWidget, QCheckBox, QHBoxLayout,
@@ -398,6 +399,10 @@ class TimeChartDisplay(Display):
             self.handle_grid_opacity_slider_mouse_release)
         self.grid_opacity_slr.setEnabled(False)
 
+        self.save_data_btn = QPushButton("Save Data to Disk")
+        self.save_data_btn.clicked.connect(
+            self.handle_save_data_btn_clicked)
+
         self.reset_data_settings_btn = QPushButton("Reset Data Settings")
         self.reset_data_settings_btn.clicked.connect(
             self.handle_reset_data_settings_btn_clicked)
@@ -647,6 +652,7 @@ class TimeChartDisplay(Display):
         self.data_tab_layout.addWidget(self.graph_drawing_settings_grpbx)
         self.chart_sync_mode_async_radio.toggled.emit(True)
 
+        self.data_tab_layout.addWidget(self.save_data_btn)
         self.data_tab_layout.addWidget(self.reset_data_settings_btn)
 
     def setup_chart_settings_layout(self):
@@ -1127,6 +1133,11 @@ class TimeChartDisplay(Display):
         self.chart.setShowXGrid(False)
         self.chart.setShowYGrid(False)
         self.chart.setShowLegend(False)
+
+    @Slot()
+    def handle_save_data_btn_clicked(self):
+        self.chart.sceneObj.contextMenuItem = self.chart.plotItem
+        self.chart.sceneObj.showExportDialog()
 
     @Slot()
     def handle_reset_data_settings_btn_clicked(self):
