@@ -3,7 +3,7 @@ The Main Display Window
 """
 
 import logging
-import argparse
+
 import os
 
 from functools import partial
@@ -74,6 +74,7 @@ class TimeChartDisplay(Display):
         """
         super(TimeChartDisplay, self).__init__(parent=parent, args=args,
                                                macros=macros)
+
         self.legend_font = None
         self.channel_map = dict()
         self.setWindowTitle("TimeChart Tool")
@@ -430,14 +431,6 @@ class TimeChartDisplay(Display):
         self.time_span_limit_seconds = None
         self.data_sampling_mode = ASYNC_DATA_SAMPLING
 
-        parser = argparse.ArgumentParser(description='TimeChart')
-        parser.add_argument("--pvs", help="Launch TimeChart with PVs loaded from command line", nargs='*')
-        args = parser.parse_args()
-        self.pv_arg_list = args.pvs
-        if len(self.pv_arg_list):
-            self.add_curve_command_line()
-
-
         # If there is an imported config file, let's start TimeChart with the imported configuration data
         if config_file:
             importer = SettingsImporter(self)
@@ -704,11 +697,15 @@ class TimeChartDisplay(Display):
             self.chart_control_frame.show()
             self.pv_add_panel.show()
 
-    def add_curve(self):
+    def add_curve(self, command_pv=None):
         """
         Add a new curve to the chart.
         """
-        pv_name = self._get_full_pv_name(self.pv_name_line_edt.text())
+        if command_pv:
+            pv_name = self._get_full_pv_name(command_pv)
+        else:
+            pv_name = self._get_full_pv_name(self.pv_name_line_edt.text())
+
         if pv_name and len(pv_name):
             color = random_color(curve_colors_only=True)
             for k, v in self.channel_map.items():
@@ -718,21 +715,6 @@ class TimeChartDisplay(Display):
             self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
             self.handle_splitter_button(left=True)
 
-    def add_curve_command_line(self):
-        """
-        Add curves to the chart from the command line.
-        """
-        for pv in self.pv_arg_list:
-            pv_name = self._get_full_pv_name(pv)
-            if pv_name and len(pv_name):
-                color = random_color(curve_colors_only=True)
-                for k, v in self.channel_map.items():
-                    if color == v.color:
-                        color = random_color(curve_colors_only=True)
-
-                self.add_y_channel(pv_name=pv_name, curve_name=pv_name, color=color)
-                self.handle_splitter_button(left=True)
-                
     def show_mouse_coordinates(self, x, y):
         self.crosshair_coord_lbl.clear()
         self.crosshair_coord_lbl.setText(
