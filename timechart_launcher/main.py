@@ -64,7 +64,10 @@ def main():
     if args.config_file:
         config_file = os.path.expandvars(os.path.expanduser(args.config_file))
 
-    display = TimeChartDisplay(config_file=config_file, args=extra_args)
+    display = TimeChartDisplay(config_file=config_file)
+    if args.pvs:    
+        for pv in args.pvs:    
+            display.add_curve(pv)
     display.show()
 
     sys.exit(app.exec_())
@@ -95,6 +98,8 @@ def _parse_arguments():
                         version='TimeChart {version}'.format(
                             version=timechart.__version__))
 
+    parser.add_argument("--pvs", help="Launch TimeChart with PVs loaded from the command line.", nargs='*')
+
     args, extra_args = parser.parse_known_args()
     return args, extra_args
 
@@ -104,3 +109,4 @@ if __name__ == "__main__":
         main()
     except Exception as error:
         traceback.print_exc()
+
