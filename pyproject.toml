@@ -1,0 +1,46 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=45", "setuptools_scm[toml]>=6.2",]
+
+[project]
+classifiers = [ "License :: OSI Approved :: BSD License", "Development Status :: 4 - Beta", "Programming Language :: Python :: 3.6", "Programming Language :: Python :: 3.7", "Programming Language :: Python :: 3.8",]
+description = "Time Chart Tool based on PyDM"
+dynamic = [ "version", "readme", "dependencies", "optional-dependencies", "optional-dependencies",]
+keywords = []
+name = "timechart"
+requires-python = ">=3.9"
+[[project.authors]]
+name = "SLAC National Accelerator Laboratory"
+
+[options]
+zip_safe = false
+include_package_data = true
+
+[project.license]
+file = "LICENSE.md"
+
+[project.gui-scripts]
+timechart = "timechart_launcher.main:main"
+
+[tool.setuptools_scm]
+write_to = "timechart/_version.py"
+
+[project.entry-points."pydm.tool"]
+timechart = "timechart.tool:PydmTimeChartTool"
+
+[tool.setuptools.packages.find]
+where = [ ".",]
+include = [ "timechart*",]
+namespaces = false
+
+[tool.setuptools.dynamic.readme]
+file = "README.md"
+
+[tool.setuptools.dynamic.dependencies]
+file = [ "requirements.txt",]
+
+[tool.setuptools.dynamic.optional-dependencies.test]
+file = "dev-requirements.txt"
+
+[tool.setuptools.dynamic.optional-dependencies.doc]
+file = "docs-requirements.txt"
