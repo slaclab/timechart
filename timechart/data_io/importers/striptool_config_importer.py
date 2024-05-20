@@ -198,7 +198,7 @@ class StripToolConfigImporter(TimeChartConfigImporter):
 
         """
         timechart_settings = OrderedDict()
-        timechart_settings["__version__"] = ver
+        timechart_settings["__version__"] = str(ver)
 
         timechart_settings["pvs"] = OrderedDict()
 
