@@ -1,7 +1,6 @@
-<img src="timechart_launcher/icons/charts_128.png" width="128" height="128" align="right"/>
-  <h1>TimeChart</h1>
-  <h3>A Charting Tool based on PyDM</h3>
-</p>
+# TimeChart
+## A Charting Tool based on PyDM
+![TimeChart logo](https://raw.githubusercontent.com/slaclab/timechart/master/timechart_launcher/icons/charts_128.png)
 
 TimeChart is a Python Qt-based graphing application for control systems.
 It is intended to be the modern, feature-by-feature matching alternative
@@ -16,7 +15,7 @@ and the PyDM's TimePlot is the central widget in TimeChart.
 
 # Installing and Running TimeChart
 
-Refer to [TimeChart Documentation] (https://slaclab.github.io/timechart/ "TimeChart Documentation") for detailed
+Refer to [TimeChart Documentation](https://slaclab.github.io/timechart/ "TimeChart Documentation") for detailed
 instructions on how to install and run TimeChart.
 
 # Acknowledgements
