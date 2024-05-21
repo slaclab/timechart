@@ -1,26 +1,39 @@
-{% set data = load_setup_py_data() %}
+{% set package_name = "timechart" %}
+{% set import_name = "timechart" %}
+{% set version = load_file_regex(load_file=os.path.join(import_name, "_version.py"), regex_pattern=".*version = '(\S+)'").group(1) %}
 
 package:
-    name    : timechart
-    version : {{ data.get('version') }}
+  name: {{ package_name }}
+  version: {{ version }}
 
 source:
-    path: ..
+  path: ..
+
+build:
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+
+
 
 requirements:
-    build:
-      - python
-      - setuptools
-      - pydm >=1.6.0
+  build:
+  - python
+  - pydm >=1.6.0
+  - setuptools_scm
+  - pip
+  run:
+  - six
+  - python
+  - pydm >=1.6.0
 
-    run:
-      - six
-      - python
-      - pydm >=1.6.0
+
 
 test:
-    imports:
-      - timechart
+  imports:
+  - timechart
+
+
 
 about:
   home: https://github.com/slaclab/timechart

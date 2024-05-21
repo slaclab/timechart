@@ -38,7 +38,7 @@ class SettingsExporter:
             The filename to export the configuration data to.
         """
         settings = OrderedDict()
-        settings["__version__"] = ver
+        settings["__version__"] = str(ver)
         settings["pvs"] = OrderedDict()
         settings["chart_settings"] = OrderedDict()
         chart = self.main_display.chart
